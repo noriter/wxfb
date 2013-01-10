@@ -1,1 +1,9 @@
 .svn
+output/Debug
+output/Release
+output/Plugins
+*.exe
+*.pdb
+*.ncb
+*.suo
+*.user
