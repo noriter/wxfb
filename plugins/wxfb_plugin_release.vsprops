@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ks_c_5601-1987"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="wxfb_plugin_release"
+	OutputDirectory="$(SolutionDir)\output\$(ConfigurationName)\$(ProjectName)"
+	IntermediateDirectory="$(SolutionDir)\output\$(ConfigurationName)\$(ProjectName)"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		EnableIntrinsicFunctions="true"
+		AdditionalIncludeDirectories="&quot;$(SolutionDir)/sdk/tinyxml&quot;;&quot;$(SolutionDir)/sdk/plugin_interface&quot;"
+		PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;TIXML_USE_TICPP;WXUSINGDLL;BUILD_DLL"
+		RuntimeLibrary="2"
+		EnableFunctionLevelLinking="true"
+		WarningLevel="3"
+		DebugInformationFormat="3"
+		DisableSpecificWarnings="4996;4819"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="comctl32.lib gdiplus.lib wxbase29u.lib wxbase29u_xml.lib wxmsw29u_qa.lib wxmsw29u_core.lib wxmsw29u_propgrid.lib wxmsw29u_richtext.lib wxmsw29u_html.lib wxmsw29u_adv.lib wxmsw29u_stc.lib wxmsw29u_aui.lib wxmsw29u_ribbon.lib wxmsw29u_xrc.lib wxscintilla.lib wxpng.lib wxjpeg.lib wxtiff.lib wxzlib.lib wxregexu.lib wxexpat.lib rpcrt4.lib"
+		OutputFile="$(SolutionDir)\output\plugins\$(ProjectName)\lib$(ProjectName).dll"
+		LinkIncremental="1"
+		GenerateDebugInformation="true"
+	/>
+</VisualStudioPropertySheet>

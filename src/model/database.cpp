@@ -1290,13 +1290,12 @@ void ObjectDatabase::ImportComponentLibrary( wxString libfile, PwxFBManager mana
 {
 	wxString path = libfile;
 
-#if wxVERSION_NUMBER < 2900
 	// This will prevent loading debug libraries in release and vice versa
 	// That used to cause crashes when trying to debug
-	#ifdef __WXFB_DEBUG__
-//		path += wxT("d");
+	#ifdef _DEBUG
+		path += wxT("_d");
 	#endif
-#endif
+
 	// Find the GetComponentLibrary function - all plugins must implement this
 	typedef IComponentLibrary* (*PFGetComponentLibrary)( IManager* manager );
 

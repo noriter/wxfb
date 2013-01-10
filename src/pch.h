@@ -32,10 +32,15 @@
 // basic wxWidgets headers
 #include <wx/wxprec.h>
 
-#ifndef WX_PRECOMP
-	#include <wx/wx.h>
-#endif
+#include <wx/wx.h>
+#include <wx/config.h>
+
+#include <wx/aui/aui.h>
+#include <wx/propgrid/propgrid.h>
 
 // #include other rarely changing headers here
+
+#include "rad/appdata.h"
+#include "model/objectbase.h"
 
 #endif // PCH_H
