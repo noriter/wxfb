@@ -149,6 +149,22 @@
 			RelativePath=".\forms.cpp"
 			>
 		</File>
+		<File
+			RelativePath="..\..\output\plugins\forms\xml\forms.cppcode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\forms\xml\forms.phpcode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\forms\xml\forms.pythoncode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\forms\xml\forms.xml"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

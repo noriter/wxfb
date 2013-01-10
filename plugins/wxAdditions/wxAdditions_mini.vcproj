@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="common"
-	ProjectGUID="{12057310-2C90-4005-AB2E-64F82265E49D}"
-	RootNamespace="common"
+	Name="wxAdditions_mini"
+	ProjectGUID="{6A1DEB64-D5C3-448D-AA18-6D498ABF63E9}"
+	RootNamespace="wxAdditions_mini"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -39,6 +39,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/src/controls/include&quot;"
 				DisableSpecificWarnings="4996;4819"
 				ForcedIncludeFiles=""
 			/>
@@ -101,6 +102,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/src/controls/include&quot;"
 				ForcedIncludeFiles=""
 			/>
 			<Tool
@@ -145,8 +147,92 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="wxFlatNotebook"
+			>
+			<File
+				RelativePath="..\..\src\controls\src\wxFlatNotebook\fnb_customize_dlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\include\wx\wxFlatNotebook\fnb_customize_dlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\src\wxFlatNotebook\fnb_resources.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\include\wx\wxFlatNotebook\fnb_resources.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\include\wx\wxFlatNotebook\fnb_singleton.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\include\wx\wxFlatNotebook\fnb_smart_ptr.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\src\wxFlatNotebook\popup_dlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\include\wx\wxFlatNotebook\popup_dlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\src\wxFlatNotebook\renderer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\include\wx\wxFlatNotebook\renderer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\src\wxFlatNotebook\wxFlatNotebook.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\include\wx\wxFlatNotebook\wxFlatNotebook.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\include\wx\wxFlatNotebook\wxFlatNotebookSDK.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\include\wx\wxFlatNotebook\wxFNBDropTarget.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\src\wxFlatNotebook\xh_fnb.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\controls\include\wx\wxFlatNotebook\xh_fnb.h"
+				>
+			</File>
+		</Filter>
 		<File
-			RelativePath=".\common.cpp"
+			RelativePath=".\wxAdditions_mini.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\wxAdditions_mini\xml\wxAdditions_mini.cppcode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\wxAdditions_mini\xml\wxAdditions_mini.phpcode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\wxAdditions_mini\xml\wxAdditions_mini.pythoncode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\wxAdditions_mini\xml\wxAdditions_mini.xml"
 			>
 		</File>
 	</Files>

@@ -149,6 +149,22 @@
 			RelativePath=".\layout.cpp"
 			>
 		</File>
+		<File
+			RelativePath="..\..\output\plugins\layout\xml\layout.cppcode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\layout\xml\layout.phpcode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\layout\xml\layout.pythoncode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\layout\xml\layout.xml"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

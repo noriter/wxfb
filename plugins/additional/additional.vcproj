@@ -149,6 +149,22 @@
 			RelativePath=".\additional.cpp"
 			>
 		</File>
+		<File
+			RelativePath="..\..\output\plugins\additional\xml\additional.cppcode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\additional\xml\additional.phpcode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\additional\xml\additional.pythoncode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\additional\xml\additional.xml"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

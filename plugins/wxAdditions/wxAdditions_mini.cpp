@@ -38,10 +38,7 @@
 #include <wx/propgrid/advprops.h>
 #include <wx/propgrid/manager.h>
 
-#if wxVERSION_NUMBER < 2900
-    // wxScintilla
-    #include <wx/wxScintilla/wxscintilla.h>
-#endif
+#include <wx/stc/stc.h>
 
 // wxWidgets
 #include <wx/xrc/xmlres.h>

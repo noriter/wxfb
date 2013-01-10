@@ -149,6 +149,38 @@
 			RelativePath=".\common.cpp"
 			>
 		</File>
+		<File
+			RelativePath="..\..\output\plugins\common\xml\common.cppcode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\common\xml\common.phpcode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\common\xml\common.pythoncode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\common\xml\common.xml"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\common\xml\menutoolbar.cppcode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\common\xml\menutoolbar.phpcode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\common\xml\menutoolbar.pythoncode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\common\xml\menutoolbar.xml"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

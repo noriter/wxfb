@@ -149,6 +149,22 @@
 			RelativePath=".\containers.cpp"
 			>
 		</File>
+		<File
+			RelativePath="..\..\output\plugins\containers\xml\containers.cppcode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\containers\xml\containers.phpcode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\containers\xml\containers.pythoncode"
+			>
+		</File>
+		<File
+			RelativePath="..\..\output\plugins\containers\xml\containers.xml"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
