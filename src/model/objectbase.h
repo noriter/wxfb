@@ -559,7 +559,7 @@ public:
 	/**
 	* Constructor.
 	*/
-	ObjectInfo(wxString class_name, PObjectType type, WPObjectPackage package, bool startGroup = false );
+	ObjectInfo(wxString class_name, PObjectType type, WPObjectPackage package, bool startGroup = false, bool paletteHidden=false );
 
 	virtual ~ObjectInfo() {};
 
@@ -660,6 +660,7 @@ public:
 	PObjectPackage GetPackage();
 
 	bool IsStartOfGroup() { return m_startGroup; }
+	bool IsPaletteHidden() { return m_PaletteHidden; }
 
 	/**
 	* Le asigna un componente a la clase.
@@ -689,6 +690,8 @@ private:
 	std::vector< PObjectInfo > m_base; // base classes
 	std::map< size_t, std::map< wxString, wxString > > m_baseClassDefaultPropertyValues;
 	IComponent* m_component;  // componente asociado a la clase los objetos del
+
+	bool m_PaletteHidden;
 	// designer
 };
 

@@ -35,8 +35,7 @@
 #include "utils/wxfbipc.h"
 #include "utils/wxfbexception.h"
 #include "codegen/cppcg.h"
-#include "codegen/pythoncg.h"
-#include "codegen/phpcg.h"
+#include "codegen/solcg.h"
 #include "codegen/xrccg.h"
 #include "codegen/codewriter.h"
 #include "rad/xrcpreview/xrcpreview.h"
@@ -2031,11 +2030,7 @@ void ApplicationData::NewProject()
 
 void ApplicationData::GenerateCode( bool panelOnly )
 {
-#ifdef USE_FLATNOTEBOOK
-	NotifyCodeGeneration( panelOnly );
-#else
 	NotifyCodeGeneration( panelOnly, true );
-#endif
 }
 
 void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString className, wxString path, wxString file )
@@ -2127,28 +2122,6 @@ void ApplicationData::GenerateInheritedClass( PObjectBase form, wxString classNa
 
 			codegen.SetHeaderWriter( h_cw );
 			codegen.SetSourceWriter( cpp_cw );
-
-			codegen.GenerateInheritedClass( obj, form );
-		}
-		else if( pCodeGen && TypeConv::FlagSet( wxT("Python"), pCodeGen->GetValue() ) )
-		{
-			PythonCodeGenerator codegen;
-			
-			const wxString& fullPath = inherFile.GetFullPath();
-			PCodeWriter python_cw( new FileCodeWriter( fullPath + wxT(".py"), useMicrosoftBOM, useUtf8 ) );
-
-			codegen.SetSourceWriter( python_cw );
-
-			codegen.GenerateInheritedClass( obj, form );
-		}
-		else if( pCodeGen && TypeConv::FlagSet( wxT("PHP"), pCodeGen->GetValue() ) )
-		{
-			PHPCodeGenerator codegen;
-			
-			const wxString& fullPath = inherFile.GetFullPath();
-			PCodeWriter php_cw( new FileCodeWriter( fullPath + wxT(".php"), useMicrosoftBOM, useUtf8 ) );
-
-			codegen.SetSourceWriter( php_cw );
 
 			codegen.GenerateInheritedClass( obj, form );
 		}

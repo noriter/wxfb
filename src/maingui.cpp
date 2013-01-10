@@ -34,9 +34,6 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/clipbrd.h>
 #include <wx/msgout.h>
-#ifdef USE_FLATNOTEBOOK
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
-#endif
 #include "utils/wxfbexception.h"
 #include <memory>
 #include "maingui.h"
@@ -214,20 +211,20 @@ int MyApp::OnRun()
 	}
 
 	wxSystemOptions::SetOption( wxT( "msw.remap" ), 0 );
-	wxSystemOptions::SetOption( wxT( "msw.staticbox.optimized-paint" ), 0 );
+	wxSystemOptions::SetOption( wxT( "msw.staticbox.optimized-paint" ), 1 );
 
 	m_frame = NULL;
 
 	#ifndef __WXFB_DEBUG__
-	wxBitmap bitmap;
-	std::auto_ptr< cbSplashScreen > splash;
-	if ( !justGenerate )
-	{
-		if ( bitmap.LoadFile( dataDir + wxFILE_SEP_PATH + wxT( "resources" ) + wxFILE_SEP_PATH + wxT( "splash.png" ), wxBITMAP_TYPE_PNG ) )
-		{
-			splash = std::auto_ptr< cbSplashScreen >( new cbSplashScreen( bitmap, -1, 0, wxNewId() ) );
-		}
-	}
+// 	wxBitmap bitmap;
+// 	std::auto_ptr< cbSplashScreen > splash;
+// 	if ( !justGenerate )
+// 	{
+// 		if ( bitmap.LoadFile( dataDir + wxFILE_SEP_PATH + wxT( "resources" ) + wxFILE_SEP_PATH + wxT( "splash.png" ), wxBITMAP_TYPE_PNG ) )
+// 		{
+// 			splash = std::auto_ptr< cbSplashScreen >( new cbSplashScreen( bitmap, -1, 0, wxNewId() ) );
+// 		}
+// 	}
 	#endif
 
 	wxYield();
@@ -258,7 +255,7 @@ int MyApp::OnRun()
 
 		#ifndef __WXFB_DEBUG__
 		// turn off the splash screen
-		delete splash.release();
+// 		delete splash.release();
 		#endif
 
 		#ifdef __WXFB_DEBUG__
@@ -336,9 +333,6 @@ bool MyApp::OnInit()
 int MyApp::OnExit()
 {
 	MacroDictionary::Destroy();
-#ifdef USE_FLATNOTEBOOK
-	wxFlatNotebook::CleanUp();
-#endif
 	AppDataDestroy();
 
 	if( !wxTheClipboard->IsOpened() )

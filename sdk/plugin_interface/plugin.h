@@ -184,6 +184,14 @@ private:
 	int m_type;
 	IManager* m_manager;
 
+	struct EvtHdlrPushRec
+	{
+		wxWeakRef<wxWindow> window;
+		wxWeakRef<wxEvtHandler> handler;
+	};
+
+	std::vector<EvtHdlrPushRec> m_PushTracking;
+
 public:
 	ComponentBase()
 	:
@@ -213,15 +221,38 @@ public:
 
     void Cleanup( wxObject* obj )
     {
-        wxWindow* window = dynamic_cast< wxWindow* >( obj );
-        if ( window != 0 )
-        {
-            if ( window->GetEventHandler() != window )
-            {
-                window->PopEventHandler( true );
-            }
-        }
+		while (!m_PushTracking.empty())
+		{
+			EvtHdlrPushRec& rec = m_PushTracking.back();
+			if (rec.window && rec.handler)
+			{
+				if (rec.window->GetEventHandler() != rec.handler)
+				{
+					rec.window->RemoveEventHandler(rec.handler);
+					delete rec.handler;
+				}
+				else
+				{
+					rec.window->PopEventHandler(true);
+				}
+			}
+
+			m_PushTracking.pop_back();
+		}
     }
+
+	void PushEventHandler(wxObject* obj, wxEvtHandler* hdlr)
+	{
+		wxWindow* window = dynamic_cast<wxWindow*>(obj);
+		if (window == NULL) return;
+
+		EvtHdlrPushRec rec;
+		rec.window = window;
+		rec.handler = hdlr;
+		m_PushTracking.push_back(rec);
+
+		window->PushEventHandler(hdlr);
+	}
 
 	void OnCreated( wxObject* /*wxobject*/, wxWindow* /*wxparent*/ )
 	{

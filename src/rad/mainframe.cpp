@@ -31,8 +31,7 @@
 #include "rad/title.h"
 #include "rad/bitmaps.h"
 #include "rad/cpppanel/cpppanel.h"
-#include "rad/pythonpanel/pythonpanel.h"
-#include "rad/phppanel/phppanel.h"
+#include "rad/solpanel/solpanel.h"
 #include "rad/xrcpanel/xrcpanel.h"
 #include "rad/geninheritclass/geninhertclass.h"
 #include "inspector/objinspect.h"
@@ -83,25 +82,26 @@
 #define ID_ALIGN_CENTER_V 127
 #define ID_ALIGN_BOTTOM   128
 
-#define ID_BORDER_LEFT    129
-#define ID_BORDER_RIGHT   130
-#define ID_BORDER_TOP     131
-#define ID_BORDER_BOTTOM  132
-#define ID_EDITOR_FNB	  133
-#define ID_MOVE_LEFT	  134
-#define ID_MOVE_RIGHT     135
+#define ID_BORDER_ALL     129
+#define ID_BORDER_LEFT    130
+#define ID_BORDER_RIGHT   131
+#define ID_BORDER_TOP     132
+#define ID_BORDER_BOTTOM  133
+#define ID_EDITOR_FNB	  134
+#define ID_MOVE_LEFT	  135
+#define ID_MOVE_RIGHT     136
 
-#define ID_PREVIEW_XRC     136
-#define ID_GEN_INHERIT_CLS 137
+#define ID_PREVIEW_XRC     137
+#define ID_GEN_INHERIT_CLS 138
 
 // The preference dialog must use wxID_PREFERENCES for wxMAC
-//#define ID_SETTINGS_GLOBAL 138	// For the future preference dialogs
-#define ID_SETTINGS_PROJ   139	// For the future preference dialogs
+//#define ID_SETTINGS_GLOBAL 139	// For the future preference dialogs
+#define ID_SETTINGS_PROJ   140	// For the future preference dialogs
 
-#define ID_FIND 142
+#define ID_FIND 143
 
-#define ID_CLIPBOARD_COPY 143
-#define ID_CLIPBOARD_PASTE 144
+#define ID_CLIPBOARD_COPY 144
+#define ID_CLIPBOARD_PASTE 145
 
 
 #define STATUS_FIELD_OBJECT 2
@@ -138,7 +138,7 @@ EVT_MENU( ID_ALIGN_CENTER_H, MainFrame::OnChangeAlignment )
 EVT_MENU( ID_ALIGN_TOP, MainFrame::OnChangeAlignment )
 EVT_MENU( ID_ALIGN_BOTTOM, MainFrame::OnChangeAlignment )
 EVT_MENU( ID_ALIGN_CENTER_V, MainFrame::OnChangeAlignment )
-EVT_MENU_RANGE( ID_BORDER_LEFT, ID_BORDER_BOTTOM, MainFrame::OnChangeBorder )
+EVT_MENU_RANGE( ID_BORDER_ALL, ID_BORDER_BOTTOM, MainFrame::OnChangeBorder )
 EVT_MENU( ID_PREVIEW_XRC, MainFrame::OnXrcPreview )
 EVT_MENU( ID_GEN_INHERIT_CLS, MainFrame::OnGenInhertedClass )
 EVT_MENU( ID_CLIPBOARD_COPY, MainFrame::OnClipboardCopy )
@@ -287,8 +287,6 @@ m_findDialog( NULL )
 	// Init. m_cpp and m_xrc first
 	m_cpp = NULL;
 	m_xrc = NULL;
-	m_python = NULL;
-	m_php = NULL;
 
 	switch ( style )
 	{
@@ -352,23 +350,15 @@ m_findDialog( NULL )
 	// So splitter windows can be restored correctly
 	Connect( wxEVT_IDLE, wxIdleEventHandler( MainFrame::OnIdle ) );
 
-	// So we don't respond to a FlatNoteBookPageChanged event during construction
-#ifdef USE_FLATNOTEBOOK
-	m_notebook->Connect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGED, wxFlatNotebookEventHandler( MainFrame::OnFlatNotebookPageChanged ), 0, this );
-#else
+	// So we don't respond to a AuiNotebookPageChanged event during construction
 	m_notebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnAuiNotebookPageChanged ), NULL, this );
-#endif
 
 };
 
 
 MainFrame::~MainFrame()
 {
-#ifdef USE_FLATNOTEBOOK
-	m_notebook->Disconnect( wxEVT_COMMAND_FLATNOTEBOOK_PAGE_CHANGED, wxFlatNotebookEventHandler( MainFrame::OnFlatNotebookPageChanged ), 0, this );
-#else
 	m_notebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnAuiNotebookPageChanged ), NULL, this );
-#endif
 
 #ifdef __WXMAC__
     // work around problem on wxMac
@@ -485,9 +475,6 @@ void MainFrame::SavePosition( const wxString &name )
 	}
 
 	config->SetPath( wxT( ".." ) );
-#ifdef USE_FLATNOTEBOOK
-	config->Write( wxT("/mainframe/editor/notebook_style"), m_notebook->GetWindowStyleFlag() );
-#endif
 }
 
 void MainFrame::OnSaveProject( wxCommandEvent &event )
@@ -721,12 +708,6 @@ void MainFrame::OnObjectSelected( wxFBObjectEvent& event )
 			case 1: // CPP panel
 				break;
 
-			case 2: // Python panel
-			   break;
-
-            case 3: // PHP panel
-			   break;
-
 			case 4: // XRC panel
 			   break;
 
@@ -919,6 +900,7 @@ void MainFrame::UpdateLayoutTools()
 	menuEdit->Enable( ID_ALIGN_BOTTOM, enableVerticalTools );
 	toolbar->EnableTool( ID_ALIGN_BOTTOM, enableVerticalTools );
 
+	toolbar->EnableTool( ID_BORDER_ALL, gotLayoutSettings );
 	toolbar->EnableTool( ID_BORDER_TOP, gotLayoutSettings );
 	toolbar->EnableTool( ID_BORDER_RIGHT, gotLayoutSettings );
 	toolbar->EnableTool( ID_BORDER_LEFT, gotLayoutSettings );
@@ -934,6 +916,7 @@ void MainFrame::UpdateLayoutTools()
 	toolbar->ToggleTool( ID_ALIGN_CENTER_V, ( ( flag & wxALIGN_CENTER_VERTICAL ) != 0 ) && enableVerticalTools );
 	toolbar->ToggleTool( ID_ALIGN_BOTTOM,   ( ( flag & wxALIGN_BOTTOM ) != 0 ) && enableVerticalTools );
 
+	toolbar->ToggleTool( ID_BORDER_ALL,		 ( ( flag & wxALL ) == wxALL ) && gotLayoutSettings );
 	toolbar->ToggleTool( ID_BORDER_TOP,      ( ( flag & wxTOP ) != 0 ) && gotLayoutSettings );
 	toolbar->ToggleTool( ID_BORDER_RIGHT,    ( ( flag & wxRIGHT ) != 0 ) && gotLayoutSettings );
 	toolbar->ToggleTool( ID_BORDER_LEFT,     ( ( flag & wxLEFT ) != 0 ) && gotLayoutSettings );
@@ -1225,6 +1208,10 @@ void MainFrame::OnChangeBorder( wxCommandEvent& e )
 
 	switch ( e.GetId() )
 	{
+		case ID_BORDER_ALL:
+			border = wxALL;
+			break;
+
 		case ID_BORDER_LEFT:
 			border = wxLEFT;
 			break;
@@ -1327,18 +1314,14 @@ bool MainFrame::SaveWarning()
 	return ( result != wxCANCEL );
 }
 
-#ifdef USE_FLATNOTEBOOK
-void MainFrame::OnFlatNotebookPageChanged( wxFlatNotebookEvent& event )
-#else
 void MainFrame::OnAuiNotebookPageChanged( wxAuiNotebookEvent& event )
-#endif
 {
 	UpdateFrame();
 
 	if ( m_autoSash )
 	{
 		m_page_selection = event.GetSelection();
-		Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > selection = %d"), m_page_selection);
+		Debug::Print(wxT("MainFrame::OnAuiNotebookPageChanged > selection = %d"), m_page_selection);
 
 		wxSize panel_size;
 		int sash_pos;
@@ -1353,46 +1336,12 @@ void MainFrame::OnAuiNotebookPageChanged( wxAuiNotebookEvent& event )
 					panel_size = m_cpp->GetClientSize();
 					sash_pos = m_rightSplitter->GetSashPosition();
 
-					Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > CPP panel: width = %d sash pos = %d"), panel_size.GetWidth(), sash_pos);
+					Debug::Print(wxT("MainFrame::OnAuiNotebookPageChanged > CPP panel: width = %d sash pos = %d"), panel_size.GetWidth(), sash_pos);
 
 					if(panel_size.GetWidth() > sash_pos)
 					{
 						// set the sash position
-						Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > reset sash position"));
-						m_rightSplitter->SetSashPosition(panel_size.GetWidth());
-					}
-				}
-				break;
-
-			case 2: // Python panel
-				if( (m_python != NULL) && (m_rightSplitter != NULL) )
-				{
-					panel_size = m_python->GetClientSize();
-					sash_pos = m_rightSplitter->GetSashPosition();
-
-					Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > Python panel: width = %d sash pos = %d"), panel_size.GetWidth(), sash_pos);
-
-					if(panel_size.GetWidth() > sash_pos)
-					{
-						// set the sash position
-						Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > reset sash position"));
-						m_rightSplitter->SetSashPosition(panel_size.GetWidth());
-					}
-				}
-				break;
-
-            case 3: // PHP panel
-				if( (m_php != NULL) && (m_rightSplitter != NULL) )
-				{
-					panel_size = m_xrc->GetClientSize();
-					sash_pos = m_rightSplitter->GetSashPosition();
-
-					Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > PHP panel: width = %d sash pos = %d"), panel_size.GetWidth(), sash_pos);
-
-					if(panel_size.GetWidth() > sash_pos)
-					{
-						// set the sash position
-						Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > reset sash position"));
+						Debug::Print(wxT("MainFrame::OnAuiNotebookPageChanged > reset sash position"));
 						m_rightSplitter->SetSashPosition(panel_size.GetWidth());
 					}
 				}
@@ -1404,12 +1353,12 @@ void MainFrame::OnAuiNotebookPageChanged( wxAuiNotebookEvent& event )
 					panel_size = m_xrc->GetClientSize();
 					sash_pos = m_rightSplitter->GetSashPosition();
 
-					Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > XRC panel: width = %d sash pos = %d"), panel_size.GetWidth(), sash_pos);
+					Debug::Print(wxT("MainFrame::OnAuiNotebookPageChanged > XRC panel: width = %d sash pos = %d"), panel_size.GetWidth(), sash_pos);
 
 					if(panel_size.GetWidth() > sash_pos)
 					{
 						// set the sash position
-						Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > reset sash position"));
+						Debug::Print(wxT("MainFrame::OnAuiNotebookPageChanged > reset sash position"));
 						m_rightSplitter->SetSashPosition(panel_size.GetWidth());
 					}
 				}
@@ -1423,7 +1372,7 @@ void MainFrame::OnAuiNotebookPageChanged( wxAuiNotebookEvent& event )
 					if(m_rightSplitter_sash_pos < sash_pos)
 					{
 						//restore the sash position
-						Debug::Print(wxT("MainFrame::OnFlatNotebookPageChanged > restore sash position: sash pos = %d"), m_rightSplitter_sash_pos);
+						Debug::Print(wxT("MainFrame::OnAuiNotebookPageChanged > restore sash position: sash pos = %d"), m_rightSplitter_sash_pos);
 						m_rightSplitter->SetSashPosition(m_rightSplitter_sash_pos);
 					}
 					else
@@ -1572,6 +1521,7 @@ wxToolBar * MainFrame::CreateFBToolBar()
 	toolbar->AddTool( ID_EXPAND, wxT( "" ), AppBitmaps::GetBitmap( wxT( "expand" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Expand (Alt+W)" ), wxT( "The item will be expanded to fill the space assigned to the item." ) );
 	toolbar->AddTool( ID_STRETCH, wxT( "" ), AppBitmaps::GetBitmap( wxT( "stretch" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Stretch (Alt+S)" ), wxT( "The item will grow and shrink with the sizer." ) );
 	toolbar->AddSeparator();
+	toolbar->AddTool( ID_BORDER_ALL, wxT(""), AppBitmaps::GetBitmap(wxT("all"), TOOL_SIZE), wxNullBitmap, wxITEM_CHECK, wxT( "Left Border" ), wxT( "A border will be added on all sides of the item." ) );
 	toolbar->AddTool( ID_BORDER_LEFT, wxT( "" ), AppBitmaps::GetBitmap( wxT( "left" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Left Border" ), wxT( "A border will be added on the left side of the item." ) );
 	toolbar->AddTool( ID_BORDER_RIGHT, wxT( "" ), AppBitmaps::GetBitmap( wxT( "right" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Right Border" ), wxT( "A border will be  added on the right side of the item." ) );
 	toolbar->AddTool( ID_BORDER_TOP, wxT( "" ), AppBitmaps::GetBitmap( wxT( "top" ), TOOL_SIZE ), wxNullBitmap, wxITEM_CHECK, wxT( "Top Border" ), wxT( "A border will be  added on the top of the item." ) );
@@ -1584,56 +1534,25 @@ wxToolBar * MainFrame::CreateFBToolBar()
 
 wxWindow * MainFrame::CreateDesignerWindow( wxWindow *parent )
 {
-#ifdef USE_FLATNOTEBOOK
-	long nbStyle;
-	wxConfigBase* config = wxConfigBase::Get();
-	config->Read( wxT("/mainframe/editor/notebook_style"), &nbStyle, wxFNB_BOTTOM | wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | wxFNB_NODRAG  | wxFNB_FF2 | wxFNB_CUSTOM_DLG );
-
-	m_notebook = new wxFlatNotebook( parent, ID_EDITOR_FNB, wxDefaultPosition, wxDefaultSize, FNB_STYLE_OVERRIDES( nbStyle ) );
-	m_notebook->SetCustomizeOptions( wxFNB_CUSTOM_TAB_LOOK | wxFNB_CUSTOM_ORIENTATION | wxFNB_CUSTOM_LOCAL_DRAG );
-
-	// Set notebook icons
-	m_icons.Add( AppBitmaps::GetBitmap( wxT( "designer" ), 16 ) );
-	m_icons.Add( AppBitmaps::GetBitmap( wxT( "c++" ), 16 ) );
-	m_icons.Add( AppBitmaps::GetBitmap( wxT( "python" ), 16 ) );
-	m_icons.Add( AppBitmaps::GetBitmap( wxT( "php" ), 16 ) );
-	m_icons.Add( AppBitmaps::GetBitmap( wxT( "xrc" ), 16 ) );
-	m_notebook->SetImageList( &m_icons );
-#else
 	m_notebook = new wxAuiNotebook( parent, ID_EDITOR_FNB, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP );
-#endif
 
 	m_visualEdit = new VisualEditor( m_notebook );
 	AppData()->GetManager()->SetVisualEditor( m_visualEdit );
 
 	m_notebook->AddPage( m_visualEdit, wxT( "Designer" ), false, 0 );
-#ifndef USE_FLATNOTEBOOK
 	m_notebook->SetPageBitmap( 0, AppBitmaps::GetBitmap( wxT( "designer" ), 16 ) );
-#endif
 
 	m_cpp = new CppPanel( m_notebook, -1 );
 	m_notebook->AddPage( m_cpp, wxT( "C++" ), false, 1 );
-#ifndef USE_FLATNOTEBOOK
 	m_notebook->SetPageBitmap( 1, AppBitmaps::GetBitmap( wxT( "c++" ), 16 ) );
-#endif
-
-	m_python = new PythonPanel( m_notebook, -1 );
-	m_notebook->AddPage( m_python, wxT( "Python" ), false, 2 );
-#ifndef USE_FLATNOTEBOOK
-	m_notebook->SetPageBitmap( 2, AppBitmaps::GetBitmap( wxT( "php" ), 16 ) );
-#endif
-
-	m_php = new PHPPanel( m_notebook, -1 );
-	m_notebook->AddPage( m_php, wxT( "PHP" ), false, 3 );
-#ifndef USE_FLATNOTEBOOK
-	m_notebook->SetPageBitmap( 3, AppBitmaps::GetBitmap( wxT( "designer" ), 16 ) );
-#endif
 
 	m_xrc = new XrcPanel( m_notebook, -1 );
 	m_notebook->AddPage( m_xrc, wxT( "XRC" ), false, 4 );
-#ifndef USE_FLATNOTEBOOK
 	m_notebook->SetPageBitmap( 4, AppBitmaps::GetBitmap( wxT( "xrc" ), 16 ) );
-#endif
+
+	m_sol = new SolPanel( m_notebook, -1 );
+	m_notebook->AddPage( m_sol, wxT( "SOL" ), false, 5 );
+	m_notebook->SetPageBitmap( 4, AppBitmaps::GetBitmap( wxT( "sol" ), 16 ) );
 
 	return m_notebook;
 }

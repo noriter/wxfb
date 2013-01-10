@@ -30,8 +30,9 @@
 
 #include <wx/splitter.h>
 #include <wx/listctrl.h>
+#include <wx/collpane.h>
 
-// Includes notebook, listbook, choicebook, auibook
+// Includes notebook, choicebook, auibook
 #include "bookutils.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,7 +56,6 @@ public:
 
 protected:
 	void OnNotebookPageChanged( wxNotebookEvent& event );
-	void OnListbookPageChanged( wxListbookEvent& event );
 	void OnChoicebookPageChanged( wxChoicebookEvent& event );
 	void OnAuiNotebookPageChanged( wxAuiNotebookEvent& event );
 	void OnSplitterSashChanged( wxSplitterEvent& event );
@@ -120,7 +120,6 @@ protected:
 
 BEGIN_EVENT_TABLE( ComponentEvtHandler, wxEvtHandler )
 	EVT_NOTEBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnNotebookPageChanged )
-	EVT_LISTBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnListbookPageChanged )
 	EVT_CHOICEBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnChoicebookPageChanged )
 	EVT_AUINOTEBOOK_PAGE_CHANGED( -1, ComponentEvtHandler::OnAuiNotebookPageChanged )
 	EVT_AUINOTEBOOK_PAGE_CLOSE( -1, ComponentEvtHandler::OnAuiNotebookPageClosed )
@@ -351,7 +350,7 @@ class SplitterWindowComponent : public ComponentBase
 				{
 					splitter->Initialize( subwindow );
 				}
-				splitter->PushEventHandler( new ComponentEvtHandler( splitter, GetManager() ) );
+				PushEventHandler(splitter, new ComponentEvtHandler( splitter, GetManager() ) );
 				break;
 			}
 			case 2:
@@ -395,7 +394,7 @@ class SplitterWindowComponent : public ComponentBase
 					splitter->SplitHorizontally( subwindow0, subwindow1, sashPos );
 				}
 
-				splitter->PushEventHandler( new ComponentEvtHandler( splitter, GetManager() ) );
+				PushEventHandler(splitter, new ComponentEvtHandler( splitter, GetManager() ) );
 				break;
 			}
 			default:
@@ -471,7 +470,7 @@ public:
 
 		BookUtils::AddImageList( obj, book );
 
-		book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
+		PushEventHandler(book, new ComponentEvtHandler( book, GetManager() ) );
 
 		return book;
 	}
@@ -528,95 +527,6 @@ public:
 	}
 };
 
-class ListbookComponent : public ComponentBase
-{
-public:
-	wxObject* Create(IObject *obj, wxObject *parent)
-	{
-		wxListbook* book = new wxListbook((wxWindow *)parent,-1,
-			obj->GetPropertyAsPoint(_("pos")),
-			obj->GetPropertyAsSize(_("size")),
-			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
-
-		BookUtils::AddImageList( obj, book );
-
-		book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
-
-		return book;
-	}
-
-// Small icon style not supported by GTK
-#ifndef  __WXGTK__
-	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
-	{
-		wxListbook* book = wxDynamicCast( wxparent, wxListbook );
-		if ( book )
-		{
-			// Small icon style if bitmapsize is not set
-			IObject* obj = GetManager()->GetIObject( wxobject );
-			if ( obj->GetPropertyAsString( _("bitmapsize") ).empty() )
-			{
-				wxListView* tmpListView = book->GetListView();
-				long flags = tmpListView->GetWindowStyleFlag();
-				flags = (flags & ~wxLC_ICON) | wxLC_SMALL_ICON;
-				tmpListView->SetWindowStyleFlag( flags );
-			}
-		}
-	}
-#endif
-
-	ticpp::Element* ExportToXrc(IObject *obj)
-	{
-		ObjectToXrcFilter xrc(obj, _("wxListbook"), obj->GetPropertyAsString(_("name")));
-		xrc.AddWindowProperties();
-		return xrc.GetXrcObject();
-	}
-
-	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
-	{
-		XrcToXfbFilter filter(xrcObj, _("wxListbook"));
-		filter.AddWindowProperties();
-		return filter.GetXfbObject();
-	}
-};
-
-void ComponentEvtHandler::OnListbookPageChanged( wxListbookEvent& event )
-{
-	OnBookPageChanged< wxListbook >( event.GetSelection(), &event );
-	event.Skip();
-}
-
-class ListbookPageComponent : public ComponentBase
-{
-public:
-	void OnCreated( wxObject* wxobject, wxWindow* wxparent )
-	{
-		BookUtils::OnCreated< wxListbook >( wxobject, wxparent, GetManager(), _("ListbookPageComponent") );
-	}
-
-	void OnSelected( wxObject* wxobject )
-		{
-		BookUtils::OnSelected< wxListbook >( wxobject, GetManager() );
-				}
-
-	ticpp::Element* ExportToXrc(IObject *obj)
-	{
-		ObjectToXrcFilter xrc(obj, _("listbookpage"));
-		xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
-		xrc.AddProperty(_("select"),_("selected"),XRC_TYPE_BOOL);
-		return xrc.GetXrcObject();
-	}
-
-	ticpp::Element* ImportFromXrc( ticpp::Element* xrcObj )
-	{
-		XrcToXfbFilter filter(xrcObj, _("listbookpage"));
-		filter.AddWindowProperties();
-		filter.AddProperty(_("selected"),_("select"),XRC_TYPE_BOOL);
-		filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
-		return filter.GetXfbObject();
-	}
-};
-
 class ChoicebookComponent : public ComponentBase
 {
 public:
@@ -627,7 +537,7 @@ public:
 			obj->GetPropertyAsSize(_("size")),
 			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
 
-		book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
+		PushEventHandler( book, new ComponentEvtHandler( book, GetManager() ) );
 
 		return book;
 	}
@@ -697,7 +607,7 @@ public:
 		book->SetTabCtrlHeight( obj->GetPropertyAsInteger( _("tab_ctrl_height") ) );
 		book->SetUniformBitmapSize( obj->GetPropertyAsSize( _("uniform_bitmap_size") ) );
 
-		book->PushEventHandler( new ComponentEvtHandler( book, GetManager() ) );
+		PushEventHandler( book, new ComponentEvtHandler( book, GetManager() ) );
 
 		return book;
 	}
@@ -797,6 +707,41 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
+class CollapsiblePaneComponent : public ComponentBase
+{
+public:
+	wxObject* Create(IObject* obj, wxObject* parent)
+	{
+		wxCollapsiblePane* pane = new wxCollapsiblePane((wxWindow*)parent, -1,
+			obj->GetPropertyAsString(_("label")),
+			obj->GetPropertyAsPoint(_("pos")),
+			obj->GetPropertyAsSize(_("size")),
+			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+
+		pane->Expand();
+
+		return pane;
+	}
+
+	ticpp::Element* ExportToXrc(IObject* obj)
+	{
+		ObjectToXrcFilter xrc(obj, _("wxCollapsiblePane"), obj->GetPropertyAsString(_("name")));
+		xrc.AddWindowProperties();
+		xrc.AddProperty(_("label"), _("label"), XRC_TYPE_TEXT);
+		return xrc.GetXrcObject();
+	}
+
+	ticpp::Element* ImportFromXrc(ticpp::Element* xrcObj)
+	{
+		XrcToXfbFilter filter(xrcObj, _("wxCollapsiblePane"));
+		filter.AddWindowProperties();
+		filter.AddProperty(_("label"), _("label"),XRC_TYPE_TEXT);
+		return filter.GetXfbObject();
+	}
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
 BEGIN_LIBRARY()
 
 
@@ -810,14 +755,13 @@ WINDOW_COMPONENT("wxScrolledWindow",ScrolledWindowComponent)
 WINDOW_COMPONENT("wxNotebook", NotebookComponent)
 ABSTRACT_COMPONENT("notebookpage",NotebookPageComponent)
 
-WINDOW_COMPONENT("wxListbook", ListbookComponent)
-ABSTRACT_COMPONENT("listbookpage", ListbookPageComponent)
-
 WINDOW_COMPONENT("wxChoicebook", ChoicebookComponent)
 ABSTRACT_COMPONENT("choicebookpage", ChoicebookPageComponent)
 
 WINDOW_COMPONENT("wxAuiNotebook", AuiNotebookComponent)
 ABSTRACT_COMPONENT("auinotebookpage", AuiNotebookPageComponent)
+
+WINDOW_COMPONENT("wxCollapsiblePane", CollapsiblePaneComponent)
 
 // wxSplitterWindow
 MACRO(wxSP_3D)
@@ -846,13 +790,6 @@ MACRO(wxNB_MULTILINE)
 MACRO(wxNB_NOPAGETHEME)
 MACRO(wxNB_FLAT)
 
-// wxListbook
-MACRO(wxLB_TOP)
-MACRO(wxLB_LEFT)
-MACRO(wxLB_RIGHT)
-MACRO(wxLB_BOTTOM)
-MACRO(wxLB_DEFAULT)
-
 // wxChoicebook
 MACRO(wxCHB_TOP)
 MACRO(wxCHB_LEFT)
@@ -873,5 +810,8 @@ MACRO(wxAUI_NB_CLOSE_ON_ACTIVE_TAB)
 MACRO(wxAUI_NB_CLOSE_ON_ALL_TABS)
 MACRO(wxAUI_NB_TOP)
 MACRO(wxAUI_NB_BOTTOM)
+
+MACRO(wxCP_DEFAULT_STYLE)
+MACRO(wxCP_NO_TLW_RESIZE)
 
 END_LIBRARY()

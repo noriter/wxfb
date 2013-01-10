@@ -57,7 +57,8 @@ public:
 	// overrides for C++
 	PTemplateParser CreateParser( const TemplateParser* oldparser, wxString _template );
 	wxString RootWxParentToCode();
-	wxString ValueToCode( PropertyType type, wxString value);
+	wxString ValueToCode( PObjectBase obj, PropertyType type, wxString value);
+	wxString TouchName(PObjectBase obj, const wxString& name);
 
 };
 

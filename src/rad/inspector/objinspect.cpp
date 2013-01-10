@@ -66,7 +66,6 @@ BEGIN_EVENT_TABLE(ObjectInspector, wxPanel)
     EVT_PG_DOUBLE_CLICK(WXFB_PROPERTY_GRID, ObjectInspector::OnPropertyGridDblClick)
     EVT_PG_ITEM_COLLAPSED(WXFB_PROPERTY_GRID, ObjectInspector::OnPropertyGridExpand)
     EVT_PG_ITEM_EXPANDED (WXFB_PROPERTY_GRID, ObjectInspector::OnPropertyGridExpand)
-
     EVT_FB_OBJECT_SELECTED( ObjectInspector::OnObjectSelected )
     EVT_FB_PROJECT_REFRESH( ObjectInspector::OnProjectRefresh )
     EVT_FB_PROPERTY_MODIFIED( ObjectInspector::OnPropertyModified )
@@ -82,20 +81,7 @@ ObjectInspector::ObjectInspector( wxWindow* parent, int id, int style )
     AppData()->AddHandler( this->GetEventHandler() );
     m_currentSel = PObjectBase();
 
-#ifdef USE_FLATNOTEBOOK
-    long nbStyle;
-    wxConfigBase* config = wxConfigBase::Get();
-    config->Read( wxT("/mainframe/objectInspector/notebook_style"), &nbStyle, wxFNB_NO_X_BUTTON | wxFNB_NO_NAV_BUTTONS | wxFNB_NODRAG | wxFNB_DROPDOWN_TABS_LIST | wxFNB_FF2 | wxFNB_CUSTOM_DLG );
-
-    m_nb = new wxFlatNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, FNB_STYLE_OVERRIDES( nbStyle ) );
-    m_nb->SetCustomizeOptions( wxFNB_CUSTOM_TAB_LOOK | wxFNB_CUSTOM_ORIENTATION | wxFNB_CUSTOM_LOCAL_DRAG );
-
-    m_icons.Add( AppBitmaps::GetBitmap( wxT("properties"), 16 ) );
-    m_icons.Add( AppBitmaps::GetBitmap( wxT("events"), 16 ) );
-    m_nb->SetImageList( &m_icons );
-#else
 	m_nb = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP );
-#endif
 
     // The colour of property grid description looks ugly if we don't set this colour
     m_nb->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
@@ -112,13 +98,13 @@ ObjectInspector::ObjectInspector( wxWindow* parent, int id, int style )
     m_pg = CreatePropertyGridManager(m_nb, WXFB_PROPERTY_GRID);
     m_eg = CreatePropertyGridManager(m_nb, WXFB_EVENT_GRID);
 
+	m_pg->GetGrid()->Bind(wxEVT_KEY_DOWN, &ObjectInspector::OnPropertyGridKeyDown, this);
+
     m_nb->AddPage( m_pg, _("Properties"), false, 0 );
     m_nb->AddPage( m_eg, _("Events"),     false, 1 );
 	
-#ifndef USE_FLATNOTEBOOK
 	m_nb->SetPageBitmap( 0, AppBitmaps::GetBitmap( wxT("properties"), 16 ) );
 	m_nb->SetPageBitmap( 1, AppBitmaps::GetBitmap( wxT("events"), 16 ) );
-#endif
 
     wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( m_nb, 1, wxALL | wxEXPAND, 0 );
@@ -139,9 +125,6 @@ void ObjectInspector::SavePosition()
     // Save Layout
     wxConfigBase* config = wxConfigBase::Get();
     config->Write( wxT("/mainframe/objectInspector/DescBoxHeight" ), m_pg->GetDescBoxHeight() );
-#ifdef USE_FLATNOTEBOOK
-    config->Write( wxT("/mainframe/objectInspector/notebook_style"), m_nb->GetWindowStyleFlag() );
-#endif
 }
 
 void ObjectInspector::Create( bool force )
@@ -424,6 +407,7 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
     else if (type == PT_STRINGLIST)
     {
         result = new wxArrayStringProperty( name, wxPG_LABEL,prop->GetValueAsArrayString() );
+		result->SetAttribute(wxPG_ARRAY_DELIMITER, wxT("\""));
     }
     else if (type == PT_FLOAT)
     {
@@ -431,24 +415,7 @@ wxPGProperty* ObjectInspector::GetProperty( PProperty prop )
     }
     else if ( type == PT_PARENT )
     {
-		result = new wxPGProperty( name, wxPG_LABEL );
-		
-		/*wxPGProperty* parent = new wxPGProperty( name, wxPG_LABEL );
-		parent->SetValueFromString( prop->GetValueAsString(), wxPG_FULL_VALUE );
-        //wxPGProperty* parent = new wxStringProperty( name, wxPG_LABEL, wxT("<composed>") );
-        //parent->SetValueFromString( prop->GetValueAsString() );
-
-        PPropertyInfo prop_desc = prop->GetPropertyInfo();
-        std::list< PropertyChild >* children = prop_desc->GetChildren();
-        std::list< PropertyChild >::iterator it;
-        for ( it = children->begin(); it != children->end(); ++it )
-        {
-            wxPGProperty* child = new wxStringProperty( it->m_name, wxPG_LABEL, wxEmptyString );
-			parent->AppendChild( child );
-            m_pg->SetPropertyHelpString( child, it->m_description );
-        }
-
-        result = parent;*/
+		result = new wxStringProperty( name, wxPG_LABEL, wxT("<composed>") );
     }
     else // Unknown property
     {
@@ -507,7 +474,7 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
 					wxArrayString values = wxStringTokenize( prop->GetValueAsString(), wxT(";"), wxTOKEN_RET_EMPTY_ALL );
 					size_t i = 0;
 					wxString value;
-					
+
 					for ( it = children->begin(); it != children->end(); ++it )
 					{
 						if( values.GetCount() > i ) value = values[i++].Trim().Trim(false);
@@ -1087,6 +1054,9 @@ wxPropertyGridManager* ObjectInspector::CreatePropertyGridManager(wxWindow *pare
     pg->SetDescBoxHeight( descBoxHeight );
 //  pg->SetExtraStyle( wxPG_EX_NATIVE_DOUBLE_BUFFERING ); Both seems to no more needed.
 //  pg->SetExtraStyle( wxPG_EX_PROCESS_EVENTS_IMMEDIATELY );
+//  
+	pg->GetGrid()->DedicateKey(WXK_UP);
+	pg->GetGrid()->DedicateKey(WXK_DOWN);
 
     return pg;
 }
@@ -1106,6 +1076,33 @@ void ObjectInspector::OnPropertyGridDblClick(wxPropertyGridEvent& event)
     }
 }
 
+void ObjectInspector::OnPropertyGridKeyDown(wxKeyEvent& event)
+{
+	switch (event.GetKeyCode())
+	{
+	case WXK_DELETE:
+		{
+			wxPGProperty* pgProp = m_pg->GetSelectedProperty();
+			if (pgProp)
+			{
+				ObjInspectorPropertyMap::iterator itr = m_propMap.find(pgProp);
+				if (itr != m_propMap.end())
+				{
+					wxVariant def = pgProp->GetDefaultValue();
+					AppData()->ModifyProperty(itr->second, def);
+					pgProp->SetValue(def);
+					pgProp->RefreshChildren();
+					event.StopPropagation();
+				}
+			}
+		}
+		break;
+
+	default:
+		event.Skip();
+	}
+}
+
 void ObjectInspector::OnEventGridDblClick(wxPropertyGridEvent& event)
 {
     wxPGProperty *pgProp = m_pg->GetPropertyByLabel( wxT("name") );
@@ -1116,7 +1113,7 @@ void ObjectInspector::OnEventGridDblClick(wxPropertyGridEvent& event)
     p->SetValueFromString( pgProp->GetDisplayedString() + event.GetPropertyLabel() );
 #else
     wxPGProperty *p = event.GetProperty();
-    p->SetValueFromString( pgProp->GetDisplayedString() + event.GetProperty()->GetLabel() );
+    p->SetValueFromString( _("_") + pgProp->GetDisplayedString() + _("_") + event.GetProperty()->GetLabel() );
 #endif
     ObjInspectorEventMap::iterator it = m_eventMap.find( p );
     if ( it != m_eventMap.end() )

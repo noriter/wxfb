@@ -24,7 +24,7 @@ Written by
 <package name="Menu/Toolbar" lib="libcommon" icon="menubar.xpm" desc="wxWidgets Menu and Toolbar Controls">
   <objectinfo class="wxStatusBar" icon="statusbar.xpm" type="statusbar">
     <inherits class="wxWindow" />
-    <property name="name" type="text">m_statusBar</property>
+    <property name="name" type="text">statusBar</property>
     <property name="fields" type="uint"  help="Number of fields in the statusbar.">1</property>
     <property name="style" type="bitlist">
       <option name="wxST_SIZEGRIP"       help="On Windows, displays a gripper at right-hand side of the status bar." />wxST_SIZEGRIP</property>
@@ -32,7 +32,7 @@ Written by
 
   <objectinfo class="wxMenuBar" icon="menubar.xpm" type="menubar" startgroup="1">
     <inherits class="wxWindow" />
-    <property name="name" type="text">m_menubar</property>
+    <property name="name" type="text">menubar</property>
     <property name="label" type="wxString_i18n">MyMenuBar</property>
 	<property name="style" type="bitlist">
       <option name="wxMB_DOCKABLE" help="Allows the menu bar to be detached (wxGTK only)."/>
@@ -40,17 +40,17 @@ Written by
   </objectinfo>
 
   <objectinfo class="wxMenu" icon="menu.xpm" type="menu">
-    <property name="name" type="text">m_menu</property>
+    <property name="name" type="text">menu</property>
     <property name="label" type="wxString_i18n">MyMenu</property>
   </objectinfo>
 
   <objectinfo class="submenu" icon="submenu.xpm" type="submenu">
-    <property name="name" type="text">m_menu</property>
+    <property name="name" type="text">menu</property>
     <property name="label" type="wxString_i18n">MyMenu</property>
   </objectinfo>
 
   <objectinfo class="wxMenuItem" icon="menuitem.xpm" type="menuitem">
-    <property name="name" type="text">m_menuItem</property>
+    <property name="name" type="text">menuItem</property>
     <property name="label" type="wxString_i18n"    help="Text for the menu item, as shown on the menu. An accelerator key can be specified using the ampersand &quot;&amp;&quot; character.">MyMenuItem</property>
     <property name="shortcut" type="wxString" help="Optional shortcut keyboard shortcut. Remarks: The general syntax is any combination of &quot;CTRL&quot;, &quot;ALT&quot; and &quot;SHIFT&quot; strings (case doesn't matter) separated by either '-' or '+' characters and followed by the accelerator itself. The accelerator may be any alphanumeric character, any function key (from F1 to F12)"/>
     <property name="help" type="wxString_i18n"     help="Optional help string that will be shown on the status bar."/>
@@ -70,13 +70,12 @@ Written by
   </objectinfo>
 
   <objectinfo class="separator" icon="separator.xpm" type="menuitem">
-	<property name="name" type="text">m_separator</property>
   </objectinfo>
 
   <objectinfo class="wxToolBar" icon="toolbar.xpm" type="toolbar" startgroup="1">
     <inherits class="wxWindow" />
 	<inherits class="AUI" />
-    <property name="name" type="text">m_toolBar</property>
+    <property name="name" type="text">toolBar</property>
     <property name="bitmapsize" type="wxSize" help="Default size of each tool bitmap. The default bitmap size is 16 by 15 pixels." />
     <property name="margins" type="wxSize"    help="Values to be used as margins for the toolbar." />
     <property name="packing" type="uint"      help="Value used for spacing tools. Remarks: The packing is used for spacing in the vertical direction if the toolbar is horizontal, and for spacing in the horizontal direction if the toolbar is vertical.">1</property>
@@ -97,7 +96,7 @@ Written by
  <objectinfo class="wxAuiToolBar" icon="auitoolbar.xpm" type="toolbar">
     <inherits class="wxWindow" />
 	<inherits class="AUI" />
-    <property name="name" type="text">m_auiToolBar</property>
+    <property name="name" type="text">auiToolBar</property>
     <property name="bitmapsize" type="wxSize" help="Default size of each tool bitmap. The default bitmap size is 16 by 15 pixels." />
     <property name="margins" type="wxSize"    help="Values to be used as margins for the toolbar." />
     <property name="packing" type="uint"      help="Value used for spacing tools. Remarks: The packing is used for spacing in the vertical direction if the toolbar is horizontal, and for spacing in the horizontal direction if the toolbar is vertical.">1</property>
@@ -118,7 +117,7 @@ Written by
   </objectinfo>
 
   <objectinfo class="tool" icon="tool.xpm" type="tool">
-    <property name="name" type="text">m_tool</property>
+    <property name="name" type="text">tool</property>
     <property name="label" type="wxString_i18n">tool</property>
     <property name="bitmap" type="bitmap"      		help="The primary tool bitmap." />
     <property name="kind" type="option">

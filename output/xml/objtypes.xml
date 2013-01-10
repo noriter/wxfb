@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <definitions>
-<!--
+  <!--
   Object type definitions
   -----------------------
   
@@ -54,7 +54,7 @@
 
   <objtype name="form">
     <childtype name="sizer" nmax="1" aui_nmax="0" />
-	<childtype name="gbsizer" nmax="1" aui_nmax="0" />
+    <childtype name="gbsizer" nmax="1" aui_nmax="0" />
     <childtype name="menubar" nmax="1" aui_nmax="1" />
     <childtype name="menu" nmax="1" aui_nmax="1" />
     <childtype name="statusbar" nmax="1" aui_nmax="1" />
@@ -64,23 +64,21 @@
     <childtype name="container" nmax="0" />
     <childtype name="notebook" nmax="0" />
     <childtype name="auinotebook" nmax="0" />
-    <childtype name="flatnotebook" nmax="0" />
-    <childtype name="listbook" nmax="0" />
     <childtype name="choicebook" nmax="0" />
     <childtype name="treelistctrl" nmax="0" />
     <childtype name="splitter" nmax="0" />
   </objtype>
 
-    <objtype name="wizard">
-        <childtype name="wizardpagesimple"/>
-        <childtype name="menu" nmax="1" />
-    </objtype>
+  <objtype name="wizard">
+    <childtype name="wizardpagesimple"/>
+    <childtype name="menu" nmax="1" />
+  </objtype>
 
-    <objtype name="wizardpagesimple">
-        <childtype name="sizer" nmax="1" />
-        <childtype name="gbsizer" nmax="1" />
-        <childtype name="menu" nmax="1" />
-    </objtype>
+  <objtype name="wizardpagesimple">
+    <childtype name="sizer" nmax="1" />
+    <childtype name="gbsizer" nmax="1" />
+    <childtype name="menu" nmax="1" />
+  </objtype>
 
   <objtype name="menubar_form">
     <childtype name="menu" />
@@ -93,7 +91,7 @@
   </objtype>
 
   <objtype name="widget">
-	<childtype name="menu" nmax="1" aui_nmax="1"/>
+    <childtype name="menu" nmax="1" aui_nmax="1"/>
   </objtype>
   <objtype name="expanded_widget" />
 
@@ -118,10 +116,8 @@
     <childtype name="sizer" nmax="1" aui_nmax="1" />
     <childtype name="gbsizer" nmax="1" aui_nmax="1" />
     <childtype name="notebook" nmax="1" aui_nmax="1" />
-    <childtype name="flatnotebook" nmax="1" aui_nmax="1" />
-    <childtype name="listbook" nmax="1" aui_nmax="1" />
     <childtype name="choicebook" nmax="1" aui_nmax="1" />
-	<childtype name="auinotebook" nmax="1" aui_nmax="1" />
+    <childtype name="auinotebook" nmax="1" aui_nmax="1" />
     <childtype name="splitter" nmax="1" aui_nmax="1" />
     <childtype name="toolbar" nmax="1" aui_nmax="1" />
     <childtype name="treelistctrl" nmax="1" aui_nmax="1" />
@@ -134,10 +130,8 @@
     <childtype name="sizer" nmax="1" aui_nmax="1" />
     <childtype name="gbsizer" nmax="1" aui_nmax="1" />
     <childtype name="notebook" nmax="1" aui_nmax="1" />
-    <childtype name="flatnotebook" nmax="1" aui_nmax="1" />
-    <childtype name="listbook" nmax="1" aui_nmax="1" />
     <childtype name="choicebook" nmax="1" aui_nmax="1" />
-	<childtype name="auinotebook" nmax="1" aui_nmax="1" />
+    <childtype name="auinotebook" nmax="1" aui_nmax="1" />
     <childtype name="splitter" nmax="1" aui_nmax="1" />
     <childtype name="toolbar" nmax="1" aui_nmax="1" />
     <childtype name="treelistctrl" nmax="1" aui_nmax="1" />
@@ -159,22 +153,6 @@
     <childtype name="container" nmax="1" aui_nmax="1" />
   </objtype>
 
-  <objtype name="flatnotebook" >
-    <childtype name="flatnotebookpage" />
-  </objtype>
-
-  <objtype name="flatnotebookpage" item="1">
-    <childtype name="container" nmax="1" aui_nmax="1" />
-  </objtype>
-
-  <objtype name="listbook" >
-    <childtype name="listbookpage" />
-  </objtype>
-
-  <objtype name="listbookpage" item="1">
-    <childtype name="container" nmax="1" aui_nmax="1" />
-  </objtype>
-
   <objtype name="choicebook" >
     <childtype name="choicebookpage" />
   </objtype>
@@ -190,7 +168,7 @@
   <objtype name="auinotebookpage" item="1">
     <childtype name="container" nmax="1" aui_nmax="1" />
   </objtype>
-  
+
   <objtype name="menubar">
     <childtype name="menu" />
   </objtype>

@@ -45,11 +45,7 @@
 #else
     #include <wx/stc/stc.h>
 #endif
-#ifdef USE_FLATNOTEBOOK
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
-#else
 #include <wx/aui/auibook.h>
-#endif
 
 BEGIN_EVENT_TABLE( XrcPanel,  wxPanel )
 	EVT_FB_CODE_GENERATION( XrcPanel::OnCodeGeneration )
@@ -131,11 +127,8 @@ void XrcPanel::InitStyledTextCtrl( wxStyledTextCtrl *stc )
 
 void XrcPanel::OnFind( wxFindDialogEvent& event )
 {
-#ifdef USE_FLATNOTEBOOK
-	wxFlatNotebook* notebook = wxDynamicCast( this->GetParent(), wxFlatNotebook );
-#else
 	wxAuiNotebook* notebook = wxDynamicCast( this->GetParent(), wxAuiNotebook );
-#endif
+
 	if ( NULL == notebook )
 	{
 		return;

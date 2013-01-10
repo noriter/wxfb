@@ -230,15 +230,22 @@ bool TemplateParser::ParseProperty()
 		return true;
 	}
 
+	wxString code;
 	if ( childName.empty() )
 	{
-		wxString code = PropertyToCode(property);
-		m_out << code;
+		code = PropertyToCode(m_obj, property);
 	}
 	else
 	{
-		m_out << property->GetChildFromParent( childName );
+		code = property->GetChildFromParent( childName );
 	}
+
+	if (propname == wxT("name"))
+	{
+		code = TouchName(m_obj, code);
+	}
+
+	m_out << code;
 
 	//  Debug::Print("parsing property %s",propname.c_str());
 
@@ -297,8 +304,6 @@ PObjectBase TemplateParser::GetWxParent()
 	candidates.push_back( m_obj->FindNearAncestor( wxT("container") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("notebook") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("splitter") ) );
-	candidates.push_back( m_obj->FindNearAncestor( wxT("flatnotebook") ) );
-	candidates.push_back( m_obj->FindNearAncestor( wxT("listbook") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("choicebook") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("auinotebook") ) );
 	candidates.push_back( m_obj->FindNearAncestor( wxT("toolbar") ) );
@@ -329,8 +334,12 @@ bool TemplateParser::ParseWxParent()
 	if ( wxparent )
 	{
 		PProperty property = GetRelatedProperty( wxparent );
-		//m_out << PropertyToCode(property);
-		m_out << ValueToCode( PT_WXPARENT, property->GetValue() );
+		wxString code = ValueToCode( wxparent, PT_WXPARENT, property->GetValue() );
+
+		if (property->GetName() == "name")
+			m_out << TouchName(wxparent, code);
+		else
+			m_out << code;
 	}
 	else
 	{
@@ -362,7 +371,7 @@ bool TemplateParser::ParseForm()
 	}
 
 	PProperty property = GetRelatedProperty( form );
-	m_out << PropertyToCode( property );
+	m_out << PropertyToCode( m_obj, property );
 
 	return true;
 }
@@ -373,7 +382,11 @@ bool TemplateParser::ParseParent()
 	if (parent)
 	{
 		PProperty property = GetRelatedProperty( parent );
-		m_out << PropertyToCode(property);
+		wxString code = PropertyToCode(parent, property);
+		if (property->GetName() == "name")
+			m_out << TouchName(parent, code);
+		else
+			m_out << code;
 	}
 	else
 	{
@@ -391,7 +404,11 @@ bool TemplateParser::ParseChild()
 	if (child)
 	{
 		PProperty property = GetRelatedProperty( child );
-		m_out << PropertyToCode(property);
+		wxString code = PropertyToCode(child, property);
+		if (property->GetName() == "name")
+			m_out << TouchName(child, code);
+		else
+			m_out << code;
 	}
 	else
 		m_out << RootWxParentToCode();
@@ -453,7 +470,7 @@ bool TemplateParser::ParseForEach()
 			{
 				wxString code;
 				PTemplateParser parser = CreateParser(this,inner_template);
-				parser->SetPredefined( ValueToCode( PT_WXSTRING_I18N, array[i] ), wxString::Format( wxT("%i"), i ) );
+				parser->SetPredefined( ValueToCode( m_obj, PT_WXSTRING_I18N, array[i] ), wxString::Format( wxT("%i"), i ) );
 				code = parser->ParseTemplate();
 				m_out << wxT("\n") << code;
 			}
@@ -1000,12 +1017,12 @@ void TemplateParser::ParseClass()
 		wxString subclass = subclass_prop->GetChildFromParent( wxT("name") );
 		if ( !subclass.empty() )
 		{
-			m_out << subclass;
+			m_out << ValueToCode(m_obj, PT_CLASS, subclass);
 			return;
 		}
 	}
 
-	m_out << ValueToCode( PT_CLASS, m_obj->GetClassName() );
+	m_out << ValueToCode( m_obj, PT_CLASS, m_obj->GetClassName() );
 }
 
 void TemplateParser::ParseIndent()
@@ -1020,11 +1037,11 @@ void TemplateParser::ParseUnindent()
 	if( m_indent < 0 ) m_indent = 0;
 }
 
-wxString TemplateParser::PropertyToCode(PProperty property)
+wxString TemplateParser::PropertyToCode(PObjectBase obj, PProperty property)
 {
 	if ( property )
 	{
-		return ValueToCode(property->GetType(), property->GetValue());
+		return ValueToCode(obj, property->GetType(), property->GetValue());
 	}
 	else
 	{

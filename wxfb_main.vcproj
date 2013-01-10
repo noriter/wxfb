@@ -352,27 +352,19 @@
 					>
 				</File>
 				<File
-					RelativePath=".\src\rad\phppanel\phppanel.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\rad\phppanel\phppanel.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\rad\pythonpanel\pythonpanel.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\rad\pythonpanel\pythonpanel.h"
-					>
-				</File>
-				<File
 					RelativePath=".\src\rad\designer\resizablepanel.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\src\rad\designer\resizablepanel.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\rad\solpanel\solpanel.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\rad\solpanel\solpanel.h"
 					>
 				</File>
 				<File
@@ -457,19 +449,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\codegen\phpcg.cpp"
+				RelativePath=".\src\codegen\solcg.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\src\codegen\phpcg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\codegen\pythoncg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\codegen\pythoncg.h"
+				RelativePath=".\src\codegen\solcg.h"
 				>
 			</File>
 			<File
@@ -598,6 +582,38 @@
 			</File>
 			<File
 				RelativePath=".\src\md5\md5.hh"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="xml"
+			>
+			<File
+				RelativePath=".\output\xml\default.cppcode"
+				>
+			</File>
+			<File
+				RelativePath=".\output\xml\default.solcode"
+				>
+			</File>
+			<File
+				RelativePath=".\output\xml\default.xml"
+				>
+			</File>
+			<File
+				RelativePath=".\output\xml\icons.xml"
+				>
+			</File>
+			<File
+				RelativePath=".\output\xml\objtypes.xml"
+				>
+			</File>
+			<File
+				RelativePath=".\output\xml\properties.cppcode"
+				>
+			</File>
+			<File
+				RelativePath=".\output\xml\properties.solcode"
 				>
 			</File>
 		</Filter>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<codegen language="sol">
+
+  <templates class="wxPanel">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $pos, $size, $window_style #ifnotnull $window_name @{, $window_name @})</template>
+  </templates>
+
+  <templates class="wxCollapsiblePane">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">
+      $name = #class(#wxparent $name, $id, $label, $pos, $size, $style #ifnotnull $window_style @{ | $window_style @} #ifnotnull $window_name @{, null, $window_name @}) #nl
+      var $name #append _pane = $name ; $name = $name #append .Pane
+    </template>
+    <template name="after_addchild">
+      $name = $name #append _pane
+    </template>
+  </templates>
+
+  <templates class="wxSplitterWindow">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @})</template>
+    <template name="settings">
+      #ifnotnull $sashgravity
+      @{
+        #ifnotequal $sashgravity "0.0"
+        @{ $name.SashGravity = $sashgravity #nl @}
+      @}
+      #ifnotnull $sashsize
+      @{
+        #ifnotequal $sashsize "-1"
+        @{	$name.SashSize = $sashsize #nl @}
+      @}
+      #ifnotnull $min_pane_size
+      @{
+        #ifnotequal $min_pane_size "0"
+        @{	$name.MinPaneSize = $min_pane_size #nl @}
+      @}
+    </template>
+    <template name="evt_connect_OnSplitterSashPosChanging"> $name.Bind($name.EVT.SASH_POS_CHANGING, this, #handler)</template>
+    <template name="evt_connect_OnSplitterSashPosChanged">  $name.Bind($name.EVT.SASH_POS_CHANGED, this, #handler)</template>
+    <template name="evt_connect_OnSplitterUnsplit">         $name.Bind($name.EVT.UNSPLIT, this, #handler)</template>
+    <template name="evt_connect_OnSplitterDClick">          $name.Bind($name.EVT.DCLICK, this, #handler)</template>
+  </templates>
+
+
+  <templates class="wxNotebook">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @})</template>
+    <template name="settings">
+      #ifnotnull $bitmapsize
+      @{
+        var $name #append ImageSize = $bitmapsize #nl
+        var $name #append Index = 0 #nl
+        var $name #append Images = wx.ImageList($name #append ImageSize.Width, $name #append ImageSize.Height) #nl
+        $name.AssignImageList($name #append Images)
+      @}
+    </template>
+    <template name="evt_connect_OnNotebookPageChanged"> $name.Bind($name.EVT.PAGE_CHANGED, this, #handler)</template>
+    <template name="evt_connect_OnNotebookPageChanging">$name.Bind($name.EVT.PAGE_CHANGING, this, #handler)</template>
+  </templates>
+
+  <templates class="notebookpage">
+    <template name="page_add">#parent $name.AddPage(#child $name, $label, $select)</template>
+    <template name="settings">
+      #ifnotnull #parent $bitmapsize
+      @{
+        #ifnotnull $bitmap
+        @{
+          var #parent $name #append Bitmap = $bitmap #nl
+          if (#parent $name #append Bitmap.Ok): #indent #nl
+          #parent $name #append Images.Add(#parent $name #append Bitmap) #nl
+          #parent $name.SetPageImage(#parent $name #append Index, #parent $name #append Index) #nl
+          ++ #parent $name #append Index #unindent #nl
+        @}
+      @}
+    </template>
+  </templates>
+
+  <templates class="wxChoicebook">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @})</template>
+    <template name="evt_connect_OnChoicebookPageChanged"> $name.Bind($name.EVT.PAGE_CHANGED, this, #handler)</template>
+    <template name="evt_connect_OnChoicebookPageChanging">$name.Bind($name.EVT.PAGE_CHANGING, this, #handler)</template>
+  </templates>
+
+  <templates class="choicebookpage">
+    <template name="page_add">#parent $name.AddPage(#child $name, $label, $select)</template>
+  </templates>
+
+  <templates class="wxAuiNotebook">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @})</template>
+    <template name="evt_connect_OnAuiNotebookPageClose">    $name.Bind($name.EVT.PAGE_CLOSE, this, #handler)</template>
+    <template name="evt_connect_OnAuiNotebookPageChanged">  $name.Bind($name.EVT.PAGE_CHANGED, this, #handler)</template>
+    <template name="evt_connect_OnAuiNotebookPageChanging"> $name.Bind($name.EVT.PAGE_CHANGING, this, #handler)</template>
+    <template name="evt_connect_OnAuiNotebookButton">       $name.Bind($name.EVT.BUTTON, this, #handler)</template>
+    <template name="evt_connect_OnAuiNotebookBeginDrag">    $name.Bind($name.EVT.BEGIN_DRAG, this, #handler)</template>
+    <template name="evt_connect_OnAuiNotebookEndDrag">      $name.Bind($name.EVT.END_DRAG, this, #handler)</template>
+    <template name="evt_connect_OnAuiNotebookDragMotion">   $name.Bind($name.EVT.DRAG_MOTION, this, #handler)</template>
+    <template name="evt_connect_OnAuiNotebookAllowDND">     $name.Bind($name.EVT.ALLOW_DND, this, #handler)</template>
+  </templates>
+
+  <templates class="auinotebookpage">
+    <template name="page_add">#parent $name.AddPage(#child $name, $label, $select, $bitmap)</template>
+  </templates>
+
+  <templates class="wxScrolledWindow">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">
+      $name = #class(#wxparent $name, $id, $pos, $size, $window_style #ifnotnull $window_name @{, $window_name @}) #nl
+      $name.SetScrollRate($scroll_rate_x, $scroll_rate_y)
+    </template>
+  </templates>
+
+
+</codegen>

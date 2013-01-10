@@ -238,26 +238,26 @@ void wxFBBitmapProperty::CreateChildren()
 	}
 	else
 	{
-		source = _("Load From File");
+		source = _("Package");
 	}
 	prevSrc = -1;
-	if ( source == wxString(_("Load From File") ) )
+	if ( source == wxString(_("Package") ) )
 	{
 		childIndex = 0;
 	}
-	else if ( source == wxString(_("Load From Embedded File") ) )
+	else if ( source == wxString(_("File") ) )
 	{
 		childIndex = 1;
 	}
-	else if ( source == wxString(_("Load From Resource") ) )
+	else if ( source == wxString(_("Resource") ) )
 	{
 		childIndex = 2;
 	}
-	else if ( source == wxString(_("Load From Icon Resource") ) )
+	else if ( source == wxString(_("Icon Resource") ) )
 	{
 		childIndex = 3;
 	}
-	else if ( source == wxString(_("Load From Art Provider") ) )
+	else if ( source == wxString(_("Art Provider") ) )
 	{
 		childIndex = 4;
 	}
@@ -274,22 +274,22 @@ wxPGProperty *wxFBBitmapProperty::CreatePropertySource( int sourceIndex )
     wxPGChoices sourceChoices;
 
     // Add 'source' property (common for all other children)
-    sourceChoices.Add(_("Load From File") );
-    sourceChoices.Add(_("Load From Embedded File") );
-    sourceChoices.Add(_("Load From Resource") );
-    sourceChoices.Add(_("Load From Icon Resource") );
-    sourceChoices.Add(_("Load From Art Provider") );
+    sourceChoices.Add(_("Package") );
+    sourceChoices.Add(_("File") );
+    sourceChoices.Add(_("Resource") );
+    sourceChoices.Add(_("Icon Resource") );
+    sourceChoices.Add(_("Art Provider") );
 
     wxPGProperty *srcProp = new wxEnumProperty( wxT("source"), wxPG_LABEL, sourceChoices, sourceIndex );
-    srcProp->SetHelpString( wxString(_("Load From File:\n") ) +
-                            wxString(_("Load the image from a file on disk.\n\n") ) +
-                            wxString(_("Load From Embedded File:\n") ) +
-                            wxString(_("C++ Only. Embed the image file in the exe and load it.\nFor other languages, behaves like \"Load From File\".\n\n") ) +
-                            wxString(_("Load From Resource:\n") ) +
-                            wxString(_("Windows Only. Load the image from a BITMAP resource in a .rc file\n\n") ) +
-                            wxString(_("Load From Icon Resource:\n") ) +
-                            wxString(_("Windows Only. Load the image from a ICON resource in a .rc file\n\n") ) +
-                            wxString(_("Load From Art Provider:\n") ) +
+    srcProp->SetHelpString( wxString(_("Package:\n") ) +
+                            wxString(_("Load the image from a stream on runtime package.\n\n") ) +
+                            wxString(_("File:\n") ) +
+							wxString(_("Load the image from a file on disk.\n\n") ) +
+                            wxString(_("Resource:\n") ) +
+                            wxString(_("Load the image from a BITMAP resource in a .rc file\n\n") ) +
+                            wxString(_("Icon Resource:\n") ) +
+                            wxString(_("Load the image from a ICON resource in a .rc file\n\n") ) +
+                            wxString(_("Art Provider:\n") ) +
                             wxString(_("Query registered providers for bitmap with given ID.\n\n") ) );
     AppendChild( srcProp );
 
@@ -548,7 +548,7 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
             // childValue.GetInteger() returns the chosen item index
             switch ( childValue.GetInteger() )
             {
-                // 'Load From File' and 'Load From Embedded File'
+                // 'Package' and 'File'
                 case 0:
                 case 1:
                 {
@@ -573,7 +573,7 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
 					
                     break;
                 }
-                // 'Load From Resource'
+                // 'Resource'
                 case 2:
                 {
 					if( prevSrc != 2 )
@@ -597,7 +597,7 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
 						
                     break;
                 }
-                // 'Load From Icon Resource'
+                // 'Icon Resource'
                 case 3:
                 {
 					if( prevSrc != 3 )
@@ -622,7 +622,7 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
 					
                     break;
                 }
-                // 'Load From Art Provider'
+                // 'Art Provider'
                 case 4:
                 {
 					if( prevSrc != 4 )
@@ -653,7 +653,7 @@ wxFBBitmapProperty::ChildChanged( wxVariant& thisValue,
         // file_path || id || resource_name
         case 1:
         {
-            if ( (Item(0)->GetValueAsString() == _("Load From File")) || (Item(0)->GetValueAsString() == _("Load From Embedded File")) )
+            if ( (Item(0)->GetValueAsString() == _("Package")) || (Item(0)->GetValueAsString() == _("File")) )
             {
                 // Save the initial file path TODO: Save the image filter index
                 if ( Item(1) )
@@ -712,8 +712,14 @@ void wxFBBitmapProperty::UpdateChildValues(const wxString& value)
 {
 	wxArrayString childVals;
 	GetChildValues( value, childVals );
+
+	if (childVals.empty())
+	{
+		childVals.push_back(wxEmptyString);
+		childVals.push_back(wxEmptyString);
+	}
 	
-	if( childVals[0].Contains( _("Load From File") ) || childVals[0].Contains( _("Load From Embedded File") ) )
+	if( childVals[0].empty() || childVals[0].Contains( _("Package") ) || childVals[0].Contains( _("File") ) )
 	{
 		if(childVals.Count() > 1)
 		{
@@ -722,24 +728,27 @@ void wxFBBitmapProperty::UpdateChildValues(const wxString& value)
 			wxFileName imgPath( img );
 			gs_imageInitialPath = imgPath.GetPath();
 
-			if ( !img.IsEmpty() )
+			if (GetChildCount() > 0)
 			{
-				Item(1)->SetValue( WXVARIANT( img ) );
-			}
-			else
-			{
-				Item(1)->SetValueToUnspecified();
+				if ( !img.IsEmpty() )
+				{
+					Item(1)->SetValue( WXVARIANT( img ) );
+				}
+				else
+				{
+					Item(1)->SetValueToUnspecified();
+				}
 			}
 		}
 	}
-	else if( childVals[0].Contains( _("Load From Resource") ) )
+	else if( childVals[0].Contains( _("Resource") ) )
 	{
 		if(childVals.Count() > 1)
 		{
 			Item(1)->SetValue( childVals[1]);
 		}
 	}
-	else if( childVals[0].Contains( _("Load From Icon Resource") ) )
+	else if( childVals[0].Contains( _("Icon Resource") ) )
 	{
 		if(childVals.Count() > 1)
 		{
@@ -751,7 +760,7 @@ void wxFBBitmapProperty::UpdateChildValues(const wxString& value)
 			Item(2)->SetValue( childVals[2]);
 		}
 	}
-	else if( childVals[0].Contains( _("Load From Art Provider") ) )
+	else if( childVals[0].Contains( _("Art Provider") ) )
 	{
 		if(childVals.Count() > 1)
 		{
@@ -767,6 +776,7 @@ void wxFBBitmapProperty::UpdateChildValues(const wxString& value)
 
 void wxFBBitmapProperty::OnSetValue()
 {
+	UpdateChildValues(m_value.GetString());
 }
 #if wxVERSION_NUMBER < 2900
 wxString wxFBBitmapProperty::GetValueAsString( int argFlags ) const

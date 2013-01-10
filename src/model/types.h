@@ -76,7 +76,7 @@ public:
 	{
 		return m_name;
 	}
-	//bool   IsHidden()  { return m_hidden; }
+	bool   IsHidden()  { return m_hidden; }
 	bool   IsItem()
 	{
 		return m_item;

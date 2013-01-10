@@ -53,6 +53,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="wxmsw29ud_webview.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -114,6 +115,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="wxmsw29u_webview.lib"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -154,11 +156,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\output\plugins\additional\xml\additional.phpcode"
-			>
-		</File>
-		<File
-			RelativePath="..\..\output\plugins\additional\xml\additional.pythoncode"
+			RelativePath="..\..\output\plugins\additional\xml\additional.solcode"
 			>
 		</File>
 		<File

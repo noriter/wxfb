@@ -38,12 +38,7 @@ class CodeEditor;
     class wxStyledTextCtrl;
 #endif
 
-#ifdef USE_FLATNOTEBOOK
-class wxFlatNotebook;
-class wxFlatNotebookImageList;
-#else
 class wxAuiNotebook;
-#endif
 
 class wxFindDialogEvent;
 
@@ -59,12 +54,7 @@ private:
 	CodeEditor* m_hPanel;
 	PTCCodeWriter m_hCW;
 	PTCCodeWriter m_cppCW;
-#ifdef USE_FLATNOTEBOOK
-	wxFlatNotebookImageList* m_icons;
-	wxFlatNotebook* m_notebook;
-#else
 	wxAuiNotebook* m_notebook;
-#endif
 
 #if wxVERSION_NUMBER < 2900
 	void InitStyledTextCtrl( wxScintilla* stc );

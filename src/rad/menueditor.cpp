@@ -77,7 +77,7 @@ MenuEditor::MenuEditor(wxWindow *parent, int id) : wxDialog(parent,id,wxT("Menu 
   wxStaticBoxSizer *sizer1;
   sizer1 = new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("Menu item")), wxVERTICAL);
   wxFlexGridSizer *sizer11;
-  sizer11 = new wxFlexGridSizer(4,2,0,0);
+  sizer11 = new wxFlexGridSizer(0,2,0,0);
   sizer11->AddGrowableCol(1);
 
   wxStaticText *m_stLabel;

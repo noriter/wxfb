@@ -33,11 +33,7 @@
     #error "wxUSE_PROPGRID must be set to 1 in your wxWidgets library."
 #endif
 
-#ifdef USE_FLATNOTEBOOK
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
-#else
 #include <wx/aui/auibook.h>
-#endif
 
 #if wxVERSION_NUMBER >= 2900
     #include <wx/propgrid/property.h>
@@ -68,12 +64,7 @@ private:
 
     PObjectBase m_currentSel;
 
-#ifdef USE_FLATNOTEBOOK
-    wxFlatNotebook* m_nb;
-    wxFlatNotebookImageList m_icons;
-#else
 	wxAuiNotebook* m_nb;
-#endif
 
     wxPropertyGridManager* m_pg;
     wxPropertyGridManager* m_eg;
@@ -120,20 +111,26 @@ private:
 
         wxPGProperty* id = pg->Append( new wxPropertyCategory( catName ) );
 
-        ExpandMap::iterator it = m_isExpanded.find( catName );
-        if ( it != m_isExpanded.end() )
-        {
-            if ( it->second )
-            {
-                m_pg->Expand( id );
-            }
-            else
-            {
-                m_pg->Collapse( id );
-            }
-        }
-
         AddItems( name, obj, obj_info, category, itemMap );
+
+        ExpandMap::iterator it = m_isExpanded.find( catName );
+        if ( it != m_isExpanded.end())
+		{
+			if (it->second)
+				pg->Expand( id );
+			else
+				pg->Collapse( id );
+		}
+		else
+		{
+			if (id->GetIndexInParent() == 0)
+				pg->Expand(id);
+			else
+				pg->Collapse(id);
+		}
+
+		pg->SetPropertyBackgroundColour(id, wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK), wxPG_DONT_RECURSE);
+		pg->SetPropertyTextColour(id, wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT), wxPG_DONT_RECURSE);
 
         pg->SetPropertyAttributeAll( wxPG_BOOL_USE_CHECKBOX, (long)1 );
     }
@@ -152,9 +149,11 @@ private:
     void OnPropertyGridExpand( wxPropertyGridEvent& event );
     void OnReCreateGrid( wxCommandEvent& event );
 	void OnBitmapPropertyChanged( wxCommandEvent& event );
-	
+
+	void OnPropertyGridKeyDown(wxKeyEvent& event);
+
 	void ModifyProperty( PProperty prop, const wxString& str );
-	
+
 #if wxVERSION_NUMBER >= 2900
 	void OnChildFocus( wxChildFocusEvent& event );
 #endif

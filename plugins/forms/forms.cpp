@@ -197,7 +197,7 @@ public:
 		if (!obj->IsNull(wxT("separation")))
 			tb->SetToolSeparation(obj->GetPropertyAsInteger(wxT("separation")));
 
-		tb->PushEventHandler( new ComponentEvtHandler( tb, GetManager() ) );
+		PushEventHandler( tb, new ComponentEvtHandler( tb, GetManager() ) );
 
 		return tb;
 	}
@@ -359,8 +359,8 @@ public:
                     wizard->SetSelection( i );
 
 					// Restore event handling
-					wizard->PushEventHandler( vobjEvtHandler );
-					wizard->PushEventHandler( wizardEvtHandler );
+					PushEventHandler( wizard, vobjEvtHandler );
+					PushEventHandler( wizard, wizardEvtHandler );
 				}
 			}
 		}

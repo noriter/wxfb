@@ -726,7 +726,7 @@ wxString ObjectBase::GetChildFromParentProperty( const wxString& parentName, con
 
 ///////////////////////////////////////////////////////////////////////////////
 
-ObjectInfo::ObjectInfo(wxString class_name, PObjectType type, WPObjectPackage package, bool startGroup )
+ObjectInfo::ObjectInfo(wxString class_name, PObjectType type, WPObjectPackage package, bool startGroup, bool paletteHidden )
 {
 	m_class = class_name;
 	m_type = type;
@@ -735,6 +735,7 @@ ObjectInfo::ObjectInfo(wxString class_name, PObjectType type, WPObjectPackage pa
 	m_package = package;
 	m_category = PPropertyCategory( new PropertyCategory( m_class ) );
 	m_startGroup = startGroup;
+	m_PaletteHidden = paletteHidden;
 }
 
 PObjectPackage ObjectInfo::GetPackage()

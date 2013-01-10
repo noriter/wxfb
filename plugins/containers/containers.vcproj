@@ -154,11 +154,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\output\plugins\containers\xml\containers.phpcode"
-			>
-		</File>
-		<File
-			RelativePath="..\..\output\plugins\containers\xml\containers.pythoncode"
+			RelativePath="..\..\output\plugins\containers\xml\containers.solcode"
 			>
 		</File>
 		<File

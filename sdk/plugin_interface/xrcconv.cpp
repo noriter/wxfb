@@ -222,11 +222,11 @@ void ObjectToXrcFilter::AddProperty( const wxString &objPropName,
 					break;
 				}
 
-				if ( bitmapProp.StartsWith( _("Load From File") ) || bitmapProp.StartsWith( _("Load From Embedded File") ) )
+				if ( bitmapProp.StartsWith( _("Package") ) || bitmapProp.StartsWith( _("File") ) )
 				{
 					LinkText( filename.Trim().Trim(false), &propElement );
 				}
-				else if( bitmapProp.StartsWith( _("Load From Art Provider") ) )
+				else if( bitmapProp.StartsWith( _("Art Provider") ) )
 				{
 					propElement.SetAttribute( "stock_id", filename.BeforeFirst( wxT(';') ).Trim().Trim(false).mb_str( wxConvUTF8 ) );
 					propElement.SetAttribute( "stock_client", filename.AfterFirst( wxT(';') ).Trim().Trim(false).mb_str( wxConvUTF8 ) );
@@ -907,7 +907,7 @@ void XrcToXfbFilter::ImportBitmapProperty( const wxString &xrcPropName, ticpp::E
 		else
 		{
 			// read file-based bitmap
-			wxString res = _("Load From File");
+			wxString res = _("Package");
 			res += wxT(";");
 			res += wxString( xrcProperty->GetText().c_str(), wxConvUTF8 );
 			property->SetText( res.Trim().mb_str( wxConvUTF8 ) );

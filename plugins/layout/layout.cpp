@@ -416,6 +416,8 @@ public:
 			obj->GetPropertyAsInteger(_("vgap")),
 			obj->GetPropertyAsInteger(_("hgap")));
 
+		sizer->SetCols(0);
+
 		AddProperties( obj, sizer );
 
 		if ( !obj->IsNull( _("empty_cell_size") ) )

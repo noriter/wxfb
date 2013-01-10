@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<codegen language="sol">
+  <templates class="Project">
+    <template name="sol_preamble">
+      $prolog
+    </template>
+    <template name="include">
+    </template>
+    <template name="sol_epilogue">
+      $epilog
+    </template>
+  </templates>
+  <templates class="wxWindow">
+    <template name="settings">
+      #ifnotnull $window_extra_style
+      @{ $name.ExtraStyle = $window_extra_style #nl @}
+
+      #ifnotnull $font
+      @{ $name.Font = $font #nl @}
+
+      #ifnotnull $fg
+      @{ $name.ForeColor = $fg #nl @}
+
+      #ifnotnull $bg
+      @{ $name.BackColor = $bg #nl @}
+
+      #ifequal $enabled "0"
+      @{ $name.Enabled = $enabled #nl @}
+
+      #ifequal $hidden "1"
+      @{ $name.Hide() #nl @}
+
+      #ifnotnull $tooltip
+      @{ $name.ToolTip = $tooltip #nl @}
+
+      #ifnotnull $context_help
+      @{ $name.HelpText = $context_help #nl @}
+
+      #ifnotnull $minimum_size
+      @{ $name.MinSize = $minimum_size #nl @}
+
+      #ifnotnull $maximum_size
+      @{ $name.MaxSize = $maximum_size #nl @}
+
+      #ifparenttypeequal "toolbar_form"
+      @{ AddControl($name) @}
+    </template>
+
+    <!-- wxKeyEvent -->
+    <template name="evt_connect_OnChar">        $name.Bind(wx.EVT.CHAR, this, #handler)</template>
+    <template name="evt_connect_OnKeyDown">     $name.Bind(wx.EVT.KEY_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnKeyUp">       $name.Bind(wx.EVT.KEY_UP, this, #handler)</template>
+
+    <!-- wxMouseEvent -->
+    <template name="evt_connect_OnEnterWindow"> $name.Bind(wx.EVT.MOUSE_ENTER, this, #handler)</template>
+    <template name="evt_connect_OnLeaveWindow"> $name.Bind(wx.EVT.MOUSE_LEAVE, this, #handler)</template>
+    <template name="evt_connect_OnLeftDClick">  $name.Bind(wx.EVT.MOUSE_LEFT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnLeftDown">    $name.Bind(wx.EVT.MOUSE_LEFT_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnLeftUp">      $name.Bind(wx.EVT.MOUSE_LEFT_UP, this, #handler)</template>
+    <template name="evt_connect_OnMiddleDClick">$name.Bind(wx.EVT.MOUSE_MIDDLE_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnMiddleDown">  $name.Bind(wx.EVT.MOUSE_MIDDLE_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnMiddleUp">    $name.Bind(wx.EVT.MOUSE_MIDDLE_UP, this, #handler)</template>
+    <template name="evt_connect_OnMotion">      $name.Bind(wx.EVT.MOUSE_MOTION, this, #handler)</template>
+    <template name="evt_connect_OnMouseWheel">  $name.Bind(wx.EVT.MOUSE_WHEEL, this, #handler)</template>
+    <template name="evt_connect_OnRightDClick"> $name.Bind(wx.EVT.MOUSE_RIGHT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnRightDown">   $name.Bind(wx.EVT.MOUSE_RIGHT_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnRightUp">     $name.Bind(wx.EVT.MOUSE_RIGHT_UP, this, #handler)</template>
+    <template name="evt_connect_OnMouseEvents">
+      $name.Bind(wx.EVT.MOUSE_LEFT_DOWN, this, #handler) #nl
+      $name.Bind(wx.EVT.MOUSE_LEFT_UP, this, #handler) #nl
+      $name.Bind(wx.EVT.MOUSE_MIDDLE_DOWN, this, #handler) #nl
+      $name.Bind(wx.EVT.MOUSE_MIDDLE_UP, this, #handler) #nl
+      $name.Bind(wx.EVT.MOUSE_RIGHT_DOWN, this, #handler) #nl
+      $name.Bind(wx.EVT.MOUSE_RIGHT_UP, this, #handler) #nl
+      $name.Bind(wx.EVT.MOUSE_MOTION, this, #handler) #nl
+      $name.Bind(wx.EVT.MOUSE_LEFT_DCLICK, this, #handler) #nl
+      $name.Bind(wx.EVT.MOUSE_MIDDLE_DCLICK, this, #handler) #nl
+      $name.Bind(wx.EVT.MOUSE_RIGHT_DCLICK, this, #handler) #nl
+      $name.Bind(wx.EVT.MOUSE_LEAVE, this, #handler) #nl
+      $name.Bind(wx.EVT.MOUSE_ENTER, this, #handler) #nl
+      $name.Bind(wx.EVT.MOUSE_WHEEL, this, #handler)
+    </template>
+
+    <!-- wxFocusEvent -->
+    <template name="evt_connect_OnKillFocus"> $name.Bind(wx.EVT.KILL_FOCUS, this, #handler)</template>
+    <template name="evt_connect_OnSetFocus">  $name.Bind(wx.EVT.SET_FOCUS, this, #handler)</template>
+    .
+    <!-- wxPaintEvent -->
+    <template name="evt_connect_OnPaint">     $name.Bind(wx.EVT.PAINT, this, #handler)</template>
+
+    <!-- wxEraseEvent -->
+    <template name="evt_connect_OnEraseBackground">$name.Bind(wx.EVT.ERASE_BACKGROUND, this, #handler)</template>
+
+    <!-- wxSizeEvent -->
+    <template name="evt_connect_OnSize">      $name.Bind(wx.EVT.SIZE, this, #handler)</template>
+
+    <!-- wxUpdateUIEvent -->
+    <template name="evt_connect_OnUpdateUI">  $name.Bind(wx.EVT.UPDATE_UI, this, #handler)</template>
+  </templates>
+
+  <templates class="Validator">
+    <template name="include" />
+    <template name="valvar_declaration" />
+    <template name="settings" />
+  </templates>
+
+  <templates class="AUI">
+    <template name="settings">
+      #ifparenttypeequal "form"
+      @{
+        #ifequal #parent $aui_managed "1"
+        @{
+          #iftypenotequal "toolbar"
+          @{
+            _AuiMgr.AddPane($name, wx.AuiPaneInfo()
+            #ifnotnull $aui_name @{.Name($aui_name)@}.$docking()
+            #ifnotnull $caption @{.Caption($caption)@}
+            #ifequal $caption_visible "0" @{.CaptionVisible($caption_visible)@}
+            #ifequal $close_button "0" @{.CloseButton($close_button)@}
+            #ifequal $maximize_button "1" @{.MaximizeButton($maximize_button)@}
+            #ifequal $minimize_button "1" @{.MinimizeButton($minimize_button)@}
+            #ifequal $pin_button "1" @{.PinButton($pin_button)@}
+            #ifequal $pane_border "0" @{.PaneBorder($pane_border)@}
+            #ifequal $gripper "1" @{.Gripper()@}
+            #ifequal $show "0" @{.Hide()@}
+            #ifequal $moveable "0" @{.Movable($moveable)@}
+            #ifnotnull $dock @{.$dock()#ifequal $dock "Float" @{.FloatingPosition($pane_position)@}@}
+            #ifnotnull $resize @{.$resize()#ifequal $resize "Resizable"	@{.FloatingSize($pane_size)@}@}
+            #ifequal $dock_fixed "0" @{.DockFixed($dock_fixed)@}
+            #ifequal $BottomDockable "0" @{.BottomDockable($BottomDockable)@}
+            #ifequal $TopDockable "0" @{.TopDockable($TopDockable)@}
+            #ifequal $LeftDockable "0" @{.LeftDockable($LeftDockable)@}
+            #ifequal $RightDockable "0"	@{.RightDockable($RightDockable)@}
+            #ifequal $floatable "0"	@{.Floatable($floatable)@}
+            #ifnotnull $aui_row	@{.Row($aui_row)@}
+            #ifnotnull $aui_position @{.Position($aui_position)@}
+            #ifnotnull $best_size @{.BestSize($best_size)@}
+            #ifnotnull $min_size @{.MinSize($min_size)@}
+            #ifnotnull $max_size @{.MaxSize($max_size)@}
+            #ifnotnull $aui_layer @{.Layer($aui_layer)@}
+            #ifequal $center_pane "1" @{.CenterPane()@}
+            #ifequal $default_pane "1" @{.DefaultPane()@}
+            #ifequal $toolbar_pane "1" @{.ToolbarPane()@}
+          ) #nl
+          @}
+        @}
+      @}
+    </template>
+  </templates>
+
+  <templates class="wxTreeCtrlBase">
+    <template name="evt_connect_OnTreeBeginDrag">       $name.Bind($name.EVT.BEGIN_DRAG, this, #handler)</template>
+    <template name="evt_connect_OnTreeBeginRDrag">      $name.Bind($name.EVT.BEGIN_RDRAG, this, #handler)</template>
+    <template name="evt_connect_OnTreeEndDrag">         $name.Bind($name.EVT.END_DRAG, this, #handler)</template>
+    <template name="evt_connect_OnTreeBeginLabelEdit">  $name.Bind($name.EVT.BEGIN_LABEL_EDIT, this, #handler)</template>
+    <template name="evt_connect_OnTreeEndLabelEdit">    $name.Bind($name.EVT.END_LABEL_EDIT, this, #handler)</template>
+    <template name="evt_connect_OnTreeDeleteItem">      $name.Bind($name.EVT.DELETE_ITEM, this, #handler)</template>
+    <template name="evt_connect_OnTreeItemActivated">   $name.Bind($name.EVT.ITEM_ACTIVATED, this, #handler)</template>
+    <template name="evt_connect_OnTreeItemCollapsed">   $name.Bind($name.EVT.ITEM_COLLAPSED, this, #handler)</template>
+    <template name="evt_connect_OnTreeItemCollapsing">  $name.Bind($name.EVT.ITEM_COLLAPSING, this, #handler)</template>
+    <template name="evt_connect_OnTreeItemExpanded">    $name.Bind($name.EVT.ITEM_EXPANDED, this, #handler)</template>
+    <template name="evt_connect_OnTreeItemExpanding">   $name.Bind($name.EVT.ITEM_EXPANDING, this, #handler)</template>
+    <template name="evt_connect_OnTreeItemRightClick">  $name.Bind($name.EVT.ITEM_RIGHT_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnTreeItemMiddleClick"> $name.Bind($name.EVT.ITEM_MIDDLE_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnTreeSelChanged">      $name.Bind($name.EVT.SEL_CHANGED, this, #handler)</template>
+    <template name="evt_connect_OnTreeSelChanging">     $name.Bind($name.EVT.SEL_CHANGING, this, #handler)</template>
+    <template name="evt_connect_OnTreeKeyDown">         $name.Bind($name.EVT.KEY_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnTreeItemMenu">        $name.Bind($name.EVT.ITEM_MENU, this, #handler)</template>
+  </templates>
+
+  <templates class="UserClasses">
+    <template name="file_comment">
+      /// Subclass of $basename, which is generated by wxFormBuilder.
+    </template>
+    <template name="event_handler_comment">
+      /// Handlers for $basename events.
+    </template>
+    <template name="source_include">import wx #nl import $gen_file</template>
+    <template name="class_decl">
+      /// Implementing $basename #nl
+      class $name : $gen_file.$basename
+    </template>
+    <template name="Frame_cons_def">
+      constructor(parent) #indent #nl { 
+      base.constructor(parent) #unindent #nl } #nl
+    </template>
+    <template name="Panel_cons_def">
+      constructor(parent) #indent #nl {
+      base.constructor(parent) #unindent #nl } #nl
+    </template>
+    <template name="Dialog_cons_def">
+      constructor(parent) #indent #nl {
+      base.constructor(parent) #unindent #nl } #nl
+    </template>
+    <template name="Wizard_cons_def">
+      constructor(parent) #indent #nl {
+      base.constructor(parent) #unindent #nl } #nl
+    </template>
+  </templates>
+</codegen>

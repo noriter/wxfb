@@ -455,11 +455,9 @@ void ObjectDatabase::SetDefaultLayoutProperties(PObjectBase sizeritem)
 		{
 			proportion->SetValue( wxT("0") );
 		}
-		sizeritem->GetProperty( wxT("flag") )->SetValue( wxT("wxALL") );
+//		sizeritem->GetProperty( wxT("flag") )->SetValue( wxT("wxALL") );
 	}
 	else if (	obj_type == wxT("notebook")			||
-				obj_type == wxT("flatnotebook")		||
-				obj_type == wxT("listbook")			||
 				obj_type == wxT("choicebook")		||
 				obj_type == wxT("auinotebook")		||
 				obj_type == wxT("treelistctrl")		||
@@ -590,12 +588,10 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 {
 	// Load some default templates
 	LoadCodeGen( m_xmlPath + wxT("properties.cppcode") );
-	LoadCodeGen( m_xmlPath + wxT("properties.pythoncode") );
-	LoadCodeGen( m_xmlPath + wxT("properties.phpcode") );
+	LoadCodeGen( m_xmlPath + wxT("properties.solcode") );
 	LoadPackage( m_xmlPath + wxT("default.xml"), m_iconPath );
 	LoadCodeGen( m_xmlPath + wxT("default.cppcode") );
-	LoadCodeGen( m_xmlPath + wxT("default.pythoncode") );
-	LoadCodeGen( m_xmlPath + wxT("default.phpcode") );
+	LoadCodeGen( m_xmlPath + wxT("default.solcode") );
 
 	// Map to temporarily hold plugins.
 	// Used to both set page order and to prevent two plugins with the same name.
@@ -676,12 +672,8 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 							xmlFileName.SetExt( wxT("cppcode") );
 							LoadCodeGen( xmlFileName.GetFullPath() );
 							
-							// Load the Python code tempates
-							xmlFileName.SetExt( wxT("pythoncode") );
-							LoadCodeGen( xmlFileName.GetFullPath() );
-
-							// Load the PHP code tempates
-							xmlFileName.SetExt( wxT("phpcode") );
+							// Load the SOL code templates
+							xmlFileName.SetExt( wxT("solcode") );
 							LoadCodeGen( xmlFileName.GetFullPath() );
 
 							std::pair< PackageMap::iterator, bool > addedPackage = packages.insert( PackageMap::value_type( packageIt->second->GetPackageName(), packageIt->second ) );
@@ -842,6 +834,23 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 				}
 			}
 
+			// Add the "sol" base class, predefined for the components and widgets
+			if (HasSolProperties(typeName))
+			{
+				PObjectInfo sol_interface = GetObjectInfo(wxT("sol"));
+				if (sol_interface)
+				{
+					size_t baseIndex = class_info->AddBaseClass( sol_interface );
+					if (typeName == wxT("sizer")    ||
+						typeName == wxT("gbsizer")  ||
+						typeName == wxT("tool")		||
+						typeName == wxT("menuitem")  )
+					{
+						class_info->AddBaseClassDefaultPropertyValue( baseIndex, _("expose_member"), _("0") );
+					}
+				}
+			}
+
 			elem_obj = elem_obj->NextSiblingElement( OBJINFO_TAG, false );
 		}
 	}
@@ -854,8 +863,30 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 bool ObjectDatabase::HasCppProperties(wxString type)
 {
 	return (type == wxT("notebook")			||
-			type == wxT("flatnotebook")		||
-			type == wxT("listbook")			||
+			type == wxT("choicebook")		||
+			type == wxT("auinotebook")		||
+			type == wxT("widget")			||
+			type == wxT("expanded_widget")	||
+			type == wxT("statusbar")		||
+			type == wxT("component")		||
+			type == wxT("container")		||
+			type == wxT("menubar")			||
+			type == wxT("menu")				||
+			type == wxT("menuitem")			||
+			type == wxT("submenu")			||
+			type == wxT("toolbar")			||
+			type == wxT("tool")				||
+			type == wxT("splitter")			||
+			type == wxT("treelistctrl")		||
+			type == wxT("sizer")			||
+			type == wxT("gbsizer")          ||
+            type == wxT("wizardpagesimple")
+			);
+}
+
+bool ObjectDatabase::HasSolProperties(wxString type)
+{
+	return (type == wxT("notebook")			||
 			type == wxT("choicebook")		||
 			type == wxT("auinotebook")		||
 			type == wxT("widget")			||
@@ -1007,7 +1038,10 @@ PObjectPackage ObjectDatabase::LoadPackage( const wxString& file, const wxString
 			bool startGroup;
 			elem_obj->GetAttributeOrDefault( "startgroup", &startGroup, false );
 
-			PObjectInfo obj_info( new ObjectInfo( _WXSTR(class_name), GetObjectType( _WXSTR(type) ), package, startGroup ) );
+			bool hidden;
+			elem_obj->GetAttributeOrDefault( "hidden", &hidden, false);
+
+			PObjectInfo obj_info( new ObjectInfo( _WXSTR(class_name), GetObjectType( _WXSTR(type) ), package, startGroup, hidden ) );
 
 			if ( !icon.empty() && wxFileName::FileExists( iconFullPath ) )
 			{
@@ -1268,8 +1302,6 @@ bool ObjectDatabase::ShowInPalette(wxString type)
 			type == wxT("submenu")				||
 			type == wxT("tool")					||
 			type == wxT("notebook")				||
-			type == wxT("flatnotebook")			||
-			type == wxT("listbook")				||
 			type == wxT("choicebook")			||
 			type == wxT("auinotebook")			||
 			type == wxT("widget")				||

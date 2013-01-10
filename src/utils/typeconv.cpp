@@ -440,7 +440,7 @@ void TypeConv::ParseBitmapWithResource( const wxString& value, wxString* image, 
     // Splitting bitmap resource property value - it is of the form "path; source [width; height]"
 
     *image = value;
-    *source = _("Load From File");
+    *source = _("Package");
     *icoSize = wxDefaultSize;
 
     wxArrayString children;
@@ -453,7 +453,7 @@ void TypeConv::ParseBitmapWithResource( const wxString& value, wxString* image, 
 		children.Add( child );
 	}
 
-	if( children.Index( _("Load From Art Provider") ) == wxNOT_FOUND )
+	if( children.Index( _("Art Provider") ) == wxNOT_FOUND )
 	{
 		// "break;" was left out intentionally
 		long temp;

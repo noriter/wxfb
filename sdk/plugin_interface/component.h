@@ -121,6 +121,8 @@ class IComponent
    */
   virtual wxObject* Create( IObject* obj, wxObject* parent ) = 0;
 
+  virtual void PushEventHandler(wxObject* obj, wxEvtHandler* hdlr) = 0;
+
   /**
    * Cleanup (do the reverse of Create)
    */
@@ -240,6 +242,15 @@ extern "C" WXEXPORT IComponentLibrary* GetComponentLibrary( IManager* manager ) 
 	extern "C" WXEXPORT void FreeComponentLibrary( IComponentLibrary* lib ) 	        \
 	{                                                                                   \
         delete lib;                                                                     \
+	}
+
+#define END_LIBRARY_STMT(STMT)                                                             \
+        return lib;                                                                     \
+	}                                                                                   \
+	extern "C" WXEXPORT void FreeComponentLibrary( IComponentLibrary* lib ) 	        \
+	{                                                                                   \
+        STMT;                                                                           \
+		delete lib;																		\
 	}
 
 #define MACRO( name ) \

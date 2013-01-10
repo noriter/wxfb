@@ -211,7 +211,9 @@ public:
 	* Returns the code for a property value in the language format.
 	* @note use ValueToCode
 	*/
-	wxString PropertyToCode( PProperty property );
+	wxString PropertyToCode( PObjectBase obj, PProperty property );
+
+	virtual wxString TouchName(PObjectBase obj, const wxString& name) = 0;
 
 	/**
 	* This method creates a new parser with the same type that the object
@@ -231,7 +233,7 @@ public:
 	/**
 	* Generates the code from a property value.
 	*/
-	virtual wxString ValueToCode(PropertyType type, wxString value) = 0;
+	virtual wxString ValueToCode(PObjectBase obj, PropertyType type, wxString value) = 0;
 
 	/**
 	* The "star" function for this class. Analyzes a template, returning the code.

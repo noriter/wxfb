@@ -27,11 +27,7 @@
 #define __MAIN_FRAME__
 
 #include "wx/wx.h"
-#ifdef USE_FLATNOTEBOOK
-#include <wx/wxFlatNotebook/wxFlatNotebook.h>
-#else
 #include <wx/aui/auibook.h>
-#endif
 #include "wx/splitter.h"
 #include <wx/fdrepdlg.h>
 
@@ -42,8 +38,7 @@ class wxFBPropertyEvent;
 class wxFBEventHandlerEvent;
 
 class CppPanel;
-class PythonPanel;
-class PHPPanel;
+class SolPanel;
 class XrcPanel;
 class ObjectTree;
 class ObjectInspector;
@@ -74,19 +69,13 @@ class MainFrame : public wxFrame
   int m_rightSplitterWidth;
 
   //wxFrameManager m_mgr;
-#ifdef USE_FLATNOTEBOOK
-  wxFlatNotebook *m_notebook;
-  wxFlatNotebookImageList m_icons;
-#else
   wxAuiNotebook *m_notebook;
-#endif
   wxFbPalette *m_palette;
   ObjectTree *m_objTree;
   ObjectInspector *m_objInsp;
   VisualEditor *m_visualEdit;
   CppPanel *m_cpp;
-  PythonPanel *m_python;
-  PHPPanel *m_php;
+  SolPanel *m_sol;
   XrcPanel *m_xrc;
   int m_style;
 
@@ -153,11 +142,7 @@ class MainFrame : public wxFrame
   void OnXrcPreview(wxCommandEvent& e);
   void OnGenInhertedClass(wxCommandEvent& e);
 
-#ifdef USE_FLATNOTEBOOK
-  void OnFlatNotebookPageChanged( wxFlatNotebookEvent& event );
-#else
   void OnAuiNotebookPageChanged( wxAuiNotebookEvent& event );
-#endif
 
   void OnProjectLoaded( wxFBEvent& event );
   void OnProjectSaved( wxFBEvent& event );

@@ -80,7 +80,7 @@ PTemplateParser CppTemplateParser::CreateParser( const TemplateParser* oldparser
 /**
 * Convert the value of the property to C++ code
 */
-wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
+wxString CppTemplateParser::ValueToCode( PObjectBase obj, PropertyType type, wxString value )
 {
 	wxString result;
 
@@ -332,12 +332,12 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 			wxArrayString array = TypeConv::StringToArrayString( value );
 			if ( array.Count() > 0 )
 			{
-				result = ValueToCode( PT_WXSTRING_I18N, array[0] );
+				result = ValueToCode( obj, PT_WXSTRING_I18N, array[0] );
 			}
 
 			for ( size_t i = 1; i < array.Count(); i++ )
 			{
-				result << wxT( ", " ) << ValueToCode( PT_WXSTRING_I18N, array[i] );
+				result << wxT( ", " ) << ValueToCode( obj, PT_WXSTRING_I18N, array[i] );
 			}
 			break;
 		}
@@ -346,6 +346,14 @@ wxString CppTemplateParser::ValueToCode( PropertyType type, wxString value )
 	}
 
 	return result;
+}
+
+wxString CppTemplateParser::TouchName(PObjectBase obj, const wxString& name)
+{
+	if (obj->GetObjectTypeName() == "form")
+		return name;
+	else
+		return wxT("m_") + name;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1670,11 +1678,9 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 		           type == wxT( "submenu" )	||
 		           type == wxT( "toolbar" )	||
 		           type == wxT( "tool" )	||
-		           type == wxT( "listbook" )	||
 		           type == wxT( "notebook" )	||
 		           type == wxT( "auinotebook" )	||
-		           type == wxT( "treelistctrl" )	||
-		           type == wxT( "flatnotebook" )
+		           type == wxT( "treelistctrl" )
 		        )
 		{
 			wxString afterAddChild = GetCode( obj, wxT( "after_addchild" ) );
@@ -1714,8 +1720,6 @@ void CppCodeGenerator::GenConstruction( PObjectBase obj, bool is_widget )
 		m_source->WriteLn( GetCode( obj, temp_name ) );
 	}
 	else if (	type == wxT( "notebookpage" )		||
-	          type == wxT( "flatnotebookpage" )	||
-	          type == wxT( "listbookpage" )		||
 	          type == wxT( "choicebookpage" )	||
 	          type == wxT( "auinotebookpage" )  ||
               type == wxT("wizardpagesimple")

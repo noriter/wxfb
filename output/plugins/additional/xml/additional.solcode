@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<codegen language="sol">
+
+  <templates class="wxTreeCtrl">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @})</template>
+    <template name="evt_connect_OnTreeGetInfo">         $name.Bind($name.EVT.GET_INFO, this, #handler)</template>
+    <template name="evt_connect_OnTreeSetInfo">         $name.Bind($name.EVT.SET_INFO, this, #handler)</template>
+    <template name="evt_connect_OnTreeItemGetTooltip">  $name.Bind($name.EVT.ITEM_GETTOOLTIP, this, #handler)</template>
+    <template name="evt_connect_OnTreeStateImageClick"> $name.Bind($name.EVT.STATE_IMAGE_CLICK, this, #handler)</template>
+  </templates>
+
+  <templates class="wxHtmlWindow">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @})</template>
+    <template name="evt_connect_OnHtmlCellClicked">     $name.Bind($name.EVT.CELL_CLICKED, this, #handler)</template>
+    <template name="evt_connect_OnHtmlCellHover">       $name.Bind($name.EVT.CELL_HOVER, this, #handler)</template>
+    <template name="evt_connect_OnHtmlLinkClicked">     $name.Bind($name.EVT.LINK_CLICKED, this, #handler)</template>
+  </templates>
+
+  <templates class="wxWebView">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, null, $pos, $size, null, $window_style)</template>
+    <template name="evt_connect_OnNavigation">          $name.Bind($name.EVT.NAVIGATION, this, #handler)</template>
+    <template name="evt_connect_OnNavigated">           $name.Bind($name.EVT.NAVIGATED, this, #handler)</template>
+    <template name="evt_connect_OnLoaded">              $name.Bind($name.EVT.LOADED, this, #handler)</template>
+    <template name="evt_connect_OnError">               $name.Bind($name.EVT.ERROR, this, #handler)</template>
+    <template name="evt_connect_OnNewWindow">           $name.Bind($name.EVT.NEWWINDOW, this, #handler)</template>
+    <template name="evt_connect_OnTitleChanged">        $name.Bind($name.EVT.TITLE_CHANGED, this, #handler)</template>
+  </templates>
+
+  <templates class="wxRichTextCtrl">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, "", $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @})</template>
+    <template name="evt_connect_OnText">                        $name.Bind($name.EVT.TEXT, this, #handler)</template>
+    <template name="evt_connect_OnTextEnter">                   $name.Bind($name.EVT.TEXT_ENTER, this, #handler)</template>
+    <template name="evt_connect_OnTextURL">                     $name.Bind($name.EVT.TEXT_URL, this, #handler)</template>
+    <template name="evt_connect_OnTextMaxLen">                  $name.Bind($name.EVT.TEXT_MAXLEN, this, #handler)</template>ate>
+    <template name="evt_connect_OnRichTextCharacter">           $name.Bind($name.EVT.RICHTEXT_CHARACTER, this, #handler)</template>
+    <template name="evt_connect_OnRichTextDelete">              $name.Bind($name.EVT.RICHTEXT_DELETE, this, #handler)</template>
+    <template name="evt_connect_OnRichTextReturn">              $name.Bind($name.EVT.RICHTEXT_RETURN, this, #handler)</template>
+    <template name="evt_connect_OnRichTextStyleChanged">        $name.Bind($name.EVT.RICHTEXT_STYLE_CHANGED, this, #handler)</template>
+    <template name="evt_connect_OnRichTextStyleSheetChanged">   $name.Bind($name.EVT.RICHTEXT_STYLESHEET_CHANGED, this, #handler)</template>
+    <template name="evt_connect_OnRichTextStyleSheetReplacing"> $name.Bind($name.EVT.RICHTEXT_STYLESHEET_REPLACING, this, #handler)</template>
+    <template name="evt_connect_OnRichTextStyleSheetReplaced">  $name.Bind($name.EVT.RICHTEXT_STYLESHEET_REPLACED, this, #handler)</template>
+    <template name="evt_connect_OnRichTextContentInserted">     $name.Bind($name.EVT.RICHTEXT_CONTENT_INSERTED, this, #handler)</template>
+    <template name="evt_connect_OnRichTextContentDeleted">      $name.Bind($name.EVT.RICHTEXT_CONTENT_DELETED, this, #handler)</template>
+  </templates>
+
+  <templates class="wxStyledTextCtrl">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @})</template>
+    <template name="evt_connect_OnChange">                      $name.Bind($name.EVT.CHANGE, this, #handler)</template>
+    <template name="evt_connect_OnStyleNeeded">                 $name.Bind($name.EVT.STYLENEEDED, this, #handler)</template>
+    <template name="evt_connect_OnCharAdded">                   $name.Bind($name.EVT.CHARADDED, this, #handler)</template>
+    <template name="evt_connect_OnSavePointReached">            $name.Bind($name.EVT.SAVEPOINTREACHED, this, #handler)</template>
+    <template name="evt_connect_OnSavePointLeft">               $name.Bind($name.EVT.SAVEPOINTLEFT, this, #handler)</template>
+    <template name="evt_connect_OnReadOnlyModifyAttempt">       $name.Bind($name.EVT.ROMODIFYATTEMPT, this, #handler)</template>
+    <template name="evt_connect_OnKey">                         $name.Bind($name.EVT.KEY, this, #handler)</template>
+    <template name="evt_connect_OnDoubleClick">                 $name.Bind($name.EVT.DOUBLECLICK, this, #handler)</template>
+    <template name="evt_connect_OnUpdateUI">                    $name.Bind($name.EVT.UPDATEUI, this, #handler)</template>
+    <template name="evt_connect_OnModified">                    $name.Bind($name.EVT.MODIFIED, this, #handler)</template>
+    <template name="evt_connect_OnMacroRecord">                 $name.Bind($name.EVT.MACRORECORD, this, #handler)</template>
+    <template name="evt_connect_OnMarginClick">                 $name.Bind($name.EVT.MARGINCLICK, this, #handler)</template>
+    <template name="evt_connect_OnNeedShown">                   $name.Bind($name.EVT.NEEDSHOWN, this, #handler)</template>
+    <template name="evt_connect_OnPainted">                     $name.Bind($name.EVT.PAINTED, this, #handler)</template>
+    <template name="evt_connect_OnUserListSelection">           $name.Bind($name.EVT.USERLISTSELECTION, this, #handler)</template>
+    <template name="evt_connect_OnURIDropped">                  $name.Bind($name.EVT.URIDROPPED, this, #handler)</template>
+    <template name="evt_connect_OnDwellStart">                  $name.Bind($name.EVT.DWELLSTART, this, #handler)</template>
+    <template name="evt_connect_OnDwellEnd">                    $name.Bind($name.EVT.DWELLEND, this, #handler)</template>
+    <template name="evt_connect_OnStartDrag">                   $name.Bind($name.EVT.START_DRAG, this, #handler)</template>
+    <template name="evt_connect_OnDragOver">                    $name.Bind($name.EVT.DRAG_OVER, this, #handler)</template>
+    <template name="evt_connect_OnDoDrop">                      $name.Bind($name.EVT.DO_DROP, this, #handler)</template>
+    <template name="evt_connect_OnZoom">                        $name.Bind($name.EVT.ZOOM, this, #handler)</template>
+    <template name="evt_connect_OnHotspotClick">                $name.Bind($name.EVT.HOTSPOT_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnHotspotDClick">               $name.Bind($name.EVT.HOTSPOT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnCallTipClick">                $name.Bind($name.EVT.CALLTIP_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnAutoCompSelection">           $name.Bind($name.EVT.AUTOCOMP_SELECTION, this, #handler)</template>
+    <template name="evt_connect_OnIndicatorClick">              $name.Bind($name.EVT.INDICATOR_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnIndicatorRelease">            $name.Bind($name.EVT.INDICATOR_RELEASE, this, #handler)</template>
+    <template name="evt_connect_OnAutoCompCancelled">           $name.Bind($name.EVT.AUTOCOMP_CANCELLED, this, #handler)</template>
+    <template name="evt_connect_OnAutoCompCharDeleted">         $name.Bind($name.EVT.AUTOCOMP_CHAR_DELETED, this, #handler)</template>
+  </templates>
+
+  <templates class="wxCheckListBox">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">
+      $name = #class(#wxparent $name, $id, $pos, $size, [$choices], $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @})
+    </template>
+    <template name="evt_connect_OnCheckListBoxToggled"> $name.Bind($name.EVT.CHECKLISTBOX, this, #handler)</template>
+    <template name="evt_connect_OnCheckListBox">        $name.Bind($name.EVT.LISTBOX, this, #handler)</template>
+    <template name="evt_connect_OnCheckListBoxDClick">  $name.Bind($name.EVT.LISTBOX_DCLICK, this, #handler)</template>
+  </templates>
+
+  <templates class="wxEditableListBox">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">
+      $name = #class(#wxparent $name, $id, $label, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @})
+      #ifnotnull $strings
+      @{ #nl $name.Strings = [ $strings ] @}
+    </template>
+  </templates>
+
+  <templates class="wxSimpleHtmlListBox">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">
+      $name = #class(#wxparent $name, $id, $pos, $size, [ $items ], $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @})
+    </template>
+    <template name="evt_connect_OnSelected">       $name.Bind($name.EVT.SELECTED, this, #handler)</template>
+    <template name="evt_connect_OnDClick">         $name.Bind($name.EVT.DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnCellClicked">    $name.Bind($name.EVT.CELL_CLICKED, this, #handler)</template>
+    <template name="evt_connect_OnCellHover">      $name.Bind($name.EVT.CELL_HOVER, this, #handler)</template>
+    <template name="evt_connect_OnLinkClicked">    $name.Bind($name.EVT.LINK_CLICKED, this, #handler)</template>
+  </templates>
+
+  <templates class="wxDataViewCtrl">
+    <template name="declaration">
+      #ifequal $type "DataView"
+      @{ var $name : #class @}
+      #ifequal $type "DataViewList"
+      @{ var $name : wx.DataViewListCtrl @}
+      #ifequal $type "DataViewTree"
+      @{ var $name : wx.DataViewTreeCtrl @}
+    </template>
+    <template name="construction">
+      #ifequal $type "DataView"
+      @{ $name = #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @}) @}
+      #ifequal $type "DataViewList"
+      @{ $name = wx.DataViewListCtrl(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @}) @}
+      #ifequal $type "DataViewTree"
+      @{ $name = wx.DataViewTreeCtrl(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @}) @}
+    </template>
+    <template name="evt_connect_OnSelectionChanged">    $name.Bind($name.EVT.SELECTION_CHANGED, this, #handler)</template>
+    <template name="evt_connect_OnItemActivated">       $name.Bind($name.EVT.ITEM_ACTIVATED, this, #handler)</template>
+    <template name="evt_connect_OnItemStartEditing">    $name.Bind($name.EVT.ITEM_START_EDITING, this, #handler)</template>
+    <template name="evt_connect_OnItemEditingStarted">  $name.Bind($name.EVT.ITEM_EDITING_STARTED, this, #handler)</template>
+    <template name="evt_connect_OnItemEditingDone">     $name.Bind($name.EVT.ITEM_EDITING_DONE, this, #handler)</template>
+    <template name="evt_connect_OnItemCollapsing">      $name.Bind($name.EVT.ITEM_COLLAPSING, this, #handler)</template>
+    <template name="evt_connect_OnItemCollapsed">       $name.Bind($name.EVT.ITEM_COLLAPSED, this, #handler)</template>
+    <template name="evt_connect_OnItemExpanding">       $name.Bind($name.EVT.ITEM_EXPANDING, this, #handler)</template>
+    <template name="evt_connect_OnItemExpanded">        $name.Bind($name.EVT.ITEM_EXPANDED, this, #handler)</template>
+    <template name="evt_connect_OnItemValueChanged">    $name.Bind($name.EVT.ITEM_VALUE_CHANGED, this, #handler)</template>
+    <template name="evt_connect_OnItemContextMenu">     $name.Bind($name.EVT.ITEM_CONTEXT_MENU, this, #handler)</template>
+    <template name="evt_connect_OnColumnHeaderClick">   $name.Bind($name.EVT.COLUMN_HEADER_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnColumnHeaderRightClick">  $name.Bind($name.EVT.COLUMN_HEADER_RIGHT_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnColumnSorted">        $name.Bind($name.EVT.COLUMN_HEADER_SORTED, this, #handler)</template>
+    <template name="evt_connect_OnColumnReordered">     $name.Bind($name.EVT.COLUMN_REORDERED, this, #handler)</template>
+    <template name="evt_connect_OnItemBeginDrag">       $name.Bind($name.EVT.ITEM_BEGIN_DRAG, this, #handler)</template>
+    <template name="evt_connect_OnItemDropPossible">    $name.Bind($name.EVT.ITEM_DROP_POSSIBLE, this, #handler)</template>
+    <template name="evt_connect_OnItemDrop">            $name.Bind($name.EVT.ITEM_DROP, this, #handler)</template>
+  </templates>
+
+  <templates class="wxGrid">
+    <template name="declaration">var $name : #class</template>
+    <template name="include">import wx.grid</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $pos, $size, $window_style #ifnotnull $window_name @{, $window_name @})</template>
+    <template name="settings">
+      #nl @# Grid
+      #nl $name.CreateGrid($rows, $cols)
+      #nl $name.EnableEditing($editing)
+      #nl $name.EnableGridLines($grid_lines)
+      #ifnotnull $grid_line_color
+      @{
+      #nl $name.SetGridLineColour($grid_line_color)
+      @}
+      #nl $name.EnableDragGridSize($drag_grid_size)
+      #nl $name.SetMargins($margin_width, $margin_height)
+      #nl
+      #nl @# Columns
+      #foreach $column_sizes
+      @{ $name.SetColSize(#npred, #pred) @}
+      #ifnotequal $autosize_cols "0"
+      @{
+      #nl $name.AutoSizeColumns()
+      @}
+      #nl $name.EnableDragColMove($drag_col_move)
+      #nl $name.EnableDragColSize($drag_col_size)
+      #nl $name.SetColLabelSize($col_label_size)
+      #foreach $col_label_values
+      @{ $name.SetColLabelValue(#npred, #pred) @}
+      #nl $name.SetColLabelAlignment($col_label_horiz_alignment, $col_label_vert_alignment)
+      #nl
+      #nl @# Rows
+      #foreach $row_sizes
+      @{ $name.SetRowSize(#npred, #pred) @}
+      #ifnotequal $autosize_rows "0"
+      @{
+      #nl $name.AutoSizeRows()
+      @}
+      #nl $name.EnableDragRowSize($drag_row_size)
+      #nl $name.SetRowLabelSize($row_label_size)
+      #foreach $row_label_values
+      @{ $name.SetRowLabelValue(#npred, #pred) @}
+      #nl $name.SetRowLabelAlignment($row_label_horiz_alignment, $row_label_vert_alignment)
+      #nl
+      #nl @# Label Appearance
+      #ifnotnull $label_bg
+      @{
+      #nl $name.SetLabelBackgroundColour($label_bg)
+      @}
+      #ifnotnull $label_font
+      @{
+      #nl $name.SetLabelFont($label_font)
+      @}
+      #ifnotnull $label_text
+      @{
+      #nl $name.SetLabelTextColour($label_text)
+      @}
+      #nl
+      #nl @# Cell Defaults
+      #ifnotnull $cell_bg
+      @{
+      #nl $name.SetDefaultCellBackgroundColour($cell_bg)
+      @}
+      #ifnotnull $cell_text
+      @{
+      #nl $name.SetDefaultCellTextColour($cell_text)
+      @}
+      #ifnotnull $cell_font
+      @{
+      #nl $name.SetDefaultCellFont($cell_font)
+      @}
+      #nl $name.SetDefaultCellAlignment($cell_horiz_alignment, $cell_vert_alignment)
+    </template>
+    <template name="evt_connect_OnGridCellLeftClick">       $name.Bind($name.EVT.CELL_LEFT_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridCellRightClick">      $name.Bind($name.EVT.CELL_RIGHT_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridCellLeftDClick">      $name.Bind($name.EVT.CELL_LEFT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridCellRightDClick">     $name.Bind($name.EVT.CELL_RIGHT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridLabelLeftClick">      $name.Bind($name.EVT.LABEL_LEFT_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridLabelRightClick">     $name.Bind($name.EVT.LABEL_RIGHT_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridLabelLeftDClick">     $name.Bind($name.EVT.LABEL_LEFT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridLabelRightDClick">    $name.Bind($name.EVT.LABEL_RIGHT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridCellChange">          $name.Bind($name.EVT.CELL_CHANGE, this, #handler)</template>
+    <template name="evt_connect_OnGridSelectCell">          $name.Bind($name.EVT.SELECT_CELL, this, #handler)</template>
+    <template name="evt_connect_OnGridEditorHidden">        $name.Bind($name.EVT.EDITOR_HIDDEN, this, #handler)</template>
+    <template name="evt_connect_OnGridEditorShown">         $name.Bind($name.EVT.EDITOR_SHOWN, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdCellLeftClick">    $name.Bind($name.EVT.CELL_LEFT_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdCellRightClick">   $name.Bind($name.EVT.CELL_RIGHT_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdCellLeftDClick">   $name.Bind($name.EVT.CELL_LEFT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdCellRightDClick">  $name.Bind($name.EVT.CELL_RIGHT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdLabelLeftClick">   $name.Bind($name.EVT.LABEL_LEFT_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdLabelRightClick">  $name.Bind($name.EVT.LABEL_RIGHT_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdLabelLeftDClick">  $name.Bind($name.EVT.LABEL_LEFT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdLabelRightDClick"> $name.Bind($name.EVT.LABEL_RIGHT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdCellChange">       $name.Bind($name.EVT.CELL_CHANGE, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdSelectCell">       $name.Bind($name.EVT.SELECT_CELL, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdEditorHidden">     $name.Bind($name.EVT.EDITOR_HIDDEN, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdEditorShown">      $name.Bind($name.EVT.EDITOR_SHOWN, this, #handler)</template>
+    <template name="evt_connect_OnGridColSize">             $name.Bind($name.EVT.COL_SIZE, this, #handler)</template>
+    <template name="evt_connect_OnGridRowSize">             $name.Bind($name.EVT.ROW_SIZE, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdColSize">          $name.Bind($name.EVT.COL_SIZE, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdRowSize">          $name.Bind($name.EVT.ROW_SIZE, this, #handler)</template>
+    <template name="evt_connect_OnGridRangeSelect">         $name.Bind($name.EVT.RANGE_SELECT, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdRangeSelect">      $name.Bind($name.EVT.RANGE_SELECT, this, #handler)</template>
+    <template name="evt_connect_OnGridEditorCreated">       $name.Bind($name.EVT.EDITOR_CREATED, this, #handler)</template>
+    <template name="evt_connect_OnGridCmdEditorCreated">    $name.Bind($name.EVT.EDITOR_CREATED, this, #handler)</template>
+  </templates>
+
+  <templates class="wxPropertyGrid">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">
+      $name = #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @})
+    </template>
+    <template name="settings">
+      #ifnotnull $extra_style
+      @{ ExtraStyle = $extra_style #nl @}
+    </template>
+    <template name="evt_connect_OnSelected">                $name.Bind($name.EVT.SELECTED, this, #handler)</template>
+    <template name="evt_connect_OnChanged">                 $name.Bind($name.EVT.CHANGED, this, #handler)</template>
+    <template name="evt_connect_OnChanging">                $name.Bind($name.EVT.CHANGING, this, #handler)</template>
+    <template name="evt_connect_OnHighlighted">             $name.Bind($name.EVT.HIGHLIGHTED, this, #handler)</template>
+    <template name="evt_connect_OnRightClick">              $name.Bind($name.EVT.RIGHT_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnDoubleClick">             $name.Bind($name.EVT.DOUBLE_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnItemCollapsed">           $name.Bind($name.EVT.ITEM_COLLAPSED, this, #handler)</template>
+    <template name="evt_connect_OnItemExpanded">            $name.Bind($name.EVT.ITEM_EXPANDED, this, #handler)</template>
+    <template name="evt_connect_OnLabelEditBegin">          $name.Bind($name.EVT.LABEL_EDIT_BEGIN, this, #handler)</template>
+    <template name="evt_connect_OnLabelEditEnding">         $name.Bind($name.EVT.LABEL_EDIT_ENDING, this, #handler)</template>
+    <template name="evt_connect_OnColBeginDrag">            $name.Bind($name.EVT.COL_BEGIN_DRAG, this, #handler)</template>
+    <template name="evt_connect_OnColDragging">             $name.Bind($name.EVT.COL_DRAGGING, this, #handler)</template>
+    <template name="evt_connect_OnColEndDrag">              $name.Bind($name.EVT.COL_END_DRAG, this, #handler)</template>
+  </templates>
+
+  <templates class="wxPropertyGridManager">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">
+      $name = #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @})
+    </template>
+    <template name="settings">
+      #ifnotnull $extra_style
+      @{ ExtraStyle = $extra_style #nl @}
+    </template>
+    <template name="evt_connect_OnSelected">                $name.Bind($name.EVT.SELECTED, this, #handler)</template>
+    <template name="evt_connect_OnChanged">                 $name.Bind($name.EVT.CHANGED, this, #handler)</template>
+    <template name="evt_connect_OnChanging">                $name.Bind($name.EVT.CHANGING, this, #handler)</template>
+    <template name="evt_connect_OnHighlighted">             $name.Bind($name.EVT.HIGHLIGHTED, this, #handler)</template>
+    <template name="evt_connect_OnRightClick">              $name.Bind($name.EVT.RIGHT_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnDoubleClick">             $name.Bind($name.EVT.DOUBLE_CLICK, this, #handler)</template>
+    <template name="evt_connect_OnItemCollapsed">           $name.Bind($name.EVT.ITEM_COLLAPSED, this, #handler)</template>
+    <template name="evt_connect_OnItemExpanded">            $name.Bind($name.EVT.ITEM_EXPANDED, this, #handler)</template>
+    <template name="evt_connect_OnLabelEditBegin">          $name.Bind($name.EVT.LABEL_EDIT_BEGIN, this, #handler)</template>
+    <template name="evt_connect_OnLabelEditEnding">         $name.Bind($name.EVT.LABEL_EDIT_ENDING, this, #handler)</template>
+    <template name="evt_connect_OnColBeginDrag">            $name.Bind($name.EVT.COL_BEGIN_DRAG, this, #handler)</template>
+    <template name="evt_connect_OnColDragging">             $name.Bind($name.EVT.COL_DRAGGING, this, #handler)</template>
+    <template name="evt_connect_OnColEndDrag">              $name.Bind($name.EVT.COL_END_DRAG, this, #handler)</template>
+  </templates>
+
+  <templates class="wxToggleButton">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $label, $pos, $size, $window_style #ifnotnull $window_name @{, null, $window_name @})</template>
+    <template name="settings">#ifnotequal $value "0" @{ $name.Value = true @}</template>
+    <template name="evt_connect_OnToggleButton">$name.Bind($name.EVT.TOGGLEBUTTON, this, #handler)</template>
+  </templates>
+
+  <templates class="wxInfoBar">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">
+      $name = #class(#wxparent $name, $id) #nl
+      $name.SetShowHideEffects($show_effect, $hide_effect)
+      #ifnotequal $effect_duration "500"
+      @{ #nl $name.EffectDuration = $effect_duration @}
+    </template>
+  </templates>
+
+  <templates class="wxBannerWindow">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">
+      $name = #class(#wxparent $name, $id, $dir, $pos, $size, $window_style) #nl
+      $name.SetText($title, $message) #nl
+      $name.SetGradient($gradient_start, $gradient_end)
+      #ifnotnull $bitmap
+      @{ #nl $name.SetBitmap($bitmap) @}
+    </template>
+  </templates>
+
+  <templates class="wxColourPickerCtrl">
+    <template name="declaration">var $name : wx.ColorPickerCtrl</template>
+    <template name="construction">
+      $name = #class(#wxparent $name, $id,
+      #ifnull $colour
+      @{ wx.BLACK, @}
+      #ifnotnull $colour
+      @{ $colour, @}
+      $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @})
+    </template>
+    <template name="evt_connect_OnColourChanged">$name.Bind($name.EVT.CHANGED, this, #handler)</template>
+  </templates>
+
+  <templates class="wxFontPickerCtrl">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">
+      $name = #class(#wxparent $name, $id,
+      #ifnull $value
+      @{ wx.NullFont, @}
+      #ifnotnull $value
+      @{ $value, @}
+      $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @})
+    </template>
+    <template name="settings">
+      #ifnotnull $max_point_size
+      @{ $name.MaxPointSize = $max_point_size @}
+    </template>
+    <template name="evt_connect_OnFontChanged">$name.Bind($name.EVT.CHANGED, this, #handler)</template>
+  </templates>
+
+  <templates class="wxFilePickerCtrl">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">
+      $name = #class(#wxparent $name, $id, $value, $message, $wildcard, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @})
+    </template>
+    <template name="evt_connect_OnFileChanged">$name.Bind($name.EVT.CHANGED, this, #handler)</template>
+  </templates>
+
+  <templates class="wxDirPickerCtrl">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">
+      $name = #class(#wxparent $name, $id, $value, $message, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @})
+    </template>
+    <template name="evt_connect_OnDirChanged">$name.Bind($name.EVT.CHANGED, this, #handler)</template>
+  </templates>
+
+  <templates class="wxDatePickerCtrl">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, wx.DEFAULT.DATETIME, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @})</template>
+    <template name="evt_connect_OnDateChanged">$name.Bind($name.EVT.CHANGED, this, #handler)</template>
+  </templates>
+
+  <templates class="wxCalendarCtrl">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, wx.DEFAULT.DATETIME, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @})</template>
+    <template name="evt_connect_OnCalendar">              $name.Bind($name.EVT.CALENDAR, this, #handler)</template>
+    <template name="evt_connect_OnCalendarSelChanged">    $name.Bind($name.EVT.SEL_CHANGED, this, #handler)</template>
+    <template name="evt_connect_OnCalendarDay">           $name.Bind($name.EVT.DAY, this, #handler)</template>
+    <template name="evt_connect_OnCalendarMonth">         $name.Bind($name.EVT.MONTH, this, #handler)</template>
+    <template name="evt_connect_OnCalendarYear">          $name.Bind($name.EVT.YEAR, this, #handler)</template>
+    <template name="evt_connect_OnCalendarWeekDayClicked">$name.Bind($name.EVT.WEEKDAY_CLICKED, this, #handler)</template>
+  </templates>
+
+  <templates class="wxScrollBar">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @})</template>
+    <template name="evt_connect_OnScroll">
+      $name.Bind(wx.EVT.SCROLL, this, #handler)
+    </template>
+    <template name="evt_connect_OnScrollTop">         $name.Bind(wx.EVT.SCROLL_TOP, this, #handler)</template>
+    <template name="evt_connect_OnScrollBottom">      $name.Bind(wx.EVT.SCROLL_BOTTOM, this, #handler)</template>
+    <template name="evt_connect_OnScrollLineUp">      $name.Bind(wx.EVT.SCROLL_LINEUP, this, #handler)</template>
+    <template name="evt_connect_OnScrollLineDown">    $name.Bind(wx.EVT.SCROLL_LINEDOWN, this, #handler)</template>
+    <template name="evt_connect_OnScrollPageUp">      $name.Bind(wx.EVT.SCROLL_PAGEUP, this, #handler)</template>
+    <template name="evt_connect_OnScrollPageDown">    $name.Bind(wx.EVT.SCROLL_PAGEDOWN, this, #handler)</template>
+    <template name="evt_connect_OnScrollThumbTrack">  $name.Bind(wx.EVT.SCROLL_THUMBTRACK, this, #handler)</template>
+    <template name="evt_connect_OnScrollThumbRelease">$name.Bind(wx.EVT.SCROLL_THUMBRELEASE, this, #handler)</template>
+    <template name="evt_connect_OnScrollChanged">     $name.Bind(wx.EVT.SCROLL_CHANGED, this, #handler)</template>
+    <template name="evt_connect_OnCommandScroll">
+      $name.Bind(wx.EVT.CMD.SCROLL, this, #handler)
+    </template>
+    <template name="evt_connect_OnCommandScrollTop">          $name.Bind(wx.EVT.CMD_SCROLL_TOP, this, #handler)</template>
+    <template name="evt_connect_OnCommandScrollBottom">       $name.Bind(wx.EVT.CMD_SCROLL_BOTTOM, this, #handler)</template>
+    <template name="evt_connect_OnCommandScrollLineUp">       $name.Bind(wx.EVT.CMD_SCROLL_LINEUP, this, #handler)</template>
+    <template name="evt_connect_OnCommandScrollLineDown">     $name.Bind(wx.EVT.CMD_SCROLL_LINEDOWN, this, #handler)</template>
+    <template name="evt_connect_OnCommandScrollPageUp">       $name.Bind(wx.EVT.CMD_SCROLL_PAGEUP, this, #handler)</template>
+    <template name="evt_connect_OnCommandScrollPageDown">     $name.Bind(wx.EVT.CMD_SCROLL_PAGEDOWN, this, #handler)</template>
+    <template name="evt_connect_OnCommandScrollThumbTrack">   $name.Bind(wx.EVT.CMD_SCROLL_THUMBTRACK, this, #handler)</template>
+    <template name="evt_connect_OnCommandScrollThumbRelease"> $name.Bind(wx.EVT.CMD_SCROLL_THUMBRELEASE, this, #handler)</template>
+    <template name="evt_connect_OnCommandScrollChanged">      $name.Bind(wx.EVT.CMD_SCROLL_CHANGED, this, #handler)</template>
+  </templates>
+
+  <templates class="wxSpinCtrl">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $value, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @}, $min, $max, $initial #ifnotnull $window_name @{, $window_name @})</template>
+    <template name="evt_connect_OnSpinCtrl">    $name.Bind($name.EVT.SPINCTRL, this, #handler)</template>
+    <template name="evt_connect_OnSpinCtrlText">$name.Bind($name.EVT.TEXT, this, #handler)</template>
+  </templates>
+
+  <templates class="wxSpinButton">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @})</template>
+    <template name="evt_connect_OnSpin">    $name.Bind($name.EVT.SPIN, this, #handler)</template>
+    <template name="evt_connect_OnSpinUp">  $name.Bind($name.EVT.SPIN_UP, this, #handler)</template>
+    <template name="evt_connect_OnSpinDown">$name.Bind($name.EVT.SPIN_DOWN, this, #handler)</template>
+  </templates>
+
+  <templates class="wxHyperlinkCtrl">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $label, $url, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @})</template>
+    <template name="settings">
+      #ifnotnull $hover_color
+      @{ #nl $name.HoverColour = $hover_color @}
+
+      #ifnotnull $normal_color
+      @{ #nl $name.NormalColour = $normal_color @}
+
+      #ifnotnull $visited_color
+      @{ #nl $name.VisitedColour = $visited_color @}
+    </template>
+    <template name="evt_connect_OnHyperlink">$name.Bind($name.EVT.HYPERLINK, this, #handler)</template>
+  </templates>
+
+  <templates class="wxGenericDirCtrl">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $defaultfolder, $pos, $size, $style #ifnotnull $window_style @{ |$window_style@}, $filter, $defaultfilter #ifnotnull $window_name @{, $window_name @})</template>
+    <template name="settings">
+      #nl $name.ShowHidden($show_hidden)
+    </template>
+  </templates>
+
+  <templates class="wxSearchCtrl">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">$name = #class(#wxparent $name, $id, $value, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @})</template>
+    <template name="settings">
+      $name.ShowSearchButton($search_button)
+      #nl $name.ShowCancelButton($cancel_button)
+    </template>
+    <template name="evt_connect_OnText">        $name.Bind($name.EVT.TEXT, this, #handler)</template>
+    <template name="evt_connect_OnTextEnter">   $name.Bind($name.EVT.TEXT_ENTER, this, #handler)</template>
+    <template name="evt_connect_OnSearchButton">$name.Bind($name.EVT.SEARCH_BTN, this, #handler)</template>
+    <template name="evt_connect_OnCancelButton">$name.Bind($name.EVT.CANCEL_BTN, this, #handler)</template>
+  </templates>
+
+  <templates class="wxScrolledCanvas">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">
+      $name = #class(#wxparent $name, $id, $pos, $size, $window_style #ifnotnull $window_name @{, $window_name @}) #nl
+      $name.SetScrollRate($scroll_rate_x, $scroll_rate_y)
+    </template>
+  </templates>
+
+  <templates class="CustomControl">
+    <template name="declaration">
+      #ifnotnull $declaration @{ $declaration @}
+      #ifnull $declaration @{ var $name : $class @}
+    </template>
+    <template name="construction">
+      $name = 
+      #ifnotnull $construction
+      @{ $construction @}
+      #ifnull $construction
+      @{ $class (this) @}
+    </template>
+    <template name="settings">$settings</template>
+    <template name="include">$include</template>
+  </templates>
+
+  <templates class="wxMediaCtrl">
+    <template name="declaration">var $name : #class</template>
+    <template name="construction">
+      $name = wx.media.MediaCtrl(#wxparent $name, $id, wx.EmptyString, $pos, $size)
+      #ifnotnull $file
+      @{ #nl $name.Load($file) @}
+      #ifnotnull $playback_rate
+      @{#nl $name.PlaybackRate = $playback_rate@}
+      #ifnotnull $volume
+      @{#nl $name.Volume = $volume@}
+      #ifnotnull $player_controls
+      @{#nl $name.ShowPlayerControls(wxMEDIACTRLPLAYERCONTROLS_$player_controls)@}
+    </template>
+    <template name="settings">
+      #ifequal $play "1"
+      @{#nl $name.Play()@}
+    </template>
+    <template name="include">import wx.media</template>
+  </templates>
+
+</codegen>

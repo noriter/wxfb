@@ -36,6 +36,7 @@
 #include <wx/aui/auibar.h>
 #include <wx/bmpcbox.h>
 #include <wx/menu.h>
+#include <wx/commandlinkbutton.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 // Custom status bar class for windows to prevent the status bar gripper from
@@ -179,6 +180,11 @@ public:
 			button->SetDefault();
 		}
 
+		if ( !obj->IsNull( _("bitmap") ) )
+		{
+			button->SetBitmap( obj->GetPropertyAsBitmap( _("bitmap") ) );
+		}
+
 		return button;
 	}
 
@@ -188,6 +194,12 @@ public:
 		xrc.AddWindowProperties();
 		xrc.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
 		xrc.AddProperty(_("default"),_("default"),XRC_TYPE_BOOL);
+
+		if ( !obj->IsNull( _("bitmap") ) )
+		{
+			xrc.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_BITMAP);
+		}
+
 		return xrc.GetXrcObject();
 	}
 
@@ -197,6 +209,7 @@ public:
 		filter.AddWindowProperties();
 		filter.AddProperty(_("label"),_("label"),XRC_TYPE_TEXT);
 		filter.AddProperty(_("default"),_("default"),XRC_TYPE_BOOL);
+		filter.AddProperty(_("bitmap"),_("bitmap"),XRC_TYPE_BITMAP);
 		return filter.GetXfbObject();
 	}
 };
@@ -279,6 +292,21 @@ public:
 	}
 };
 
+class CommandLinkButtonComponent : public ComponentBase
+{
+public:
+	wxObject* Create(IObject* obj, wxObject* parent)
+	{
+		wxCommandLinkButton* btn = new wxCommandLinkButton((wxWindow*)parent, wxID_ANY,
+			obj->GetPropertyAsString(_("main_label")),
+			obj->GetPropertyAsString(_("note")),
+			obj->GetPropertyAsPoint(_("pos")),
+			obj->GetPropertyAsSize(_("size")),
+			obj->GetPropertyAsInteger(_("style")) | obj->GetPropertyAsInteger(_("window_style")));
+
+		return btn;
+	}
+};
 
 class TextCtrlComponent : public ComponentBase
 {
@@ -297,7 +325,7 @@ public:
 			tc->SetMaxLength( obj->GetPropertyAsInteger( _("maxlength") ) );
 		}
 
-		tc->PushEventHandler( new ComponentEvtHandler( tc, GetManager() ) );
+		PushEventHandler(tc, new ComponentEvtHandler( tc, GetManager() ) );
 
 		return tc;
 	}
@@ -402,7 +430,7 @@ public:
 		int sel = obj->GetPropertyAsInteger(_("selection"));
 		if( sel > -1 && sel < (int) choices.GetCount() ) combo->SetSelection(sel);
 
-		combo->PushEventHandler( new ComponentEvtHandler( combo, GetManager() ) );
+		PushEventHandler(combo, new ComponentEvtHandler( combo, GetManager() ) );
 		
 		return combo;
 	}
@@ -449,8 +477,8 @@ public:
 		
 		int sel = obj->GetPropertyAsInteger(_("selection"));
 		if( sel > -1 && sel < (int) choices.GetCount() ) bcombo->SetSelection(sel);
-		
-		bcombo->PushEventHandler( new ComponentEvtHandler( bcombo, GetManager() ) );
+
+		PushEventHandler(bcombo, new ComponentEvtHandler( bcombo, GetManager() ) );
 			
 		return bcombo;
 	}
@@ -486,7 +514,7 @@ public:
 			obj->GetPropertyAsInteger(_("window_style")) | obj->GetPropertyAsInteger(_T("style")));
         res->SetValue(obj->GetPropertyAsInteger(_T("checked")) != 0);
 
-        res->PushEventHandler( new ComponentEvtHandler( res, GetManager() ) );
+		PushEventHandler(res, new ComponentEvtHandler( res, GetManager() ) );
 
         return res;
 	}
@@ -804,7 +832,7 @@ public:
 		sb->SetFieldsCount(obj->GetPropertyAsInteger(_("fields")));
 
 		#ifndef __WXMSW__
-		sb->PushEventHandler( new wxLeftDownRedirect( sb, GetManager() ) );
+		PushEventHandler(sb, new wxLeftDownRedirect( sb, GetManager() ) );
 		#endif
 		return sb;
 	}
@@ -996,7 +1024,7 @@ public:
 		if (!obj->IsNull(_("separation")))
 			tb->SetToolSeparation(obj->GetPropertyAsInteger(_("separation")));
 
-		tb->PushEventHandler( new ComponentEvtHandler( tb, GetManager() ) );
+		PushEventHandler(tb, new ComponentEvtHandler( tb, GetManager() ) );
 		
 		return tb;
 	}
@@ -1405,7 +1433,7 @@ public:
 
 		delete []strings;
 
-		choice->PushEventHandler( new ComponentEvtHandler( choice, GetManager() ) );
+		PushEventHandler(choice, new ComponentEvtHandler( choice, GetManager() ) );
 
 		return choice;
 	}
@@ -1553,7 +1581,7 @@ public:
 				ac->SetInactiveBitmap( wxNullBitmap );
 		}
 
-		ac->PushEventHandler( new ComponentEvtHandler( ac, GetManager() ) );
+		PushEventHandler(ac, new ComponentEvtHandler( ac, GetManager() ) );
 
 		return ac;
 	}
@@ -1581,6 +1609,7 @@ BEGIN_LIBRARY()
 
 WINDOW_COMPONENT("wxButton",ButtonComponent)
 WINDOW_COMPONENT("wxBitmapButton",BitmapButtonComponent)
+WINDOW_COMPONENT("wxCommandLinkButton",CommandLinkButtonComponent)
 WINDOW_COMPONENT("wxTextCtrl",TextCtrlComponent)
 WINDOW_COMPONENT("wxStaticText",StaticTextComponent)
 WINDOW_COMPONENT("wxComboBox", ComboBoxComponent)

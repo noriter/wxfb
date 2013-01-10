@@ -37,6 +37,7 @@
 #include <rad/appdata.h>
 #include "utils/wxfbexception.h"
 #include "model/objectbase.h"
+#include <wx/collpane.h>
 
 #ifdef __WX24__
 #define wxFULL_REPAINT_ON_RESIZE 0
@@ -529,7 +530,7 @@ void VisualEditor::Create()
 			}
 			else
 			  m_back->ShowTitleBar(false);
-			  
+
 			// --- AUI
 			if(  m_form->GetObjectTypeName() == wxT("form") )
 			{
@@ -736,7 +737,7 @@ void VisualEditor::Generate( PObjectBase obj, wxWindow* wxparent, wxObject* pare
 			SetupWindow( obj, createdWindow );
 
 			// Push event handler in order to respond to Paint and Mouse events
-			createdWindow->PushEventHandler( new VObjEvtHandler( createdWindow, obj ) );
+			comp->PushEventHandler( createdWindow, new VObjEvtHandler( createdWindow, obj ) );
 			break;
 
 		case COMPONENT_TYPE_SIZER:
@@ -762,7 +763,10 @@ void VisualEditor::Generate( PObjectBase obj, wxWindow* wxparent, wxObject* pare
 	// Recursively generate the children
 	for ( unsigned int i = 0; i < obj->GetChildCount(); i++ )
 	{
-		Generate( obj->GetChild( i ), new_wxparent, createdObject );
+		if (obj->GetClassName() == wxT("wxCollapsiblePane"))
+			Generate( obj->GetChild( i ), ((wxCollapsiblePane*)new_wxparent)->GetPane(), createdObject );
+		else
+			Generate( obj->GetChild( i ), new_wxparent, createdObject );
 	}
 
 	comp->OnCreated( createdObject, new_wxparent );
@@ -884,8 +888,6 @@ void VisualEditor::SetupWindow( PObjectBase obj, wxWindow* window )
 					tname == wxT("container") || 
 					tname == wxT("notebook") ||
 					tname == wxT("auinotebook") ||
-					tname == wxT("flatnotebook") ||
-					tname == wxT("listbook") ||
 					tname == wxT("choicebook") ||
 					tname == wxT("treelistctrl") ||
 					tname == wxT("splitter") ) )

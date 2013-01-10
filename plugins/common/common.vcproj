@@ -154,11 +154,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\output\plugins\common\xml\common.phpcode"
-			>
-		</File>
-		<File
-			RelativePath="..\..\output\plugins\common\xml\common.pythoncode"
+			RelativePath="..\..\output\plugins\common\xml\common.solcode"
 			>
 		</File>
 		<File
@@ -170,11 +166,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\output\plugins\common\xml\menutoolbar.phpcode"
-			>
-		</File>
-		<File
-			RelativePath="..\..\output\plugins\common\xml\menutoolbar.pythoncode"
+			RelativePath="..\..\output\plugins\common\xml\menutoolbar.solcode"
 			>
 		</File>
 		<File

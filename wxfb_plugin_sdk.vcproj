@@ -46,12 +46,13 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough="pch.h"
+				ProgramDataBaseFileName="$(TargetDir)/$(TargetName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 				DisableSpecificWarnings="4996;4819"
-				ForcedIncludeFiles="pch.h"
+				ForcedIncludeFiles=""
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -64,6 +65,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)\$(ProjectName)_d.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -112,13 +114,13 @@
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;TIXML_USE_TICPP;WXUSINGDLL"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough="pch.h"
 				ProgramDataBaseFileName="$(TargetDir)/$(TargetName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4996;4819"
-				ForcedIncludeFiles="pch.h"
+				ForcedIncludeFiles=""
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -214,30 +216,6 @@
 		</File>
 		<File
 			RelativePath=".\sdk\plugin_interface\fontcontainer.h"
-			>
-		</File>
-		<File
-			RelativePath=".\src\pch.cpp"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="1"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					UsePrecompiledHeader="1"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath=".\src\pch.h"
 			>
 		</File>
 		<File

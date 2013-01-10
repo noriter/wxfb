@@ -24,6 +24,7 @@
 	<icon name="balign" 	file="balign.png"	/>
 	<icon name="expand" 	file="expand.png"	/>
 	<icon name="stretch" 	file="stretch.png"	/>
+  <icon name="all"      file="all.png" />
 	<icon name="left" 		file="left.xpm"		/>
 	<icon name="right" 		file="right.xpm"	/>
 	<icon name="top" 		file="top.xpm"		/>
@@ -40,8 +41,7 @@
 	<icon name="h" 				file="h.png"		/>
 	<icon name="designer"		file="designer.png"	/>
 	<icon name="c++" 			file="c++.png"		/>
-	<icon name="python" 		file="python.png"		/>
-	<icon name="php" 			file="php.png"		/>
+  <icon name="sol"      file="sol.png"/>
 	<icon name="xrc" 			file="xrc.png"		/>
 
     <!-- Object Properties -->
