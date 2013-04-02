@@ -21,7 +21,7 @@
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
-// SOL code generation writen by
+// NIT code generation writen by
 //   Jun-hyeok Jang - ellongrey@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -34,8 +34,8 @@ The implementation of the generation of relative paths is a little hacky, and no
 The value of all properties that are file or a directory paths must be absolute, otherwise the code generation will not work.
 */
 
-#ifndef _SOL_CODE_GEN_
-#define _SOL_CODE_GEN_
+#ifndef _NIT_CODE_GEN_
+#define _NIT_CODE_GEN_
 
 // wxFormBuilder flags (fbfXXX)
 #define fbfSILENT true
@@ -89,9 +89,9 @@ private:
 };
 
 /**
-* Parse the SOL templates.
+* Parse the NIT templates.
 */
-class SolTemplateParser : public TemplateParser
+class NitTemplateParser : public TemplateParser
 {
 private:
 	bool m_i18n;
@@ -103,10 +103,10 @@ private:
 	void SetupModulePrefixes();
 
 public:
-	SolTemplateParser( PObjectBase obj, wxString _template, bool useI18N, bool useRelativePath, wxString basePath, PrefixDict& prefixDict );
-	SolTemplateParser( const SolTemplateParser & that, wxString _template, PrefixDict& prefixDict );
+	NitTemplateParser( PObjectBase obj, wxString _template, bool useI18N, bool useRelativePath, wxString basePath, PrefixDict& prefixDict );
+	NitTemplateParser( const NitTemplateParser & that, wxString _template, PrefixDict& prefixDict );
 
-	// overrides for SOL
+	// overrides for NIT
 	PTemplateParser CreateParser( const TemplateParser* oldparser, wxString _template );
 	wxString RootWxParentToCode();
 	wxString ValueToCode( PObjectBase obj, PropertyType type, wxString value);
@@ -115,9 +115,9 @@ public:
 };
 
 /**
-* Generate the SOL code
+* Generate the NIT code
 */
-class SolCodeGenerator : public CodeGenerator
+class NitCodeGenerator : public CodeGenerator
 {
 private:
 	PCodeWriter m_source;
@@ -239,9 +239,9 @@ public:
 	/**
 	* Convert a wxString to the "C/C++" format.
 	*/
-	static wxString ConvertSolString( wxString text);
+	static wxString ConvertNitString( wxString text);
 
-	SolCodeGenerator();
+	NitCodeGenerator();
 
 	/**
 	* Set the codewriter for the source file
@@ -280,4 +280,4 @@ public:
 };
 
 
-#endif //_SOL_CODE_GEN_
+#endif //_NIT_CODE_GEN_

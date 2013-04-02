@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
-<codegen language="sol">
+<codegen language="nit">
   <templates class="wxWindow">
     <template name="toolbar_add">#parent $name.AddControl($name)</template>
   </templates>

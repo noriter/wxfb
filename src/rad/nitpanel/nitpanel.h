@@ -21,7 +21,7 @@
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
-// SOL code generation written by
+// NIT code generation written by
 //   Jun-hyeok Jang - ellongrey@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -32,8 +32,8 @@
 @note
 */
 
-#ifndef __SOL_PANEL_H__
-#define __SOL_PANEL_H__
+#ifndef __NIT_PANEL_H__
+#define __NIT_PANEL_H__
 
 #include <wx/panel.h>
 
@@ -54,11 +54,11 @@ class wxFBPropertyEvent;
 class wxFBObjectEvent;
 class wxFBEventHandlerEvent;
 
-class SolPanel : public wxPanel
+class NitPanel : public wxPanel
 {
 private:
-	CodeEditor* m_SolPanel;
-	PTCCodeWriter m_solCW;
+	CodeEditor* m_NitPanel;
+	PTCCodeWriter m_nitCW;
 
 #if wxVERSION_NUMBER < 2900
 	void InitStyledTextCtrl( wxScintilla* stc );
@@ -67,8 +67,8 @@ private:
 #endif
 
 public:
-	SolPanel( wxWindow *parent, int id );
-	~SolPanel();
+	NitPanel( wxWindow *parent, int id );
+	~NitPanel();
 
 	void OnPropertyModified( wxFBPropertyEvent& event );
 	void OnProjectRefresh( wxFBEvent& event );
@@ -81,4 +81,4 @@ public:
 	DECLARE_EVENT_TABLE()
 };
 
-#endif //__SOL_PANEL_H__
+#endif //__NIT_PANEL_H__

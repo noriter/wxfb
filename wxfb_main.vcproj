@@ -360,11 +360,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\src\rad\solpanel\solpanel.cpp"
+					RelativePath=".\src\rad\nitpanel\nitpanel.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\rad\solpanel\solpanel.h"
+					RelativePath=".\src\rad\nitpanel\nitpanel.h"
 					>
 				</File>
 				<File
@@ -449,11 +449,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\codegen\solcg.cpp"
+				RelativePath=".\src\codegen\nitcg.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\src\codegen\solcg.h"
+				RelativePath=".\src\codegen\nitcg.h"
 				>
 			</File>
 			<File
@@ -593,7 +593,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\output\xml\default.solcode"
+				RelativePath=".\output\xml\default.nitcode"
 				>
 			</File>
 			<File
@@ -613,7 +613,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\output\xml\properties.solcode"
+				RelativePath=".\output\xml\properties.nitcode"
 				>
 			</File>
 		</Filter>

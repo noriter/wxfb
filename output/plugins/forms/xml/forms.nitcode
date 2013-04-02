@@ -24,7 +24,7 @@ Written by
 Python code generation writen by
   Michal Bližňák - michal.bliznak@gmail.com
 -->
-<codegen language="sol">
+<codegen language="nit">
 
   <templates class="wxTopLevelWindow">
     <template name="evt_connect_OnActivate">    Bind(this.EVT.ACTIVATE, this, #handler)</template>

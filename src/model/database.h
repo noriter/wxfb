@@ -112,7 +112,7 @@ class ObjectDatabase
 {
  public:
   static bool HasCppProperties(wxString type);
-  static bool HasSolProperties(wxString type);
+  static bool HasNitProperties(wxString type);
  private:
   typedef std::vector<PObjectPackage> PackageVector;
 

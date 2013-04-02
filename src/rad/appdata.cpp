@@ -35,7 +35,7 @@
 #include "utils/wxfbipc.h"
 #include "utils/wxfbexception.h"
 #include "codegen/cppcg.h"
-#include "codegen/solcg.h"
+#include "codegen/nitcg.h"
 #include "codegen/xrccg.h"
 #include "codegen/codewriter.h"
 #include "rad/xrcpreview/xrcpreview.h"

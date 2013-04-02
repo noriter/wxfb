@@ -31,7 +31,7 @@
 #include "rad/title.h"
 #include "rad/bitmaps.h"
 #include "rad/cpppanel/cpppanel.h"
-#include "rad/solpanel/solpanel.h"
+#include "rad/nitpanel/nitpanel.h"
 #include "rad/xrcpanel/xrcpanel.h"
 #include "rad/geninheritclass/geninhertclass.h"
 #include "inspector/objinspect.h"
@@ -1550,9 +1550,9 @@ wxWindow * MainFrame::CreateDesignerWindow( wxWindow *parent )
 	m_notebook->AddPage( m_xrc, wxT( "XRC" ), false, 4 );
 	m_notebook->SetPageBitmap( 4, AppBitmaps::GetBitmap( wxT( "xrc" ), 16 ) );
 
-	m_sol = new SolPanel( m_notebook, -1 );
-	m_notebook->AddPage( m_sol, wxT( "SOL" ), false, 5 );
-	m_notebook->SetPageBitmap( 4, AppBitmaps::GetBitmap( wxT( "sol" ), 16 ) );
+	m_nit = new NitPanel( m_notebook, -1 );
+	m_notebook->AddPage( m_nit, wxT( "nit" ), false, 5 );
+	m_notebook->SetPageBitmap( 4, AppBitmaps::GetBitmap( wxT( "nit" ), 16 ) );
 
 	return m_notebook;
 }

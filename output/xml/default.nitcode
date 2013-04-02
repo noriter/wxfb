@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
-<codegen language="sol">
+<codegen language="nit">
   <templates class="Project">
-    <template name="sol_preamble">
+    <template name="nit_preamble">
       $prolog
     </template>
     <template name="include">
     </template>
-    <template name="sol_epilogue">
+    <template name="nit_epilogue">
       $epilog
     </template>
   </templates>

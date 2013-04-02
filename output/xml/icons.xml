@@ -41,7 +41,7 @@
 	<icon name="h" 				file="h.png"		/>
 	<icon name="designer"		file="designer.png"	/>
 	<icon name="c++" 			file="c++.png"		/>
-  <icon name="sol"      file="sol.png"/>
+  <icon name="nit"      file="nit.png"/>
 	<icon name="xrc" 			file="xrc.png"		/>
 
     <!-- Object Properties -->

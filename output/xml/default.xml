@@ -13,9 +13,9 @@
     </property>
     <property name="code_generation" type="bitlist">
       <option name="C++" help="Generate C++ Code" />
-      <option name="SOL" help="Generate SOL COde" />
+      <option name="nit" help="Generate NIT Code" />
       <option name="XRC" help="Generate XRC Code"/>
-      SOL
+      NIT
     </property>
     <property name="internationalize" type="bool" help="For C++ Only.&#x0A;Generate strings with _() macro instead of wxT() macro. This allows for translation.">0</property>
     <category name="C++ Properties">
@@ -46,10 +46,10 @@
         none
       </property>
     </category>
-    <category name="SOL Properties">
-      <property name="prolog" type="text" help="For SOL Only.&#x0A;Includes this code fragment before class declarations."></property>
-      <property name="epilog" type="text" help="For SOL Only.&#x0A;Includes this code fragment after all class declarations."></property>
-      <property name="skip_sol_events" type="bool" help="For SOL Only.&#x0A;Call Skip() function in all generated event handlers.">1</property>
+    <category name="NIT Properties">
+      <property name="prolog" type="text" help="For NIT Only.&#x0A;Includes this code fragment before class declarations."></property>
+      <property name="epilog" type="text" help="For NIT Only.&#x0A;Includes this code fragment after all class declarations."></property>
+      <property name="skip_nit_events" type="bool" help="For NIT Only.&#x0A;Call Skip() function in all generated event handlers.">1</property>
     </category>
   </objectinfo>
 
@@ -62,7 +62,7 @@
     </property>
   </objectinfo>
 
-  <objectinfo class="sol" smallIcon="sol.png" type="interface">
+  <objectinfo class="nit" smallIcon="nit.png" type="interface">
     <property name="expose_member" type="bool" help="when true, a member will be created on class">
       0
     </property>

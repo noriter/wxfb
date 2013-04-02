@@ -38,7 +38,7 @@ class wxFBPropertyEvent;
 class wxFBEventHandlerEvent;
 
 class CppPanel;
-class SolPanel;
+class NitPanel;
 class XrcPanel;
 class ObjectTree;
 class ObjectInspector;
@@ -75,7 +75,7 @@ class MainFrame : public wxFrame
   ObjectInspector *m_objInsp;
   VisualEditor *m_visualEdit;
   CppPanel *m_cpp;
-  SolPanel *m_sol;
+  NitPanel *m_nit;
   XrcPanel *m_xrc;
   int m_style;
 

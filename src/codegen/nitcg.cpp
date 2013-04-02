@@ -21,12 +21,12 @@
 //   José Antonio Hurtado - joseantonio.hurtado@gmail.com
 //   Juan Antonio Ortega  - jortegalalmolda@gmail.com
 //
-// SOL code generation writen by
+// NIT code generation writen by
 //   Jun-hyeok Jang - ellongrey@gmail.com
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "solcg.h"
+#include "nitcg.h"
 #include "codewriter.h"
 #include "utils/typeconv.h"
 #include "utils/debug.h"
@@ -197,7 +197,7 @@ wxString PrefixDict::Convert(const wxString& str)
 	return str;
 }
 
-SolTemplateParser::SolTemplateParser( PObjectBase obj, wxString _template, bool useI18N, bool useRelativePath, wxString basePath, PrefixDict& prefixDict )
+NitTemplateParser::NitTemplateParser( PObjectBase obj, wxString _template, bool useI18N, bool useRelativePath, wxString basePath, PrefixDict& prefixDict )
 :
 TemplateParser(obj,_template),
 m_i18n( useI18N ),
@@ -213,7 +213,7 @@ m_PrefixDict(prefixDict)
 	SetupModulePrefixes();
 }
 
-SolTemplateParser::SolTemplateParser( const SolTemplateParser & that, wxString _template, PrefixDict& prefixDict  )
+NitTemplateParser::NitTemplateParser( const NitTemplateParser & that, wxString _template, PrefixDict& prefixDict  )
 :
 TemplateParser( that, _template ),
 m_i18n( that.m_i18n ),
@@ -224,26 +224,26 @@ m_PrefixDict(that.m_PrefixDict)
 	SetupModulePrefixes();
 }
 
-wxString SolTemplateParser::RootWxParentToCode()
+wxString NitTemplateParser::RootWxParentToCode()
 {
 	return wxT("this");
 }
 
-PTemplateParser SolTemplateParser::CreateParser( const TemplateParser* oldparser, wxString _template )
+PTemplateParser NitTemplateParser::CreateParser( const TemplateParser* oldparser, wxString _template )
 {
-	const SolTemplateParser* solOldParser = dynamic_cast< const SolTemplateParser* >( oldparser );
-	if ( solOldParser != NULL )
+	const NitTemplateParser* nitOldParser = dynamic_cast< const NitTemplateParser* >( oldparser );
+	if ( nitOldParser != NULL )
 	{
-		PTemplateParser newparser( new SolTemplateParser( *solOldParser, _template, m_PrefixDict ) );
+		PTemplateParser newparser( new NitTemplateParser( *nitOldParser, _template, m_PrefixDict ) );
 		return newparser;
 	}
 	return PTemplateParser();
 }
 
 /**
-* Convert the value of the property to SOL code
+* Convert the value of the property to NIT code
 */
-wxString SolTemplateParser::ValueToCode( PObjectBase obj, PropertyType type, wxString value )
+wxString NitTemplateParser::ValueToCode( PObjectBase obj, PropertyType type, wxString value )
 {
 	wxString result;
 
@@ -264,7 +264,7 @@ wxString SolTemplateParser::ValueToCode( PObjectBase obj, PropertyType type, wxS
 			}
 			else
 			{
-				result << wxT("\"") << SolCodeGenerator::ConvertSolString( value ) << wxT("\"");
+				result << wxT("\"") << NitCodeGenerator::ConvertNitString( value ) << wxT("\"");
 			}
 			break;
 		}
@@ -278,11 +278,11 @@ wxString SolTemplateParser::ValueToCode( PObjectBase obj, PropertyType type, wxS
 			{
 				if ( m_i18n )
 				{
-					result << wxT("_T(\"") << SolCodeGenerator::ConvertSolString(value) << wxT("\")");
+					result << wxT("_T(\"") << NitCodeGenerator::ConvertNitString(value) << wxT("\")");
 				}
 				else
 				{
-					result << wxT("\"") << SolCodeGenerator::ConvertSolString(value) << wxT("\"");
+					result << wxT("\"") << NitCodeGenerator::ConvertNitString(value) << wxT("\"");
 				}
 			}
 			break;
@@ -459,7 +459,7 @@ wxString SolTemplateParser::ValueToCode( PObjectBase obj, PropertyType type, wxS
 
 			if ( path.StartsWith( wxT("file:") ) )
 			{
-				wxLogWarning( wxT("SOL code generation does not support using URLs for bitmap properties:\n%s"), path.c_str() );
+				wxLogWarning( wxT("NIT code generation does not support using URLs for bitmap properties:\n%s"), path.c_str() );
 				result = wxT("null");
 				break;
 			}
@@ -482,11 +482,11 @@ wxString SolTemplateParser::ValueToCode( PObjectBase obj, PropertyType type, wxS
 
 				if (source == _("Package"))
 				{
-					result << wxT("wx.Bitmap(pack.Locate(\"") << SolCodeGenerator::ConvertSolString( file ) << wxT("\"))");
+					result << wxT("wx.Bitmap(pack.Locate(\"") << NitCodeGenerator::ConvertNitString( file ) << wxT("\"))");
 				}
 				else
 				{
-					result << wxT("wx.Bitmap(\"") << SolCodeGenerator::ConvertSolString( file ) << wxT("\", wx.Bitmap.TYPE.ANY)");
+					result << wxT("wx.Bitmap(\"") << NitCodeGenerator::ConvertNitString( file ) << wxT("\", wx.Bitmap.TYPE.ANY)");
 				}
 			}
 			else if ( source == _("Resource") )
@@ -546,7 +546,7 @@ wxString SolTemplateParser::ValueToCode( PObjectBase obj, PropertyType type, wxS
 
 ///////////////////////////////////////////////////////////////////////////////
 
-SolCodeGenerator::SolCodeGenerator()
+NitCodeGenerator::NitCodeGenerator()
 {
 	SetupPredefinedMacros();
 	m_useRelativePath = false;
@@ -554,7 +554,7 @@ SolCodeGenerator::SolCodeGenerator()
 	m_firstID = 1000;
 }
 
-wxString SolCodeGenerator::ConvertSolString( wxString text )
+wxString NitCodeGenerator::ConvertNitString( wxString text )
 {
 	wxString result;
 
@@ -592,7 +592,7 @@ wxString SolCodeGenerator::ConvertSolString( wxString text )
 	return result;
 }
 
-void SolCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectBase form )
+void NitCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectBase form )
 {
 	if (!userClasses)
 	{
@@ -654,7 +654,7 @@ void SolCodeGenerator::GenerateInheritedClass( PObjectBase userClasses, PObjectB
 	m_source->Unindent();
 }
 
-bool SolCodeGenerator::GenerateCode( PObjectBase project )
+bool NitCodeGenerator::GenerateCode( PObjectBase project )
 {
 	if (!project)
 	{
@@ -670,14 +670,14 @@ bool SolCodeGenerator::GenerateCode( PObjectBase project )
 	m_source->Clear();
 
 	wxString code = (
-		wxT("// SOL code generated with wxFormBuilder for sol (version ") wxT(__DATE__) wxT(")\n")
+		wxT("// NIT code generated with wxFormBuilder for nit (version ") wxT(__DATE__) wxT(")\n")
 		wxT("// PLEASE DO \"NOT\" EDIT THIS FILE!\n") );
 
 	m_source->WriteLn( code );
 
-	// Insert sol preamble
+	// Insert nit preamble
 
-	code = GetCode( project, wxT("sol_preamble") );
+	code = GetCode( project, wxT("nit_preamble") );
 	if ( !code.empty() )
 	{
 		m_source->WriteLn( code );
@@ -729,7 +729,7 @@ bool SolCodeGenerator::GenerateCode( PObjectBase project )
 	GenDefines( project );
 
 	wxString eventHandlerPostfix;
-	PProperty eventKindProp = project->GetProperty( wxT("skip_sol_events") );
+	PProperty eventKindProp = project->GetProperty( wxT("skip_nit_events") );
 	if( eventKindProp->GetValueAsInteger() )
 	{
 		eventHandlerPostfix = wxT(" { event.Skip() }");
@@ -747,7 +747,7 @@ bool SolCodeGenerator::GenerateCode( PObjectBase project )
 		GenClassDeclaration( child, false, wxT(""), events, eventHandlerPostfix );
 	}
 
-	code = GetCode( project, wxT("sol_epilogue") );
+	code = GetCode( project, wxT("nit_epilogue") );
 	if( !code.empty() ) 
 	{
 		m_source->WriteLn();
@@ -759,7 +759,7 @@ bool SolCodeGenerator::GenerateCode( PObjectBase project )
 	return true;
 }
 
-void SolCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &events)
+void NitCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &events)
 {
 	if ( events.empty() )
 		return;
@@ -820,10 +820,10 @@ void SolCodeGenerator::GenEvents( PObjectBase class_obj, const EventVector &even
 	}
 }
 
-bool SolCodeGenerator::GenEventEntry( PObjectBase obj, PObjectInfo obj_info, const wxString& templateName, const wxString& handlerName)
+bool NitCodeGenerator::GenEventEntry( PObjectBase obj, PObjectInfo obj_info, const wxString& templateName, const wxString& handlerName)
 {
 	wxString _template;
-	PCodeInfo code_info = obj_info->GetCodeInfo( wxT("sol") );
+	PCodeInfo code_info = obj_info->GetCodeInfo( wxT("nit") );
 	if ( code_info )
 	{
 		_template = code_info->GetTemplate( wxString::Format( wxT("evt_%s"), templateName.c_str() ) );
@@ -834,7 +834,7 @@ bool SolCodeGenerator::GenEventEntry( PObjectBase obj, PObjectInfo obj_info, con
 				_template.Replace(wxT("#handler"), wxT("@") + handlerName); 
 			else
 				_template.Replace(wxT("#handler"), handlerName); 
-			SolTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
+			NitTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
 			m_source->WriteLn( parser.ParseTemplate() );
 			return true;
 		}
@@ -852,7 +852,7 @@ bool SolCodeGenerator::GenEventEntry( PObjectBase obj, PObjectInfo obj_info, con
 	return false;
 }
 
-void SolCodeGenerator::GenVirtualEventHandlers( const EventVector& events, const wxString& eventHandlerPostfix )
+void NitCodeGenerator::GenVirtualEventHandlers( const EventVector& events, const wxString& eventHandlerPostfix )
 {
 	if ( events.size() > 0 )
 	{
@@ -885,7 +885,7 @@ void SolCodeGenerator::GenVirtualEventHandlers( const EventVector& events, const
 	}
 }
 
-void SolCodeGenerator::GetGenEventHandlers( PObjectBase obj )
+void NitCodeGenerator::GetGenEventHandlers( PObjectBase obj )
 {
 	GenDefinedEventHandlers( obj->GetObjectInfo(), obj );
 
@@ -896,15 +896,15 @@ void SolCodeGenerator::GetGenEventHandlers( PObjectBase obj )
 	}
 }
 
-void SolCodeGenerator::GenDefinedEventHandlers( PObjectInfo info, PObjectBase obj )
+void NitCodeGenerator::GenDefinedEventHandlers( PObjectInfo info, PObjectBase obj )
 {
-	PCodeInfo code_info = info->GetCodeInfo( wxT( "sol" ) );
+	PCodeInfo code_info = info->GetCodeInfo( wxT( "nit" ) );
 	if ( code_info )
 	{
 		wxString _template = code_info->GetTemplate( wxT("generated_event_handlers") );
 		if ( !_template.empty() )
 		{
-			SolTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
+			NitTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
 			wxString code = parser.ParseTemplate();
 
 			if ( !code.empty() )
@@ -923,10 +923,10 @@ void SolCodeGenerator::GenDefinedEventHandlers( PObjectInfo info, PObjectBase ob
 }
 
 
-wxString SolCodeGenerator::GetCode(PObjectBase obj, wxString name, bool silent)
+wxString NitCodeGenerator::GetCode(PObjectBase obj, wxString name, bool silent)
 {
 	wxString _template;
-	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT("sol") );
+	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT("nit") );
 
 	if (!code_info)
 	{
@@ -941,13 +941,13 @@ wxString SolCodeGenerator::GetCode(PObjectBase obj, wxString name, bool silent)
 
 	_template = code_info->GetTemplate(name);
 
-	SolTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
+	NitTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
 	wxString code = parser.ParseTemplate();
 
 	return code;
 }
 
-void SolCodeGenerator::GenClassDeclaration(PObjectBase class_obj, bool use_enum, const wxString& classDecoration, const EventVector &events, const wxString& eventHandlerPostfix)
+void NitCodeGenerator::GenClassDeclaration(PObjectBase class_obj, bool use_enum, const wxString& classDecoration, const EventVector &events, const wxString& eventHandlerPostfix)
 {
 	PProperty propName = class_obj->GetProperty( wxT("name") );
 	if ( !propName )
@@ -994,7 +994,7 @@ void SolCodeGenerator::GenClassDeclaration(PObjectBase class_obj, bool use_enum,
 	m_source->WriteLn( wxT("}") );
 }
 
-void SolCodeGenerator::GenMemberDeclarations(PObjectBase obj)
+void NitCodeGenerator::GenMemberDeclarations(PObjectBase obj)
 {
 	wxString typeName = obj->GetObjectTypeName();
 
@@ -1014,7 +1014,7 @@ void SolCodeGenerator::GenMemberDeclarations(PObjectBase obj)
 	}
 }
 
-void SolCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* subclasses, std::vector< wxString >* headerIncludes )
+void NitCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* subclasses, std::vector< wxString >* headerIncludes )
 {
 	// Call GenSubclassForwardDeclarations on all children as well
 	for ( unsigned int i = 0; i < obj->GetChildCount(); i++ )
@@ -1084,18 +1084,18 @@ void SolCodeGenerator::GenSubclassSets( PObjectBase obj, std::set< wxString >* s
 	}
 }
 
-void SolCodeGenerator::GenIncludes( PObjectBase project, std::vector<wxString>* includes, std::set< wxString >* templates )
+void NitCodeGenerator::GenIncludes( PObjectBase project, std::vector<wxString>* includes, std::set< wxString >* templates )
 {
 	GenObjectIncludes( project, includes, templates );
 }
 
-void SolCodeGenerator::GenObjectIncludes( PObjectBase project, std::vector< wxString >* includes, std::set< wxString >* templates )
+void NitCodeGenerator::GenObjectIncludes( PObjectBase project, std::vector< wxString >* includes, std::set< wxString >* templates )
 {
 	// Fill the set
-	PCodeInfo code_info = project->GetObjectInfo()->GetCodeInfo( wxT("sol") );
+	PCodeInfo code_info = project->GetObjectInfo()->GetCodeInfo( wxT("nit") );
 	if (code_info)
 	{
-		SolTemplateParser parser( project, code_info->GetTemplate( wxT("include") ), m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
+		NitTemplateParser parser( project, code_info->GetTemplate( wxT("include") ), m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
 		wxString include = parser.ParseTemplate();
 		if ( !include.empty() )
 		{
@@ -1116,7 +1116,7 @@ void SolCodeGenerator::GenObjectIncludes( PObjectBase project, std::vector< wxSt
 	GenBaseIncludes( project->GetObjectInfo(), project, includes, templates );
 }
 
-void SolCodeGenerator::GenBaseIncludes( PObjectInfo info, PObjectBase obj, std::vector< wxString >* includes, std::set< wxString >* templates )
+void NitCodeGenerator::GenBaseIncludes( PObjectInfo info, PObjectBase obj, std::vector< wxString >* includes, std::set< wxString >* templates )
 {
 	if ( !info )
 	{
@@ -1130,10 +1130,10 @@ void SolCodeGenerator::GenBaseIncludes( PObjectInfo info, PObjectBase obj, std::
 		GenBaseIncludes( base_info, obj, includes, templates );
 	}
 
-	PCodeInfo code_info = info->GetCodeInfo( wxT("sol") );
+	PCodeInfo code_info = info->GetCodeInfo( wxT("nit") );
 	if ( code_info )
 	{
-		SolTemplateParser parser( obj, code_info->GetTemplate( wxT("include") ), m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
+		NitTemplateParser parser( obj, code_info->GetTemplate( wxT("include") ), m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
 		wxString include = parser.ParseTemplate();
 		if ( !include.empty() )
 		{
@@ -1145,7 +1145,7 @@ void SolCodeGenerator::GenBaseIncludes( PObjectInfo info, PObjectBase obj, std::
 	}
 }
 
-void SolCodeGenerator::AddUniqueIncludes( const wxString& include, std::vector< wxString >* includes )
+void NitCodeGenerator::AddUniqueIncludes( const wxString& include, std::vector< wxString >* includes )
 {
 	// Split on newlines to only generate unique include lines
 	// This strips blank lines and trims
@@ -1173,7 +1173,7 @@ void SolCodeGenerator::AddUniqueIncludes( const wxString& include, std::vector< 
 	}
 }
 
-void SolCodeGenerator::FindDependencies( PObjectBase obj, std::set< PObjectInfo >& info_set )
+void NitCodeGenerator::FindDependencies( PObjectBase obj, std::set< PObjectInfo >& info_set )
 {
 	unsigned int ch_count = obj->GetChildCount();
 	if (ch_count > 0)
@@ -1188,7 +1188,7 @@ void SolCodeGenerator::FindDependencies( PObjectBase obj, std::set< PObjectInfo 
 	}
 }
 
-void SolCodeGenerator::GenConstructor( PObjectBase class_obj, const EventVector &events )
+void NitCodeGenerator::GenConstructor( PObjectBase class_obj, const EventVector &events )
 {
 	// generate function definition
 	m_source->WriteLn( GetCode( class_obj, wxT("cons_def") ) );
@@ -1247,7 +1247,7 @@ void SolCodeGenerator::GenConstructor( PObjectBase class_obj, const EventVector 
 	}
 }
 
-void SolCodeGenerator::GenDestructor( PObjectBase class_obj, const EventVector &events )
+void NitCodeGenerator::GenDestructor( PObjectBase class_obj, const EventVector &events )
 {
 	m_source->WriteLn();
 	// generate function definition
@@ -1262,12 +1262,12 @@ void SolCodeGenerator::GenDestructor( PObjectBase class_obj, const EventVector &
 	m_source->WriteLn( wxT("}") );
 }
 
-void SolCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
+void NitCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 {
 	wxString type = obj->GetObjectTypeName();
 	PObjectInfo info = obj->GetObjectInfo();
 
-	if ( ObjectDatabase::HasSolProperties( type ) )
+	if ( ObjectDatabase::HasNitProperties( type ) )
 	{
 		bool expose = obj->GetPropertyAsInteger(wxT("expose_member")) != 0;
 		bool hasName = !obj->GetPropertyAsString("name").empty();
@@ -1310,7 +1310,7 @@ void SolCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 					wxT("#ifnull #parent $size")
 					wxT("@{ #nl $name.Fit(#wxparent $name) @}");
 
-				SolTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
+				NitTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
 				m_source->WriteLn(parser.ParseTemplate());
 			}
 		}
@@ -1325,7 +1325,7 @@ void SolCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 					wxString _template = wxT("$name.Initialize(");
 					_template = _template + sub1->GetProperty( wxT("name") )->GetValue() + wxT(")");
 
-					SolTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
+					NitTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
 					m_source->WriteLn(parser.ParseTemplate());
 					break;
 				}
@@ -1348,7 +1348,7 @@ void SolCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 					_template = _template + sub1->GetProperty( wxT("name") )->GetValue() +
 						wxT(", ") + sub2->GetProperty( wxT("name") )->GetValue() + wxT(", $sashpos)");
 
-					SolTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
+					NitTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
 					m_source->WriteLn(parser.ParseTemplate());
 					break;
 				}
@@ -1454,10 +1454,10 @@ void SolCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 	}
 }
 
-void SolCodeGenerator::GenDestruction( PObjectBase obj )
+void NitCodeGenerator::GenDestruction( PObjectBase obj )
 {
 	wxString _template;
-	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT( "sol" ) );
+	PCodeInfo code_info = obj->GetObjectInfo()->GetCodeInfo( wxT( "nit" ) );
 
 	if ( code_info )
 	{
@@ -1465,7 +1465,7 @@ void SolCodeGenerator::GenDestruction( PObjectBase obj )
 
 		if ( !_template.empty() )
 		{
-			SolTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
+			NitTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
 			wxString code = parser.ParseTemplate();
 			if ( !code.empty() )
 			{
@@ -1482,7 +1482,7 @@ void SolCodeGenerator::GenDestruction( PObjectBase obj )
 	}
 }
 
-void SolCodeGenerator::FindMacros( PObjectBase obj, std::vector<wxString>* macros )
+void NitCodeGenerator::FindMacros( PObjectBase obj, std::vector<wxString>* macros )
 {
 	// iterate through all of the properties of all objects, add the macros
 	// to the vector
@@ -1516,7 +1516,7 @@ void SolCodeGenerator::FindMacros( PObjectBase obj, std::vector<wxString>* macro
 	}
 }
 
-void SolCodeGenerator::FindEventHandlers(PObjectBase obj, EventVector &events)
+void NitCodeGenerator::FindEventHandlers(PObjectBase obj, EventVector &events)
 {
 	unsigned int i;
 	for (i=0; i < obj->GetEventCount(); i++)
@@ -1533,7 +1533,7 @@ void SolCodeGenerator::FindEventHandlers(PObjectBase obj, EventVector &events)
 	}
 }
 
-void SolCodeGenerator::GenDefines( PObjectBase project)
+void NitCodeGenerator::GenDefines( PObjectBase project)
 {
 	std::vector< wxString > macros;
 	FindMacros( project, &macros );
@@ -1562,10 +1562,10 @@ void SolCodeGenerator::GenDefines( PObjectBase project)
 	if( !macros.empty() ) m_source->WriteLn( wxT("") );
 }
 
-void SolCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
+void NitCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
 {
 	wxString _template;
-	PCodeInfo code_info = info->GetCodeInfo( wxT("sol") );
+	PCodeInfo code_info = info->GetCodeInfo( wxT("nit") );
 
 	if ( !code_info )
 	{
@@ -1576,7 +1576,7 @@ void SolCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
 
 	if ( !_template.empty() )
 	{
-		SolTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
+		NitTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
 		wxString code = parser.ParseTemplate();
 		if ( !code.empty() )
 		{
@@ -1592,7 +1592,7 @@ void SolCodeGenerator::GenSettings(PObjectInfo info, PObjectBase obj)
 	}
 }
 
-void SolCodeGenerator::GenAddToolbar( PObjectInfo info, PObjectBase obj )
+void NitCodeGenerator::GenAddToolbar( PObjectInfo info, PObjectBase obj )
 {
 	wxArrayString arrCode;
 
@@ -1601,10 +1601,10 @@ void SolCodeGenerator::GenAddToolbar( PObjectInfo info, PObjectBase obj )
 	for( size_t i = 0; i < arrCode.GetCount(); i++ ) m_source->Write( arrCode[i] );
 }
 
-void SolCodeGenerator::GetAddToolbarCode( PObjectInfo info, PObjectBase obj, wxArrayString& codelines )
+void NitCodeGenerator::GetAddToolbarCode( PObjectInfo info, PObjectBase obj, wxArrayString& codelines )
 {
 	wxString _template;
-	PCodeInfo code_info = info->GetCodeInfo( wxT( "sol" ) );
+	PCodeInfo code_info = info->GetCodeInfo( wxT( "nit" ) );
 
 	if ( !code_info )
 		return;
@@ -1613,7 +1613,7 @@ void SolCodeGenerator::GetAddToolbarCode( PObjectInfo info, PObjectBase obj, wxA
 
 	if ( !_template.empty() )
 	{
-		SolTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
+		NitTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
 		wxString code = parser.ParseTemplate();
 		if ( !code.empty() )
 		{
@@ -1631,7 +1631,7 @@ void SolCodeGenerator::GetAddToolbarCode( PObjectInfo info, PObjectBase obj, wxA
 
 ///////////////////////////////////////////////////////////////////////
 
-void SolCodeGenerator::UseRelativePath(bool relative, wxString basePath)
+void NitCodeGenerator::UseRelativePath(bool relative, wxString basePath)
 {
 	bool result;
 	m_useRelativePath = relative;
@@ -1659,7 +1659,7 @@ return auxPath;
 #define ADD_PREFIX(k, v) m_PrefixDict.AddPrefix(wxT(k), wxT(v))
 #define ADD_CONVERTED(k, v) m_PrefixDict.AddConverted(wxT(k), wxT(v))
 
-void SolCodeGenerator::SetupPredefinedMacros()
+void NitCodeGenerator::SetupPredefinedMacros()
 {
 	/* no id matches this one when compared to it */
 	ADD_PREDEFINED_MACRO(wx.ID.NONE);
@@ -1793,7 +1793,7 @@ void SolCodeGenerator::SetupPredefinedMacros()
 
 	////////////////////////////////////
 
-	// TODO: .solcode 파일로 이전
+	// TODO: refactor to .nitcode file
 
 	ADD_PREFIX("XRCID", "wx.XRCID.");
 	ADD_PREFIX("wxID_",	"wx.ID.");
@@ -1993,11 +1993,11 @@ void SolCodeGenerator::SetupPredefinedMacros()
 	////////////////////////////////////
 }
 
-void SolTemplateParser::SetupModulePrefixes()
+void NitTemplateParser::SetupModulePrefixes()
 {
 }
 
-wxString SolTemplateParser::TouchName(PObjectBase obj, const wxString& name)
+wxString NitTemplateParser::TouchName(PObjectBase obj, const wxString& name)
 {
 	if (obj->GetObjectTypeName() == "form")
 		return name;

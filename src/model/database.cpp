@@ -588,10 +588,10 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 {
 	// Load some default templates
 	LoadCodeGen( m_xmlPath + wxT("properties.cppcode") );
-	LoadCodeGen( m_xmlPath + wxT("properties.solcode") );
+	LoadCodeGen( m_xmlPath + wxT("properties.nitcode") );
 	LoadPackage( m_xmlPath + wxT("default.xml"), m_iconPath );
 	LoadCodeGen( m_xmlPath + wxT("default.cppcode") );
-	LoadCodeGen( m_xmlPath + wxT("default.solcode") );
+	LoadCodeGen( m_xmlPath + wxT("default.nitcode") );
 
 	// Map to temporarily hold plugins.
 	// Used to both set page order and to prevent two plugins with the same name.
@@ -672,8 +672,8 @@ void ObjectDatabase::LoadPlugins( PwxFBManager manager )
 							xmlFileName.SetExt( wxT("cppcode") );
 							LoadCodeGen( xmlFileName.GetFullPath() );
 							
-							// Load the SOL code templates
-							xmlFileName.SetExt( wxT("solcode") );
+							// Load the NIT code templates
+							xmlFileName.SetExt( wxT("nitcode") );
 							LoadCodeGen( xmlFileName.GetFullPath() );
 
 							std::pair< PackageMap::iterator, bool > addedPackage = packages.insert( PackageMap::value_type( packageIt->second->GetPackageName(), packageIt->second ) );
@@ -834,13 +834,13 @@ void ObjectDatabase::SetupPackage( const wxString& file, const wxString& path, P
 				}
 			}
 
-			// Add the "sol" base class, predefined for the components and widgets
-			if (HasSolProperties(typeName))
+			// Add the "nit" base class, predefined for the components and widgets
+			if (HasNitProperties(typeName))
 			{
-				PObjectInfo sol_interface = GetObjectInfo(wxT("sol"));
-				if (sol_interface)
+				PObjectInfo nit_interface = GetObjectInfo(wxT("nit"));
+				if (nit_interface)
 				{
-					size_t baseIndex = class_info->AddBaseClass( sol_interface );
+					size_t baseIndex = class_info->AddBaseClass( nit_interface );
 					if (typeName == wxT("sizer")    ||
 						typeName == wxT("gbsizer")  ||
 						typeName == wxT("tool")		||
@@ -884,7 +884,7 @@ bool ObjectDatabase::HasCppProperties(wxString type)
 			);
 }
 
-bool ObjectDatabase::HasSolProperties(wxString type)
+bool ObjectDatabase::HasNitProperties(wxString type)
 {
 	return (type == wxT("notebook")			||
 			type == wxT("choicebook")		||

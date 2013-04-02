@@ -25,7 +25,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "solpanel.h"
+#include "nitpanel.h"
 
 #include "rad/codeeditor/codeeditor.h"
 #include "rad/wxfbevent.h"
@@ -40,7 +40,7 @@
 #include "model/objectbase.h"
 
 #include "codegen/codewriter.h"
-#include "codegen/solcg.h"
+#include "codegen/nitcg.h"
 
 #include <wx/fdrepdlg.h>
 #include <wx/config.h>
@@ -51,30 +51,30 @@
 #include <wx/stc/stc.h>
 #endif
 
-BEGIN_EVENT_TABLE ( SolPanel,  wxPanel )
-EVT_FB_CODE_GENERATION( SolPanel::OnCodeGeneration )
-EVT_FB_PROJECT_REFRESH( SolPanel::OnProjectRefresh )
-EVT_FB_PROPERTY_MODIFIED( SolPanel::OnPropertyModified )
-EVT_FB_OBJECT_CREATED( SolPanel::OnObjectChange )
-EVT_FB_OBJECT_REMOVED( SolPanel::OnObjectChange )
-EVT_FB_OBJECT_SELECTED( SolPanel::OnObjectChange )
-EVT_FB_EVENT_HANDLER_MODIFIED( SolPanel::OnEventHandlerModified )
+BEGIN_EVENT_TABLE ( NitPanel,  wxPanel )
+EVT_FB_CODE_GENERATION( NitPanel::OnCodeGeneration )
+EVT_FB_PROJECT_REFRESH( NitPanel::OnProjectRefresh )
+EVT_FB_PROPERTY_MODIFIED( NitPanel::OnPropertyModified )
+EVT_FB_OBJECT_CREATED( NitPanel::OnObjectChange )
+EVT_FB_OBJECT_REMOVED( NitPanel::OnObjectChange )
+EVT_FB_OBJECT_SELECTED( NitPanel::OnObjectChange )
+EVT_FB_EVENT_HANDLER_MODIFIED( NitPanel::OnEventHandlerModified )
 
-EVT_FIND( wxID_ANY, SolPanel::OnFind )
-EVT_FIND_NEXT( wxID_ANY, SolPanel::OnFind )
+EVT_FIND( wxID_ANY, NitPanel::OnFind )
+EVT_FIND_NEXT( wxID_ANY, NitPanel::OnFind )
 END_EVENT_TABLE()
 
-SolPanel::SolPanel( wxWindow *parent, int id )
+NitPanel::NitPanel( wxWindow *parent, int id )
 :
 wxPanel( parent, id )
 {
 	AppData()->AddHandler( this->GetEventHandler() );
 	wxBoxSizer *top_sizer = new wxBoxSizer( wxVERTICAL );
 
-	m_SolPanel = new CodeEditor( this, -1 );
-	InitStyledTextCtrl( m_SolPanel->GetTextCtrl() );
+	m_NitPanel = new CodeEditor( this, -1 );
+	InitStyledTextCtrl( m_NitPanel->GetTextCtrl() );
 
-	top_sizer->Add( m_SolPanel, 1, wxEXPAND, 0 );
+	top_sizer->Add( m_NitPanel, 1, wxEXPAND, 0 );
 
 	SetSizer( top_sizer );
 	SetAutoLayout( true );
@@ -82,21 +82,21 @@ wxPanel( parent, id )
 	top_sizer->Fit( this );
 	top_sizer->Layout();
 
-	m_solCW = PTCCodeWriter( new TCCodeWriter( m_SolPanel->GetTextCtrl() ) );
+	m_nitCW = PTCCodeWriter( new TCCodeWriter( m_NitPanel->GetTextCtrl() ) );
 }
 
-SolPanel::~SolPanel()
+NitPanel::~NitPanel()
 {
 	//delete m_icons;
 	AppData()->RemoveHandler( this->GetEventHandler() );
 }
 
 #if wxVERSION_NUMBER < 2900
-void SolPanel::InitStyledTextCtrl( wxScintilla *stc )
+void NitPanel::InitStyledTextCtrl( wxScintilla *stc )
 {
 	stc->SetLexer( wxSTC_LEX_CPP );
 #else
-void SolPanel::InitStyledTextCtrl( wxStyledTextCtrl *stc )
+void NitPanel::InitStyledTextCtrl( wxStyledTextCtrl *stc )
 {
 	stc->SetLexer( wxSTC_LEX_CPP );
 #endif
@@ -151,40 +151,40 @@ void SolPanel::InitStyledTextCtrl( wxStyledTextCtrl *stc )
 	stc->SetReadOnly( true );
 }
 
-void SolPanel::OnFind( wxFindDialogEvent& event )
+void NitPanel::OnFind( wxFindDialogEvent& event )
 {
-	m_SolPanel->GetEventHandler()->ProcessEvent( event );
+	m_NitPanel->GetEventHandler()->ProcessEvent( event );
 }
 
-void SolPanel::OnPropertyModified( wxFBPropertyEvent& event )
-{
-	// Generate code to the panel only
-	event.SetId( 1 );
-	OnCodeGeneration( event );
-}
-
-void SolPanel::OnProjectRefresh( wxFBEvent& event )
+void NitPanel::OnPropertyModified( wxFBPropertyEvent& event )
 {
 	// Generate code to the panel only
 	event.SetId( 1 );
 	OnCodeGeneration( event );
 }
 
-void SolPanel::OnObjectChange( wxFBObjectEvent& event )
+void NitPanel::OnProjectRefresh( wxFBEvent& event )
 {
 	// Generate code to the panel only
 	event.SetId( 1 );
 	OnCodeGeneration( event );
 }
 
-void SolPanel::OnEventHandlerModified( wxFBEventHandlerEvent& event )
+void NitPanel::OnObjectChange( wxFBObjectEvent& event )
 {
 	// Generate code to the panel only
 	event.SetId( 1 );
 	OnCodeGeneration( event );
 }
 
-void SolPanel::OnCodeGeneration( wxFBEvent& event )
+void NitPanel::OnEventHandlerModified( wxFBEventHandlerEvent& event )
+{
+	// Generate code to the panel only
+	event.SetId( 1 );
+	OnCodeGeneration( event );
+}
+
+void NitPanel::OnCodeGeneration( wxFBEvent& event )
 {
 	PObjectBase objectToGenerate;
 
@@ -237,14 +237,14 @@ void SolPanel::OnCodeGeneration( wxFBEvent& event )
 
 	if(!project || !objectToGenerate)return;
 
-	// Get Sol properties from the project
+	// Get nit properties from the project
 
-	// If Sol generation is not enabled, do not generate the file
+	// If nit generation is not enabled, do not generate the file
 	bool doFile = false;
 	PProperty pCodeGen = project->GetProperty( wxT( "code_generation" ) );
 	if ( pCodeGen )
 	{
-		doFile = TypeConv::FlagSet( wxT("SOL"), pCodeGen->GetValue() ) && !panelOnly;
+		doFile = TypeConv::FlagSet( wxT("nit"), pCodeGen->GetValue() ) && !panelOnly;
 	}
 
 	if ( !(doPanel || doFile ) )
@@ -299,7 +299,7 @@ void SolPanel::OnCodeGeneration( wxFBEvent& event )
 	// Generate code in the panel
 	if ( doPanel )
 	{
-		SolCodeGenerator codegen;
+		NitCodeGenerator codegen;
 		codegen.UseRelativePath( useRelativePath, path );
 
 		if ( pFirstID )
@@ -307,26 +307,26 @@ void SolPanel::OnCodeGeneration( wxFBEvent& event )
 			codegen.SetFirstID( firstID );
 		}
 
-		codegen.SetSourceWriter( m_solCW );
+		codegen.SetSourceWriter( m_nitCW );
 
 		Freeze();
 
 #if wxVERSION_NUMBER < 2900
-		wxScintilla* solEditor = m_SolPanel->GetTextCtrl();
+		wxScintilla* nitEditor = m_NitPanel->GetTextCtrl();
 #else
-		wxStyledTextCtrl* solEditor = m_SolPanel->GetTextCtrl();
+		wxStyledTextCtrl* nitEditor = m_NitPanel->GetTextCtrl();
 #endif
-		solEditor->SetReadOnly( false );
-		int solLine = solEditor->GetFirstVisibleLine() + solEditor->LinesOnScreen() - 1;
-		int solXOffset = solEditor->GetXOffset();
+		nitEditor->SetReadOnly( false );
+		int nitLine = nitEditor->GetFirstVisibleLine() + nitEditor->LinesOnScreen() - 1;
+		int nitXOffset = nitEditor->GetXOffset();
 
 		codegen.GenerateCode( project );
 
-		solEditor->SetReadOnly( true );
-		solEditor->GotoLine( solLine );
-		solEditor->SetXOffset( solXOffset );
-		solEditor->SetAnchor( 0 );
-		solEditor->SetCurrentPos( 0 );
+		nitEditor->SetReadOnly( true );
+		nitEditor->GotoLine( nitLine );
+		nitEditor->SetXOffset( nitXOffset );
+		nitEditor->SetAnchor( 0 );
+		nitEditor->SetCurrentPos( 0 );
 
 		Thaw();
 	}
@@ -336,7 +336,7 @@ void SolPanel::OnCodeGeneration( wxFBEvent& event )
 	{
 		try
 		{
-			SolCodeGenerator codegen;
+			NitCodeGenerator codegen;
 			codegen.UseRelativePath( useRelativePath, path );
 
 			if ( pFirstID )
@@ -350,9 +350,9 @@ void SolPanel::OnCodeGeneration( wxFBEvent& event )
 			// Determine if Utf8 or Ansi is to be created
 			bool useUtf8 = true;
 
-			PCodeWriter sol_cw( new FileCodeWriter( path + file + wxT( ".sol" ), useMicrosoftBOM, useUtf8 ) );
+			PCodeWriter nit_cw( new FileCodeWriter( path + file + wxT( ".nit" ), useMicrosoftBOM, useUtf8 ) );
 
-			codegen.SetSourceWriter( sol_cw );
+			codegen.SetSourceWriter( nit_cw );
 			codegen.GenerateCode( project );
 			wxLogStatus( wxT( "Code generated on \'%s\'." ), path.c_str() );
 		}
