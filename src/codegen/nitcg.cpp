@@ -482,7 +482,7 @@ wxString NitTemplateParser::ValueToCode( PObjectBase obj, PropertyType type, wxS
 
 				if (source == _("Package"))
 				{
-					result << wxT("wx.Bitmap(pack.Locate(\"") << NitCodeGenerator::ConvertNitString( file ) << wxT("\"))");
+					result << wxT("wx.Bitmap(pack.locate(\"") << NitCodeGenerator::ConvertNitString( file ) << wxT("\"))");
 				}
 				else
 				{
@@ -1305,10 +1305,10 @@ void NitCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 				// It's not a good practice to embed templates into the source code,
 				// because you will need to recompile...
 
-				wxString _template =	wxT("#wxparent $name.Sizer = $name #nl")
-					wxT("#wxparent $name.Layout()")
+				wxString _template =	wxT("#wxparent $name.sizer = $name #nl")
+					wxT("#wxparent $name.layout()")
 					wxT("#ifnull #parent $size")
-					wxT("@{ #nl $name.Fit(#wxparent $name) @}");
+					wxT("@{ #nl $name.fit(#wxparent $name) @}");
 
 				NitTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
 				m_source->WriteLn(parser.ParseTemplate());
@@ -1322,7 +1322,7 @@ void NitCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 			case 1:
 				{
 					PObjectBase sub1 = obj->GetChild(0)->GetChild(0);
-					wxString _template = wxT("$name.Initialize(");
+					wxString _template = wxT("$name.initialize(");
 					_template = _template + sub1->GetProperty( wxT("name") )->GetValue() + wxT(")");
 
 					NitTemplateParser parser( obj, _template, m_i18n, m_useRelativePath, m_basePath, m_PrefixDict );
@@ -1338,11 +1338,11 @@ void NitCodeGenerator::GenConstruction(PObjectBase obj, bool is_widget )
 					wxString _template;
 					if ( obj->GetProperty( wxT("splitmode") )->GetValue() == wxT("wxSPLIT_VERTICAL") )
 					{
-						_template = wxT("$name.SplitVertically(");
+						_template = wxT("$name.splitVertically(");
 					}
 					else
 					{
-						_template = wxT("$name.SplitHorizontally(");
+						_template = wxT("$name.splitHorizontally(");
 					}
 
 					_template = _template + sub1->GetProperty( wxT("name") )->GetValue() +

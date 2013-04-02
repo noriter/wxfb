@@ -2,18 +2,18 @@
 
 <codegen language="nit">
   <templates class="wxWindow">
-    <template name="toolbar_add">#parent $name.AddControl($name)</template>
+    <template name="toolbar_add">#parent $name.addControl($name)</template>
   </templates>
 
   <templates class="wxStatusBar">
     <template name="declaration">var $name : #class</template>
-    <template name="construction">$name = #wxparent $name.CreateStatusBar($fields, $style #ifnotnull $window_style @{ |$window_style @}, $id #ifnotnull $window_name @{, $window_name @})</template>
+    <template name="construction">$name = #wxparent $name.createStatusBar($fields, $style #ifnotnull $window_style @{ |$window_style @}, $id #ifnotnull $window_name @{, $window_name @})</template>
   </templates>
 
   <templates class="wxMenuBar">
     <template name="declaration">var $name : #class</template>
     <template name="construction">$name = #class($style #ifnotnull $window_style @{ |$window_style @})</template>
-    <template name="after_addchild">#wxparent $name.MenuBar = $name</template>
+    <template name="after_addchild">#wxparent $name.menuBar = $name</template>
   </templates>
 
   <templates class="wxMenu">
@@ -25,22 +25,22 @@
         #ifequal #parent $context_menu "1"
         @{
           #ifparenttypeequal "widget"
-          @{ #parent $name.Bind(wx.EVT.MOUSE_RIGHT_DOWN, this, @(evt) => #parent $name.PopupMenu($name, evt.Position) ) @}
+          @{ #parent $name.bind(wx.EVT.MOUSE_RIGHT_DOWN, this) by (evt) => #parent $name.popupMenu($name, evt.Position) @}
           #ifparenttypeequal "container"
-          @{ #parent $name.Bind(wx.EVT.MOUSE_RIGHT_DOWN, this, @(evt) => #parent $name.PopupMenu($name, evt.Position) ) @}
+          @{ #parent $name.bind(wx.EVT.MOUSE_RIGHT_DOWN, this) by (evt) => #parent $name.popupMenu($name, evt.Position) @}
           #ifparenttypeequal "form"
-          @{ Bind(wx.EVT.MOUSE_RIGHT_DOWN, this, @(evt) => $name.PopupMenu(evt.Position) ) @}
+          @{ bind(wx.EVT.MOUSE_RIGHT_DOWN, this) by (evt) => $name.popupMenu(evt.Position) @}
           #ifparenttypeequal "tool"
-          @{ Bind(wx.ToolBar.EVT.TOOL_DROPDOWN, this, #parent $name #append OnDropDownMenu) @}
+          @{ bind(wx.ToolBar.EVT.TOOL_DROPDOWN, this, #parent $name #append _onDropDownMenu) @}
         @}
       @}
       #ifparenttypeequal "menubar"
       @{
-        #parent $name.Append($name, $label)
+        #parent $name.append($name, $label)
       @}
       #ifparenttypeequal "menubar_form"
       @{
-        Append($name, $label)
+        append($name, $label)
       @}
     </template>
     <template name="generated_event_handlers">
@@ -50,15 +50,15 @@
         @{
           #ifparenttypeequal "tool"
           @{
-            function #parent $name #append OnDropDownMenu(event) #nl
+            function #parent $name #append _onDropDownMenu(event) #nl
             { #indent #nl 
-              if (event.IsDropDownClicked()) #nl
+              if (event.isDropDownClicked()) #nl
               { #indent #nl 
-                #wxparent $name.SetToolSticky(event.Id, true) #nl
-                var rect = #wxparent $name.GetToolRect(event.Id) #nl
-                var pt = ScreenToClient(#wxparent $name.ClientToScreen(wx.Point(rect.X, rect.Y + rect.Height))) #nl
-                #wxparent $name.PopupMenu($name, pt) #nl
-                #wxparent $name.SetToolSticky(event.Id, false)
+                #wxparent $name.setToolSticky(event.Id, true) #nl
+                var rect = #wxparent $name.getToolRect(event.Id) #nl
+                var pt = screenToClient(#wxparent $name.clientToScreen(wx.Point(rect.x, rect.y + rect.height))) #nl
+                #wxparent $name.popupMenu($name, pt) #nl
+                #wxparent $name.setToolSticky(event.id, false)
               #unindent #nl }
             #unindent #nl } 
           @}
@@ -70,7 +70,7 @@
   <templates class="submenu">
     <template name="declaration">var $name : wx.Menu</template>
     <template name="construction">$name = wx.Menu()</template>
-    <template name="after_addchild">#parent $name.AppendSubMenu($name, $label)</template>
+    <template name="after_addchild">#parent $name.appendSubMenu($name, $label)</template>
   </templates>
 
   <templates class="wxMenuItem">
@@ -81,32 +81,28 @@
     <template name="settings">
       #ifnotnull $bitmap
       @{
-        $name.Bitmap = $bitmap #nl
+        $name.bitmap = $bitmap #nl
       @}
-      #ifnotnull $unchecked_bitmap
-      @{
-        $name.UncheckedBitmap = $unchecked_bitmap #nl
-      @}
-      #parent $name.AppendItem($name) #nl
+      #parent $name.appendItem($name) #nl
       #ifequal $enabled "0"
-      @{ $name.Enabled = false #nl @}
+      @{ $name.enabled = false #nl @}
       #ifequal $kind "wxITEM_CHECK"
       @{
         #ifequal $checked "1"
-        @{ $name.Checked = true #nl @}
+        @{ $name.checked = true #nl @}
       @}
       #ifequal $kind "wxITEM_RADIO"
       @{
         #ifequal $checked "1"
-        @{ $name.Checked = true #nl @}
+        @{ $name.checked = true #nl @}
       @}
     </template>
-    <template name="evt_connect_OnMenuSelection"> Bind($name.EVT.MENU, $id, this, #handler)</template>
-    <template name="evt_connect_OnUpdateUI">      Bind($name.EVT.UPDATE_UI, $id, this, #handler)</template>
+    <template name="evt_connect_OnMenuSelection"> bind($name.EVT.MENU, $id, this, #handler)</template>
+    <template name="evt_connect_OnUpdateUI">      bind($name.EVT.UPDATE_UI, $id, this, #handler)</template>
   </templates>
 
   <templates class="separator">
-    <template name="construction">#parent $name.AppendSeparator() #nl</template>
+    <template name="construction">#parent $name.appendSeparator() #nl</template>
   </templates>
 
   <templates class="wxToolBar">
@@ -120,7 +116,7 @@
         @}
         #ifequal #parent $aui_managed "0"
         @{
-          $name = #wxparent $name.CreateToolBar($style #ifnotnull $window_style @{ |$window_style @}, $id #ifnotnull $window_name @{, $window_name @})
+          $name = #wxparent $name.createToolBar($style #ifnotnull $window_style @{ |$window_style @}, $id #ifnotnull $window_name @{, $window_name @})
         @}
       @}
       #ifparenttypeequal "sizeritem"
@@ -131,57 +127,57 @@
       @{
         $name = #class(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @})
       @}
-      #ifnotnull $bitmapsize @{ #nl $name.ToolBitmapSize = $bitmapsize @}
+      #ifnotnull $bitmapsize @{ #nl $name.toolBitmapSize = $bitmapsize @}
 
       #ifnotnull $separation
       @{
         #ifnotequal $separation "5"
-        @{ #nl $name.ToolSeparation = $separation @}
+        @{ #nl $name.toolSeparation = $separation @}
       @}
 
-      #ifnotnull $margins    @{ #nl $name.Margins = $margins @}
+      #ifnotnull $margins    @{ #nl $name.margins = $margins @}
 
       #ifnotnull $packing
       @{
         #ifnotequal $packing "1"
-        @{ #nl $name.ToolPacking = $packing @}
+        @{ #nl $name.toolPacking = $packing @}
       @}
     </template>
     <template name="after_addchild">
-      $name.Realize()
+      $name.realize()
       #ifparenttypeequal "form"
       @{
         #ifequal #parent $aui_managed "1"
         @{ #nl
-          _AuiMgr.AddPane($name, wx.AuiPaneInfo()
-          #ifnotnull $aui_name @{.Name($aui_name)@}.$docking()
-          #ifnotnull $caption @{.Caption($caption)@}
-          #ifequal $caption_visible "0" @{.CaptionVisible($caption_visible)@}
-          #ifequal $close_button "0" @{.CloseButton($close_button)@}
-          #ifequal $maximize_button "1" @{.MaximizeButton($maximize_button)@}
-          #ifequal $minimize_button "1" @{.MinimizeButton($minimize_button)@}
-          #ifequal $pin_button "1" @{.PinButton($pin_button)@}
-          #ifequal $pane_border "0" @{.PaneBorder($pane_border)@}
-          #ifequal $gripper "1" @{.Gripper()@}
-          #ifequal $show "0" @{.Hide()@}
-          #ifequal $moveable "0" @{.Movable($moveable)@}
-          #ifnotnull $dock @{.$dock()#ifequal $dock "Float" @{.FloatingPosition($pane_position)@}@}
-          #ifnotnull $resize @{.$resize()#ifequal $resize "Resizable"	@{.FloatingSize($pane_size)@}@}
-          #ifequal $dock_fixed "0" @{.DockFixed($dock_fixed)@}
-          #ifequal $BottomDockable "0" @{.BottomDockable($BottomDockable)@}
-          #ifequal $TopDockable "0" @{.TopDockable($TopDockable)@}
-          #ifequal $LeftDockable "0" @{.LeftDockable($LeftDockable)@}
-          #ifequal $RightDockable "0"	@{.RightDockable($RightDockable)@}
-          #ifequal $floatable "0"	@{.Floatable($floatable)@}
-          #ifnotnull $aui_row	@{.Row($aui_row)@}
-          #ifnotnull $aui_position @{.Position($aui_position)@}
-          #ifnotnull $best_size @{.BestSize($best_size)@}
-          #ifnotnull $min_size @{.MinSize($min_size)@}
-          #ifnotnull $max_size @{.MaxSize($max_size)@}
-          #ifnotnull $aui_layer @{.Layer($aui_layer)@}
-          #ifequal $center_pane "1" @{.CenterPane()@}
-          #ifequal $default_pane "1" @{.DefaultPane()@}
-          #ifequal $toolbar_pane "1" @{.ToolbarPane()@}
+          _auiMgr.addPane($name, wx.AuiPaneInfo()
+          #ifnotnull $aui_name @{.name($aui_name)@}.$docking()
+          #ifnotnull $caption @{.caption($caption)@}
+          #ifequal $caption_visible "0" @{.captionVisible($caption_visible)@}
+          #ifequal $close_button "0" @{.closeButton($close_button)@}
+          #ifequal $maximize_button "1" @{.maximizeButton($maximize_button)@}
+          #ifequal $minimize_button "1" @{.minimizeButton($minimize_button)@}
+          #ifequal $pin_button "1" @{.pinButton($pin_button)@}
+          #ifequal $pane_border "0" @{.paneBorder($pane_border)@}
+          #ifequal $gripper "1" @{.gripper()@}
+          #ifequal $show "0" @{.hide()@}
+          #ifequal $moveable "0" @{.movable($moveable)@}
+          #ifnotnull $dock @{.$dock()#ifequal $dock "Float" @{.floatingPosition($pane_position)@}@}
+          #ifnotnull $resize @{.$resize()#ifequal $resize "Resizable"	@{.floatingSize($pane_size)@}@}
+          #ifequal $dock_fixed "0" @{.dockFixed($dock_fixed)@}
+          #ifequal $BottomDockable "0" @{.bottomDockable($BottomDockable)@}
+          #ifequal $TopDockable "0" @{.topDockable($TopDockable)@}
+          #ifequal $LeftDockable "0" @{.leftDockable($LeftDockable)@}
+          #ifequal $RightDockable "0"	@{.rightDockable($RightDockable)@}
+          #ifequal $floatable "0"	@{.floatable($floatable)@}
+          #ifnotnull $aui_row	@{.row($aui_row)@}
+          #ifnotnull $aui_position @{.position($aui_position)@}
+          #ifnotnull $best_size @{.bestSize($best_size)@}
+          #ifnotnull $min_size @{.minSize($min_size)@}
+          #ifnotnull $max_size @{.maxSize($max_size)@}
+          #ifnotnull $aui_layer @{.layer($aui_layer)@}
+          #ifequal $center_pane "1" @{.centerPane()@}
+          #ifequal $default_pane "1" @{.defaultPane()@}
+          #ifequal $toolbar_pane "1" @{.toolbarPane()@}
           )
           @}
       @}
@@ -193,58 +189,58 @@
     <template name="construction">
       $name = wx.AuiToolBar(#wxparent $name, $id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, null, $window_name @})
 
-      #ifnotnull $bitmapsize @{ #nl $name.ToolBitmapSize = $bitmapsize @}
+      #ifnotnull $bitmapsize @{ #nl $name.toolBitmapSize = $bitmapsize @}
 
       #ifnotnull $separation
       @{
         #ifnotequal $separation "5"
-        @{ #nl $name.ToolSeparation = $separation @}
+        @{ #nl $name.toolSeparation = $separation @}
       @}
 
-      #ifnotnull $margins    @{ #nl $name.Margins = $margins @}
+      #ifnotnull $margins    @{ #nl $name.margins = $margins @}
 
       #ifnotnull $packing
       @{
         #ifnotequal $packing "1"
-        @{ #nl $name.ToolPacking = $packing @}
+        @{ #nl $name.toolPacking = $packing @}
       @}
     </template>
     <template name="after_addchild">
-      $name.Realize()
+      $name.realize()
       #ifparenttypeequal "form"
       @{
         #ifequal #parent $aui_managed "1"
         @{ #nl
-          _AuiMgr.AddPane($name, wx.AuiPaneInfo()#ifnotnull $aui_name
-          @{.Name($aui_name)@}.$docking()#ifnotnull $caption
-          @{.Caption($caption)@}#ifequal $caption_visible "0"
-          @{.CaptionVisible($caption_visible)@}#ifequal $close_button "0"
-          @{.CloseButton($close_button)@}#ifequal $maximize_button "1"
-          @{.MaximizeButton($maximize_button)@}#ifequal $minimize_button "1"
-          @{.MinimizeButton($minimize_button)@}#ifequal $pin_button "1"
-          @{.PinButton($pin_button)@}#ifequal $pane_border "0"
-          @{.PaneBorder($pane_border)@}#ifequal $gripper "1"
-          @{.Gripper()@}#ifequal $show "0"
-          @{.Hide()@}#ifequal $moveable "0"
-          @{.Movable($moveable)@}#ifnotnull $dock
+          _auiMgr.addPane($name, wx.AuiPaneInfo()#ifnotnull $aui_name
+          @{.name($aui_name)@}.$docking()#ifnotnull $caption
+          @{.caption($caption)@}#ifequal $caption_visible "0"
+          @{.captionVisible($caption_visible)@}#ifequal $close_button "0"
+          @{.closeButton($close_button)@}#ifequal $maximize_button "1"
+          @{.maximizeButton($maximize_button)@}#ifequal $minimize_button "1"
+          @{.minimizeButton($minimize_button)@}#ifequal $pin_button "1"
+          @{.pinButton($pin_button)@}#ifequal $pane_border "0"
+          @{.paneBorder($pane_border)@}#ifequal $gripper "1"
+          @{.gripper()@}#ifequal $show "0"
+          @{.hide()@}#ifequal $moveable "0"
+          @{.movable($moveable)@}#ifnotnull $dock
           @{.$dock()#ifequal $dock "Float"
-          @{.FloatingPosition($pane_position)@}
+          @{.floatingPosition($pane_position)@}
           @}#ifnotnull $resize
           @{.$resize()#ifequal $resize "Resizable"
-          @{.FloatingSize($pane_size)@}
+          @{.floatingSize($pane_size)@}
           @}#ifequal $dock_fixed "0"
-          @{.DockFixed($dock_fixed)@}#ifequal $BottomDockable "0"
-          @{.BottomDockable($BottomDockable)@}#ifequal $TopDockable "0"
-          @{.TopDockable($TopDockable)@}#ifequal $LeftDockable "0"
-          @{.LeftDockable($LeftDockable)@}#ifequal $RightDockable "0"
-          @{.RightDockable($RightDockable)@}#ifequal $floatable "0"
-          @{.Floatable($floatable)@}#ifnotnull $aui_row
-          @{.Row($aui_row)@}#ifnotnull $aui_position
-          @{.Position($aui_position)@}#ifnotnull $aui_layer
-          @{.Layer($aui_layer)@}#ifequal $center_pane "1"
-          @{.CenterPane()@}#ifequal $default_pane "1"
-          @{.DefaultPane()@}#ifequal $toolbar_pane "1"
-          @{.ToolbarPane()@}
+          @{.dockFixed($dock_fixed)@}#ifequal $BottomDockable "0"
+          @{.bottomDockable($BottomDockable)@}#ifequal $TopDockable "0"
+          @{.topDockable($TopDockable)@}#ifequal $LeftDockable "0"
+          @{.leftDockable($LeftDockable)@}#ifequal $RightDockable "0"
+          @{.rightDockable($RightDockable)@}#ifequal $floatable "0"
+          @{.floatable($floatable)@}#ifnotnull $aui_row
+          @{.row($aui_row)@}#ifnotnull $aui_position
+          @{.position($aui_position)@}#ifnotnull $aui_layer
+          @{.layer($aui_layer)@}#ifequal $center_pane "1"
+          @{.centerPane()@}#ifequal $default_pane "1"
+          @{.defaultPane()@}#ifequal $toolbar_pane "1"
+          @{.toolbarPane()@}
           )
         @}
       @}
@@ -258,45 +254,45 @@
       @{
         #ifparentclassequal "wxToolBar"
         @{
-          $name = #parent $name.AddTool($id, $label, $bitmap, null, $kind, $tooltip, $statusbar)
+          $name = #parent $name.addTool($id, $label, $bitmap, null, $kind, $tooltip, $statusbar)
         @}
         #ifparentclassequal "wxAuiToolBar"
         @{
-          $name = #parent $name.AddTool($id, $label, $bitmap, null, $kind, $tooltip, $statusbar)
+          $name = #parent $name.addTool($id, $label, $bitmap, null, $kind, $tooltip, $statusbar)
           #ifequal $context_menu "1"
           @{
-            #nl #parent $name.SetToolDropDown($id, true)
+            #nl #parent $name.setToolDropDown($id, true)
           @}
         @}
       @}
       #ifparenttypeequal "toolbar_form"
       @{
-        $name = AddTool($id, $label, $bitmap, null, $kind, $tooltip, $statusbar)
+        $name = addTool($id, $label, $bitmap, null, $kind, $tooltip, $statusbar)
       @}
     </template>
-    <template name="evt_connect_OnToolClicked">     Bind(#parent $name.EVT.TOOL, $id, this, #handler)</template>
-    <template name="evt_connect_OnMenuSelection">   Bind(#parent $name.EVT.MENU, $id, this, #handler)</template>
-    <template name="evt_connect_OnToolRClicked">    Bind(#parent $name.EVT.TOOL_RCLICKED, $id, this, #handler)</template>
-    <template name="evt_connect_OnToolEnter">       Bind(#parent $name.EVT.TOOL_ENTER, $id, this, #handler)</template>
-    <template name="evt_connect_OnUpdateUI">        Bind(#parent $name.EVT.UPDATE_UI, $id, this, #handler)</template>
-    <template name="evt_connect_OnAuiToolBarToolDropDown">  Bind(#parent $name.EVT.TOOL_DROPDOWN, $id, this, #handler)</template>
-    <template name="evt_connect_OnAuiToolBarOverflowClick"> Bind(#parent $name.EVT.OVERFLOW_CLICK, $id, this, #handler)</template>
-    <template name="evt_connect_OnAuiToolBarRightClick">    Bind(#parent $name.EVT.RIGHT_CLICK, $id, this, #handler)</template>
-    <template name="evt_connect_OnAuiToolBarMiddleClick">   Bind(#parent $name.EVT.MIDDLE_CLICK, $id, this, #handler)</template>
-    <template name="evt_connect_OnAuiToolBarBeginDrag">     Bind(#parent $name.EVT.BEGIN_DRAG, $id, this, #handler)</template>
+    <template name="evt_connect_OnToolClicked">     bind(#parent $name.EVT.TOOL, $id, this, #handler)</template>
+    <template name="evt_connect_OnMenuSelection">   bind(#parent $name.EVT.MENU, $id, this, #handler)</template>
+    <template name="evt_connect_OnToolRClicked">    bind(#parent $name.EVT.TOOL_RCLICKED, $id, this, #handler)</template>
+    <template name="evt_connect_OnToolEnter">       bind(#parent $name.EVT.TOOL_ENTER, $id, this, #handler)</template>
+    <template name="evt_connect_OnUpdateUI">        bind(#parent $name.EVT.UPDATE_UI, $id, this, #handler)</template>
+    <template name="evt_connect_OnAuiToolBarToolDropDown">  bind(#parent $name.EVT.TOOL_DROPDOWN, $id, this, #handler)</template>
+    <template name="evt_connect_OnAuiToolBarOverflowClick"> bind(#parent $name.EVT.OVERFLOW_CLICK, $id, this, #handler)</template>
+    <template name="evt_connect_OnAuiToolBarRightClick">    bind(#parent $name.EVT.RIGHT_CLICK, $id, this, #handler)</template>
+    <template name="evt_connect_OnAuiToolBarMiddleClick">   bind(#parent $name.EVT.MIDDLE_CLICK, $id, this, #handler)</template>
+    <template name="evt_connect_OnAuiToolBarBeginDrag">     bind(#parent $name.EVT.BEGIN_DRAG, $id, this, #handler)</template>
   </templates>
 
   <templates class="toolSeparator">
     <template name="construction">
       #ifparenttypeequal "toolbar"
       @{
-        #parent $name.AddSeparator()
+        #parent $name.addSeparator()
       @}
       #ifparenttypeequal "toolbar_form"
       @{
-        AddSeparator()
+        addSeparator()
       @}
     </template>
-    <template name="construction">#parent $name.AddSeparator()</template>
+    <template name="construction">#parent $name.addSeparator()</template>
   </templates>
 </codegen>

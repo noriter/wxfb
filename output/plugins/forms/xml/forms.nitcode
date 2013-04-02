@@ -27,21 +27,21 @@ Python code generation writen by
 <codegen language="nit">
 
   <templates class="wxTopLevelWindow">
-    <template name="evt_connect_OnActivate">    Bind(this.EVT.ACTIVATE, this, #handler)</template>
-    <template name="evt_connect_OnActivateApp"> Bind(wx.App.EVT.ACTIVATE_APP, this, #handler)</template>
-    <template name="evt_connect_OnClose">       Bind(this.EVT.CLOSE, this, #handler)</template>
-    <template name="evt_connect_OnHibernate">   Bind(wx.App.EVT.HIBERNATE, this, #handler)</template>
-    <template name="evt_connect_OnIconize">     Bind(this.EVT.ICONIZE, this, #handler)</template>
-    <template name="evt_connect_OnIdle">        Bind(wx.App.EVT.IDLE, this, #handler)</template>
+    <template name="evt_connect_OnActivate">    bind(this.EVT.ACTIVATE, this, #handler)</template>
+    <template name="evt_connect_OnActivateApp"> bind(wx.App.EVT.ACTIVATE_APP, this, #handler)</template>
+    <template name="evt_connect_OnClose">       bind(this.EVT.CLOSE, this, #handler)</template>
+    <template name="evt_connect_OnHibernate">   bind(wx.App.EVT.HIBERNATE, this, #handler)</template>
+    <template name="evt_connect_OnIconize">     bind(this.EVT.ICONIZE, this, #handler)</template>
+    <template name="evt_connect_OnIdle">        bind(wx.App.EVT.IDLE, this, #handler)</template>
   </templates>
 
   <templates class="AUI Events">
-    <template name="evt_connect_OnAuiPaneButton">   Bind(_AuiMgr.EVT.PANE_BUTTON, this, #handler)</template>
-    <template name="evt_connect_OnAuiPaneClose">    Bind(_AuiMgr.EVT.PANE_CLOSE, this, #handler)</template>
-    <template name="evt_connect_OnAuiPaneMaximize"> Bind(_AuiMgr.EVT.PANE_MAXIMIZE, this, #handler)</template>
-    <template name="evt_connect_OnAuiPaneRestore">  Bind(_AuiMgr.EVT.PANE_RESTORE, this, #handler)</template>
-    <template name="evt_connect_OnAuiRender">       Bind(_AuiMgr.EVT.RENDER, this, #handler)</template>
-    <template name="evt_connect_OnAuiFindManager">  Bind(_AuiMgr.EVT.FIND_MANAGER, this, #handler)</template>
+    <template name="evt_connect_OnAuiPaneButton">   bind(_auiMgr.EVT.PANE_BUTTON, this, #handler)</template>
+    <template name="evt_connect_OnAuiPaneClose">    bind(_auiMgr.EVT.PANE_CLOSE, this, #handler)</template>
+    <template name="evt_connect_OnAuiPaneMaximize"> bind(_auiMgr.EVT.PANE_MAXIMIZE, this, #handler)</template>
+    <template name="evt_connect_OnAuiPaneRestore">  bind(_auiMgr.EVT.PANE_RESTORE, this, #handler)</template>
+    <template name="evt_connect_OnAuiRender">       bind(_auiMgr.EVT.RENDER, this, #handler)</template>
+    <template name="evt_connect_OnAuiFindManager">  bind(_auiMgr.EVT.FIND_MANAGER, this, #handler)</template>
   </templates>
 
   <templates class="Frame">
@@ -54,80 +54,80 @@ Python code generation writen by
       @{ wx.ScriptFrame @}
     </template>
     <template name="cons_def">
-      constructor(parent=null, id=$id, pack=runtime.Locator)
+      constructor(parent=null, id=$id, pack=script.locator)
     </template>
     <template name="cons_call">
       base.constructor(parent, id, $title, $pos, $size, $style #ifnotnull $window_style @{ | $window_style @} #ifnotnull $window_name @{, $window_name @})
     </template>
     <template name="destruction">
       #ifequal $aui_managed "1"
-      @{ _AuiMgr.UnInit() #nl @}
+      @{ _auiMgr.unInit() #nl @}
     </template>
     <template name="declaration">
       #ifequal $aui_managed "1"
-      @{ var _AuiMgr : wx.AuiManager @}
+      @{ var _auiMgr : wx.AuiManager @}
     </template>>
     <template name="settings">
-      SetSizeHints($minimum_size, $maximum_size) #nl
+      setSizeHints($minimum_size, $maximum_size) #nl
 
       #ifnotnull $window_extra_style
-      @{ ExtraStyle = $window_extra_style #nl @}
+      @{ extraStyle = $window_extra_style #nl @}
 
       #ifnotnull $extra_style
-      @{ ExtraStyle = $extra_style #nl @}
+      @{ extraStyle = $extra_style #nl @}
 
       #ifnotnull $font
-      @{ Font = $font #nl @}
+      @{ font = $font #nl @}
 
       #ifnotnull $fg
-      @{ ForeColor = $fg #nl @}
+      @{ foreColor = $fg #nl @}
 
       #ifnotnull $bg
-      @{ BackColor = $bg #nl @}
+      @{ backColor = $bg #nl @}
 
       #ifequal $enabled "0"
-      @{ Enabled = $enabled #nl @}
+      @{ enabled = $enabled #nl @}
 
       #ifequal $hidden "1"
-      @{ Hide() #nl @}
+      @{ hide() #nl @}
 
       #ifnotnull $tooltip
-      @{ ToolTip = $tooltip #nl @}
+      @{ toolTip = $tooltip #nl @}
 
       #ifequal $aui_managed "1"
       @{
         #nl
-        _AuiMgr = wx.AuiManager(this, $aui_manager_style) #nl
+        _auiMgr = wx.AuiManager(this, $aui_manager_style) #nl
       @}
     </template>
     <template name="after_addchild">
       #ifequal $aui_managed "1"
-      @{ #nl _AuiMgr.Update() @}
+      @{ #nl _auiMgr.update() @}
       #ifnotnull $center
-      @{ #nl Center($center) @}
+      @{ #nl center($center) @}
     </template>
-    <template name="evt_connect_OnChar">            Bind(this.EVT.CHAR, this, #handler)</template>
-    <template name="evt_connect_OnEnterWindow">     Bind(wx.EVT.MOUSE_ENTER, this, #handler)</template>
-    <template name="evt_connect_OnEraseBackground"> Bind(this.EVT.ERASE_BACKGROUND, this, #handler)</template>
-    <template name="evt_connect_OnKeyDown">         Bind(this.EVT.KEY_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnKeyUp">           Bind(this.EVT.KEY_UP, this, #handler)</template>
-    <template name="evt_connect_OnKillFocus">       Bind(this.EVT.KILL_FOCUS, this, #handler)</template>
-    <template name="evt_connect_OnLeaveWindow">     Bind(wx.EVT.MOUSE_LEAVE, this, #handler)</template>
-    <template name="evt_connect_OnLeftDClick">      Bind(wx.EVT.MOUSE_LEFT_DCLICK, this, #handler)</template>
-    <template name="evt_connect_OnLeftDown">        Bind(wx.EVT.MOUSE_LEFT_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnLeftUp">          Bind(wx.EVT.MOUSE_LEFT_UP, this, #handler)</template>
-    <template name="evt_connect_OnMiddleDClick">    Bind(wx.EVT.MOUSE_MIDDLE_DCLICK, this, #handler)</template>
-    <template name="evt_connect_OnMiddleDown">      Bind(wx.EVT.MOUSE_MIDDLE_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnMiddleUp">        Bind(wx.EVT.MOUSE_MIDDLE_UP, this, #handler)</template>
-    <template name="evt_connect_OnMotion">          Bind(wx.EVT.MOUSE_MOTION, this, #handler)</template>
-    <template name="evt_connect_OnMouseWheel">      Bind(wx.EVT.MOUSE_WHEEL, this, #handler)</template>
-    <template name="evt_connect_OnPaint">           Bind(wx.EVT.PAINT, this, #handler)</template>
-    <template name="evt_connect_OnRightDClick">     Bind(wx.EVT.MOUSE_RIGHT_DCLICK, this, #handler)</template>
-    <template name="evt_connect_OnRightDown">       Bind(wx.EVT.MOUSE_RIGHT_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnRightUp">         Bind(wx.EVT,MOUSE_RIGHT_UP, this, #handler)</template>
-    <template name="evt_connect_OnSetFocus">        Bind(this.EVT.SET_FOCUS, this, #handler)</template>
-    <template name="evt_connect_OnSize">            Bind(this.EVT.SIZE, this, #handler)</template>
-    <template name="evt_connect_OnUpdateUI">        Bind(this.EVT.UPDATE_UI, this, #handler)</template>
+    <template name="evt_connect_OnChar">            bind(this.EVT.CHAR, this, #handler)</template>
+    <template name="evt_connect_OnEnterWindow">     bind(wx.EVT.MOUSE_ENTER, this, #handler)</template>
+    <template name="evt_connect_OnEraseBackground"> bind(this.EVT.ERASE_BACKGROUND, this, #handler)</template>
+    <template name="evt_connect_OnKeyDown">         bind(this.EVT.KEY_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnKeyUp">           bind(this.EVT.KEY_UP, this, #handler)</template>
+    <template name="evt_connect_OnKillFocus">       bind(this.EVT.KILL_FOCUS, this, #handler)</template>
+    <template name="evt_connect_OnLeaveWindow">     bind(wx.EVT.MOUSE_LEAVE, this, #handler)</template>
+    <template name="evt_connect_OnLeftDClick">      bind(wx.EVT.MOUSE_LEFT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnLeftDown">        bind(wx.EVT.MOUSE_LEFT_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnLeftUp">          bind(wx.EVT.MOUSE_LEFT_UP, this, #handler)</template>
+    <template name="evt_connect_OnMiddleDClick">    bind(wx.EVT.MOUSE_MIDDLE_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnMiddleDown">      bind(wx.EVT.MOUSE_MIDDLE_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnMiddleUp">        bind(wx.EVT.MOUSE_MIDDLE_UP, this, #handler)</template>
+    <template name="evt_connect_OnMotion">          bind(wx.EVT.MOUSE_MOTION, this, #handler)</template>
+    <template name="evt_connect_OnMouseWheel">      bind(wx.EVT.MOUSE_WHEEL, this, #handler)</template>
+    <template name="evt_connect_OnPaint">           bind(wx.EVT.PAINT, this, #handler)</template>
+    <template name="evt_connect_OnRightDClick">     bind(wx.EVT.MOUSE_RIGHT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnRightDown">       bind(wx.EVT.MOUSE_RIGHT_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnRightUp">         bind(wx.EVT,MOUSE_RIGHT_UP, this, #handler)</template>
+    <template name="evt_connect_OnSetFocus">        bind(this.EVT.SET_FOCUS, this, #handler)</template>
+    <template name="evt_connect_OnSize">            bind(this.EVT.SIZE, this, #handler)</template>
+    <template name="evt_connect_OnUpdateUI">        bind(this.EVT.UPDATE_UI, this, #handler)</template>
   </templates>
 
   <templates class="Panel">
@@ -140,80 +140,80 @@ Python code generation writen by
       @{ wx.ScriptPanel @}
     </template>
     <template name="cons_def">
-      constructor(parent=null, id=$id, pack=runtime.Locator)
+      constructor(parent=null, id=$id, pack=script.locator)
     </template>
     <template name="cons_call">
       base.constructor(parent, id, $pos, $size, $window_style #ifnotnull $window_name @{, $window_name @})
     </template>
     <template name="destruction">
       #ifequal $aui_managed "1"
-      @{ _AuiMgr.UnInit() #nl @}
+      @{ _auiMgr.unInit() #nl @}
     </template>
     <template name="declaration">
       #ifequal $aui_managed "1"
-      @{ var _AuiMgr : wx.AuiManager @}
+      @{ var _auiMgr : wx.AuiManager @}
     </template>>
     <template name="settings">
       #ifnotnull $window_extra_style
-      @{ ExtraStyle = $window_extra_style #nl @}
+      @{ extraStyle = $window_extra_style #nl @}
 
       #ifnotnull $font
-      @{ Font = $font #nl @}
+      @{ font = $font #nl @}
 
       #ifnotnull $fg
-      @{ ForeColor = $fg #nl @}
+      @{ foreColor = $fg #nl @}
 
       #ifnotnull $bg
-      @{ BackColor = $bg #nl @}
+      @{ backColor = $bg #nl @}
 
       #ifequal $enabled "0"
-      @{ Enabled = $enabled #nl @}
+      @{ enabled = $enabled #nl @}
 
       #ifequal $hidden "1"
-      @{ Hide() #nl @}
+      @{ hide() #nl @}
 
       #ifnotnull $tooltip
-      @{ ToolTip = $tooltip #nl @}
+      @{ toolTip = $tooltip #nl @}
 
       #ifnotnull $minimum_size
-      @{ MinSize = $minimum_size #nl @}
+      @{ minSize = $minimum_size #nl @}
 
       #ifnotnull $maximum_size
-      @{ MaxSize = $maximum_size #nl @}
+      @{ maxSize = $maximum_size #nl @}
 
       #ifequal $aui_managed "1"
       @{
         #nl
-        _AuiMgr = wx.AuiManager(this, $aui_manager_style) #nl
+        _auiMgr = wx.AuiManager(this, $aui_manager_style) #nl
       @}
     </template>
     <template name="after_addchild">
       #ifequal $aui_managed "1"
-      @{ #nl _AuiMgr.Update() @}
+      @{ #nl _auiMgr.Update() @}
     </template>
-    <template name="evt_connect_OnInitDialog">      Bind(this.EVT.INIT_DIALOG, this, #handler)</template>
-    <template name="evt_connect_OnChar">            Bind(this.EVT.EVT_CHAR, this, #handler)</template>
-    <template name="evt_connect_OnEnterWindow">     Bind(wx.EVT.MOUSE_ENTER, this, #handler)</template>
-    <template name="evt_connect_OnEraseBackground"> Bind(this.EVT.ERASE_BACKGROUND, this, #handler)</template>
-    <template name="evt_connect_OnKeyDown">         Bind(this.EVT.KEY_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnKeyUp">           Bind(this.EVT.KEY_UP, this, #handler)</template>
-    <template name="evt_connect_OnKillFocus">       Bind(this.EVT.KILL_FOCUS, this, #handler)</template>
-    <template name="evt_connect_OnLeaveWindow">     Bind(wx.EVT.MOUSE_LEAVE, this, #handler)</template>
-    <template name="evt_connect_OnLeftDClick">      Bind(wx.EVT.MOUSE_LEFT_DCLICK, this, #handler)</template>
-    <template name="evt_connect_OnLeftDown">        Bind(wx.EVT.MOUSE_LEFT_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnLeftUp">          Bind(wx.EVT.MOUSE_LEFT_UP, this, #handler)</template>
-    <template name="evt_connect_OnMiddleDClick">    Bind(wx.EVT.MOUSE_MIDDLE_DCLICK, this, #handler)</template>
-    <template name="evt_connect_OnMiddleDown">      Bind(wx.EVT.MOUSE_MIDDLE_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnMiddleUp">        Bind(wx.EVT.MOUSE_MIDDLE_UP, this, #handler)</template>
-    <template name="evt_connect_OnMotion">          Bind(wx.EVT.MOUSE_MOTION, this, #handler)</template>
-    <template name="evt_connect_OnMouseWheel">      Bind(wx.EVT.MOUSE_WHEEL, this, #handler)</template>
-    <template name="evt_connect_OnPaint">           Bind(this.EVT.PAINT, this, #handler)</template>
-    <template name="evt_connect_OnRightDClick">     Bind(wx.EVT.MOUSE_RIGHT_DCLICK, this, #handler)</template>
-    <template name="evt_connect_OnRightDown">       Bind(wx.EVT.MOUSE_RIGHT_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnRightUp">         Bind(wx.EVT.MOUSE_RIGHT_UP, this, #handler)</template>
-    <template name="evt_connect_OnSetFocus">        Bind(this.EVT.SET_FOCUS, this, #handler)</template>
-    <template name="evt_connect_OnSize">            Bind(this.EVT.SIZE, this, #handler)</template>
-    <template name="evt_connect_OnUpdateUI">        Bind(this.EVT.UPDATE_UI, this, #handler)</template>
+    <template name="evt_connect_OnInitDialog">      bind(this.EVT.INIT_DIALOG, this, #handler)</template>
+    <template name="evt_connect_OnChar">            bind(this.EVT.EVT_CHAR, this, #handler)</template>
+    <template name="evt_connect_OnEnterWindow">     bind(wx.EVT.MOUSE_ENTER, this, #handler)</template>
+    <template name="evt_connect_OnEraseBackground"> bind(this.EVT.ERASE_BACKGROUND, this, #handler)</template>
+    <template name="evt_connect_OnKeyDown">         bind(this.EVT.KEY_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnKeyUp">           bind(this.EVT.KEY_UP, this, #handler)</template>
+    <template name="evt_connect_OnKillFocus">       bind(this.EVT.KILL_FOCUS, this, #handler)</template>
+    <template name="evt_connect_OnLeaveWindow">     bind(wx.EVT.MOUSE_LEAVE, this, #handler)</template>
+    <template name="evt_connect_OnLeftDClick">      bind(wx.EVT.MOUSE_LEFT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnLeftDown">        bind(wx.EVT.MOUSE_LEFT_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnLeftUp">          bind(wx.EVT.MOUSE_LEFT_UP, this, #handler)</template>
+    <template name="evt_connect_OnMiddleDClick">    bind(wx.EVT.MOUSE_MIDDLE_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnMiddleDown">      bind(wx.EVT.MOUSE_MIDDLE_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnMiddleUp">        bind(wx.EVT.MOUSE_MIDDLE_UP, this, #handler)</template>
+    <template name="evt_connect_OnMotion">          bind(wx.EVT.MOUSE_MOTION, this, #handler)</template>
+    <template name="evt_connect_OnMouseWheel">      bind(wx.EVT.MOUSE_WHEEL, this, #handler)</template>
+    <template name="evt_connect_OnPaint">           bind(this.EVT.PAINT, this, #handler)</template>
+    <template name="evt_connect_OnRightDClick">     bind(wx.EVT.MOUSE_RIGHT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnRightDown">       bind(wx.EVT.MOUSE_RIGHT_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnRightUp">         bind(wx.EVT.MOUSE_RIGHT_UP, this, #handler)</template>
+    <template name="evt_connect_OnSetFocus">        bind(this.EVT.SET_FOCUS, this, #handler)</template>
+    <template name="evt_connect_OnSize">            bind(this.EVT.SIZE, this, #handler)</template>
+    <template name="evt_connect_OnUpdateUI">        bind(this.EVT.UPDATE_UI, this, #handler)</template>
   </templates>
 
 
@@ -227,81 +227,81 @@ Python code generation writen by
       @{ wx.ScriptDialog @}
     </template>
     <template name="cons_def">
-      constructor(parent=null, id=$id, pack=runtime.Locator)
+      constructor(parent=null, id=$id, pack=script.locator)
     </template>
     <template name="cons_call">
       base.constructor(parent, id, $title, $pos, $size, $style #ifnotnull $window_style @{ | $window_style @} #ifnotnull $window_name @{, $window_name @})
     </template>
     <template name="destruction">
       #ifequal $aui_managed "1"
-      @{ _AuiMgr.UnInit() #nl @}
+      @{ _auiMgr.UnInit() #nl @}
     </template>
     <template name="declaration">
       #ifequal $aui_managed "1"
-      @{ var _AuiMgr : wx.AuiManager @}
+      @{ var _auiMgr : wx.AuiManager @}
     </template>>
     <template name="settings">
-      SetSizeHints($minimum_size, $maximum_size) #nl
+      setSizeHints($minimum_size, $maximum_size) #nl
 
       #ifnotnull $window_extra_style
-      @{ ExtraStyle = $window_extra_style #nl @}
+      @{ extraStyle = $window_extra_style #nl @}
 
       #ifnotnull $extra_style
-      @{ ExtraStyle = $extra_style #nl @}
+      @{ extraStyle = $extra_style #nl @}
       
       #ifnotnull $font
-      @{ Font = $font #nl @}
+      @{ font = $font #nl @}
 
       #ifnotnull $fg
-      @{ ForeColor = $fg #nl @}
+      @{ foreColor = $fg #nl @}
 
       #ifnotnull $bg
-      @{ BackColor = $bg #nl @}
+      @{ backColor = $bg #nl @}
 
       #ifequal $enabled "0"
-      @{ Enabled = $enabled #nl @}
+      @{ enabled = $enabled #nl @}
 
       #ifequal $hidden "1"
-      @{ Hide() #nl @}
+      @{ hide() #nl @}
 
       #ifnotnull $tooltip
-      @{ ToolTip = $tooltip #nl @}
+      @{ toolTip = $tooltip #nl @}
 
       #ifequal $aui_managed "1"
       @{
         #nl
-        _AuiMgr = wx.AuiManager(this, $aui_manager_style) #nl
+        _auiMgr = wx.AuiManager(this, $aui_manager_style) #nl
       @}
     </template>
     <template name="after_addchild">
       #ifequal $aui_managed "1"
-      @{ #nl _AuiMgr.Update() @}
+      @{ #nl _auiMgr.update() @}
       #ifnotnull $center
-      @{ #nl Center($center) @}
+      @{ #nl center($center) @}
     </template>
-    <template name="evt_connect_OnInitDialog">      Bind(this.EVT.INIT_DIALOG, this, #handler)</template>
-    <template name="evt_connect_OnChar">            Bind(this.EVT.CHAR, this, #handler)</template>
-    <template name="evt_connect_OnEnterWindow">     Bind(wx.EVT.MOUSE_ENTER, this, #handler)</template>
-    <template name="evt_connect_OnEraseBackground"> Bind(this.EVT.ERASE_BACKGROUND, this, #handler)</template>
-    <template name="evt_connect_OnKeyDown">         Bind(this.EVT.KEY_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnKeyUp">           Bind(this.EVT.KEY_UP, this, #handler)</template>
-    <template name="evt_connect_OnKillFocus">       Bind(this.EVT.KILL_FOCUS, this, #handler)</template>
-    <template name="evt_connect_OnLeaveWindow">     Bind(wx.EVT.MOUSE_LEAVE, this, #handler)</template>
-    <template name="evt_connect_OnLeftDClick">      Bind(wx.EVT.MOUSE_LEFT_DCLICK, this, #handler)</template>
-    <template name="evt_connect_OnLeftDown">        Bind(wx.EVT.MOUSE_LEFT_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnLeftUp">          Bind(wx.EVT.MOUSE_LEFT_UP, this, #handler)</template>
-    <template name="evt_connect_OnMiddleDClick">    Bind(wx.EVT.MOUSE_MIDDLE_DCLICK, this, #handler)</template>
-    <template name="evt_connect_OnMiddleDown">      Bind(wx.EVT.MOUSE_MIDDLE_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnMiddleUp">        Bind(wx.EVT.MOUSE_MIDDLE_UP, this, #handler)</template>
-    <template name="evt_connect_OnMotion">          Bind(wx.EVT.MOUSE_MOTION, this, #handler)</template>
-    <template name="evt_connect_OnMouseWheel">      Bind(wx.EVT.MOUSE_WHEEL, this, #handler)</template>
-    <template name="evt_connect_OnPaint">           Bind(this.EVT.PAINT, this, #handler)</template>
-    <template name="evt_connect_OnRightDClick">     Bind(wx.EVT.MOUSE_RIGHT_DCLICK, this, #handler)</template>
-    <template name="evt_connect_OnRightDown">       Bind(wx.EVT.MOUSE_RIGHT_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnRightUp">         Bind(wx.EVT.MOUSE_RIGHT_UP, this, #handler)</template>
-    <template name="evt_connect_OnSetFocus">        Bind(this.EVT.SET_FOCUS, this, #handler)</template>
-    <template name="evt_connect_OnSize">            Bind(this.EVT.SIZE, this, #handler)</template>
-    <template name="evt_connect_OnUpdateUI">        Bind(this.EVT.UPDATE_UI, this, #handler)</template>
+    <template name="evt_connect_OnInitDialog">      bind(this.EVT.INIT_DIALOG, this, #handler)</template>
+    <template name="evt_connect_OnChar">            bind(this.EVT.CHAR, this, #handler)</template>
+    <template name="evt_connect_OnEnterWindow">     bind(wx.EVT.MOUSE_ENTER, this, #handler)</template>
+    <template name="evt_connect_OnEraseBackground"> bind(this.EVT.ERASE_BACKGROUND, this, #handler)</template>
+    <template name="evt_connect_OnKeyDown">         bind(this.EVT.KEY_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnKeyUp">           bind(this.EVT.KEY_UP, this, #handler)</template>
+    <template name="evt_connect_OnKillFocus">       bind(this.EVT.KILL_FOCUS, this, #handler)</template>
+    <template name="evt_connect_OnLeaveWindow">     bind(wx.EVT.MOUSE_LEAVE, this, #handler)</template>
+    <template name="evt_connect_OnLeftDClick">      bind(wx.EVT.MOUSE_LEFT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnLeftDown">        bind(wx.EVT.MOUSE_LEFT_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnLeftUp">          bind(wx.EVT.MOUSE_LEFT_UP, this, #handler)</template>
+    <template name="evt_connect_OnMiddleDClick">    bind(wx.EVT.MOUSE_MIDDLE_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnMiddleDown">      bind(wx.EVT.MOUSE_MIDDLE_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnMiddleUp">        bind(wx.EVT.MOUSE_MIDDLE_UP, this, #handler)</template>
+    <template name="evt_connect_OnMotion">          bind(wx.EVT.MOUSE_MOTION, this, #handler)</template>
+    <template name="evt_connect_OnMouseWheel">      bind(wx.EVT.MOUSE_WHEEL, this, #handler)</template>
+    <template name="evt_connect_OnPaint">           bind(this.EVT.PAINT, this, #handler)</template>
+    <template name="evt_connect_OnRightDClick">     bind(wx.EVT.MOUSE_RIGHT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnRightDown">       bind(wx.EVT.MOUSE_RIGHT_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnRightUp">         bind(wx.EVT.MOUSE_RIGHT_UP, this, #handler)</template>
+    <template name="evt_connect_OnSetFocus">        bind(this.EVT.SET_FOCUS, this, #handler)</template>
+    <template name="evt_connect_OnSize">            bind(this.EVT.SIZE, this, #handler)</template>
+    <template name="evt_connect_OnUpdateUI">        bind(this.EVT.UPDATE_UI, this, #handler)</template>
   </templates>
 
   <templates class="Wizard">
@@ -314,81 +314,81 @@ Python code generation writen by
       @{ wx.ScriptWizard @}
     </template>
     <template name="declaration">
-      var _Pages : array&lt;wx.WizardPageSimple&gt; = []
+      var _pages : array&lt;wx.WizardPageSimple&gt; = []
     </template>
     <template name="cons_def">
-      constructor(parent=null, id=$id, pack=runtime.Locator)
+      constructor(parent=null, id=$id, pack=script.locator)
     </template>
     <template name="cons_call">
       base.constructor(parent, id, $title, $bitmap, $pos, $size, $style #ifnotnull $window_style @{ | $window_style @} #ifnotnull $window_name @{, $window_name @})
     </template>
     <template name="settings">
-      SetSizeHints($minimum_size, $maximum_size) #nl
+      setSizeHints($minimum_size, $maximum_size) #nl
 
       #ifnotnull $window_extra_style
-      @{ ExtraStyle = $window_extra_style #nl @}
+      @{ extraStyle = $window_extra_style #nl @}
 
       #ifnotnull $extra_style
-      @{ ExtraStyle = $extra_style #nl @}
+      @{ extraStyle = $extra_style #nl @}
 
       #ifnotnull $font
-      @{ Font = $font #nl @}
+      @{ font = $font #nl @}
 
       #ifnotnull $fg
-      @{ ForeColor = $fg #nl @}
+      @{ foreColor = $fg #nl @}
 
       #ifnotnull $bg
-      @{ BackColor = $bg #nl @}
+      @{ backColor = $bg #nl @}
 
       #ifequal $enabled "0"
-      @{ Enabled = $enabled #nl @}
+      @{ enabled = $enabled #nl @}
 
       #ifequal $hidden "1"
-      @{ Hide() #nl @}
+      @{ hide() #nl @}
 
       #ifnotnull $tooltip
-      @{ ToolTip = $tooltip #nl @}
+      @{ toolTip = $tooltip #nl @}
     </template>
     <template name="after_addchild">
       #ifnotnull $center
-      @{ #nl Center($center) @}
+      @{ #nl center($center) @}
     </template>
-    <template name="evt_connect_OnInitDialog">          Bind(this.EVT.INIT_DIALOG, this, #handler)</template>
-    <template name="evt_connect_OnChar">                Bind(this.EVT.CHAR, this, #handler)</template>
-    <template name="evt_connect_OnEnterWindow">         Bind(wx.EVT.MOUSE_ENTER, this, #handler)</template>
-    <template name="evt_connect_OnEraseBackground">     Bind(this.EVT.ERASE_BACKGROUND, this, #handler)</template>
-    <template name="evt_connect_OnKeyDown">             Bind(this.EVT.KEY_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnKeyUp">               Bind(this.EVT.KEY_UP, this, #handler)</template>
-    <template name="evt_connect_OnKillFocus">           Bind(this.EVT.KILL_FOCUS, this, #handler)</template>
-    <template name="evt_connect_OnLeaveWindow">         Bind(wx.EVT.MOUSE_LEAVE, this, #handler)</template>
-    <template name="evt_connect_OnLeftDClick">          Bind(wx.EVT.MOUSE_LEFT_DCLICK, this, #handler)</template>
-    <template name="evt_connect_OnLeftDown">            Bind(wx.EVT.MOUSE_LEFT_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnLeftUp">              Bind(wx.EVT.MOUSE_LEFT_UP, this, #handler)</template>
-    <template name="evt_connect_OnMiddleDClick">        Bind(wx.EVT.MOUSE_MIDDLE_DCLICK, this, #handler)</template>
-    <template name="evt_connect_OnMiddleDown">          Bind(wx.EVT.MOUSE_MIDDLE_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnMiddleUp">            Bind(wx.EVT.MOUSE_MIDDLE_UP, this, #handler)</template>
-    <template name="evt_connect_OnMotion">              Bind(wx.EVT.MOUSE_MOTION, this, #handler)</template>
-    <template name="evt_connect_OnMouseWheel">          Bind(wx.EVT.MOUSE_WHEEL, this, #handler)</template>
-    <template name="evt_connect_OnPaint">               Bind(this.EVT.PAINT, this, #handler)</template>
-    <template name="evt_connect_OnRightDClick">         Bind(wx.EVT.MOUSE_RIGHT_DCLICK, this, #handler)</template>
-    <template name="evt_connect_OnRightDown">           Bind(wx.EVT.MOUSE_RIGHT_DOWN, this, #handler)</template>
-    <template name="evt_connect_OnRightUp">             Bind(wx.EVT.MOUSE_RIGHT_UP, this, #handler)</template>
-    <template name="evt_connect_OnSetFocus">            Bind(this.EVT.SET_FOCUS, this, #handler)</template>
-    <template name="evt_connect_OnSize">                Bind(this.EVT.SIZE, this, #handler)</template>
-    <template name="evt_connect_OnUpdateUI">            Bind(this.EVT.UPDATE_UI, this, #handler)</template>
-    <template name="evt_connect_OnWizardPageChanged">   Bind(this.EVT.PAGE_CHANGED, this, #handler)</template>
-    <template name="evt_connect_OnWizardPageChanging">  Bind(this.EVT.PAGE_CHANGING, this, #handler)</template>
-    <template name="evt_connect_OnWizardPageShown">     Bind(this.EVT.PAGE_SHOWN, this, #handler)</template>
-    <template name="evt_connect_OnWizardCancel">        Bind(this.EVT.CANCEL, this, #handler)</template>
-    <template name="evt_connect_OnWizardHelp">          Bind(this.EVT.HELP, this, #handler)</template>
-    <template name="evt_connect_OnWizardFinished">      Bind(this.EVT.FINISHED, this, #handler)</template>
+    <template name="evt_connect_OnInitDialog">          bind(this.EVT.INIT_DIALOG, this, #handler)</template>
+    <template name="evt_connect_OnChar">                bind(this.EVT.CHAR, this, #handler)</template>
+    <template name="evt_connect_OnEnterWindow">         bind(wx.EVT.MOUSE_ENTER, this, #handler)</template>
+    <template name="evt_connect_OnEraseBackground">     bind(this.EVT.ERASE_BACKGROUND, this, #handler)</template>
+    <template name="evt_connect_OnKeyDown">             bind(this.EVT.KEY_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnKeyUp">               bind(this.EVT.KEY_UP, this, #handler)</template>
+    <template name="evt_connect_OnKillFocus">           bind(this.EVT.KILL_FOCUS, this, #handler)</template>
+    <template name="evt_connect_OnLeaveWindow">         bind(wx.EVT.MOUSE_LEAVE, this, #handler)</template>
+    <template name="evt_connect_OnLeftDClick">          bind(wx.EVT.MOUSE_LEFT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnLeftDown">            bind(wx.EVT.MOUSE_LEFT_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnLeftUp">              bind(wx.EVT.MOUSE_LEFT_UP, this, #handler)</template>
+    <template name="evt_connect_OnMiddleDClick">        bind(wx.EVT.MOUSE_MIDDLE_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnMiddleDown">          bind(wx.EVT.MOUSE_MIDDLE_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnMiddleUp">            bind(wx.EVT.MOUSE_MIDDLE_UP, this, #handler)</template>
+    <template name="evt_connect_OnMotion">              bind(wx.EVT.MOUSE_MOTION, this, #handler)</template>
+    <template name="evt_connect_OnMouseWheel">          bind(wx.EVT.MOUSE_WHEEL, this, #handler)</template>
+    <template name="evt_connect_OnPaint">               bind(this.EVT.PAINT, this, #handler)</template>
+    <template name="evt_connect_OnRightDClick">         bind(wx.EVT.MOUSE_RIGHT_DCLICK, this, #handler)</template>
+    <template name="evt_connect_OnRightDown">           bind(wx.EVT.MOUSE_RIGHT_DOWN, this, #handler)</template>
+    <template name="evt_connect_OnRightUp">             bind(wx.EVT.MOUSE_RIGHT_UP, this, #handler)</template>
+    <template name="evt_connect_OnSetFocus">            bind(this.EVT.SET_FOCUS, this, #handler)</template>
+    <template name="evt_connect_OnSize">                bind(this.EVT.SIZE, this, #handler)</template>
+    <template name="evt_connect_OnUpdateUI">            bind(this.EVT.UPDATE_UI, this, #handler)</template>
+    <template name="evt_connect_OnWizardPageChanged">   bind(this.EVT.PAGE_CHANGED, this, #handler)</template>
+    <template name="evt_connect_OnWizardPageChanging">  bind(this.EVT.PAGE_CHANGING, this, #handler)</template>
+    <template name="evt_connect_OnWizardPageShown">     bind(this.EVT.PAGE_SHOWN, this, #handler)</template>
+    <template name="evt_connect_OnWizardCancel">        bind(this.EVT.CANCEL, this, #handler)</template>
+    <template name="evt_connect_OnWizardHelp">          bind(this.EVT.HELP, this, #handler)</template>
+    <template name="evt_connect_OnWizardFinished">      bind(this.EVT.FINISHED, this, #handler)</template>
 
   </templates>
 
   <templates class="WizardPageSimple">
     <template name="construction">
       $name = wx.WizardPageSimple(this #ifnotnull $bitmap @{ , null, null, $bitmap @}) #nl
-      AddPage($name) #nl
+      addPage($name) #nl
     </template>
     <template name="declaration">
       var $name : wx.WizardPageSimple
@@ -404,7 +404,7 @@ Python code generation writen by
       @{ wx.MenuBar @}
     </template>
     <template name="cons_def">
-      constructor(parent=null, id=$id, pack=runtime.Locator)
+      constructor(parent=null, id=$id, pack=script.locator)
     </template>
     <template name="cons_call">
       base.constructor($style)
@@ -420,14 +420,14 @@ Python code generation writen by
       @{ wx.ToolBar @}
     </template>
     <template name="cons_def">
-      constructor(parent=null, id=$id, pack=runtime.Locator)
+      constructor(parent=null, id=$id, pack=script.locator)
     </template>
     <template name="cons_call">
       base.constructor(parent, id, $pos, $size, $style #ifnotnull $window_style @{ |$window_style @} #ifnotnull $window_name @{, $window_name @})
     </template>
     <template name="settings">
     </template>
-    <template name="after_addchild">#nl Realize()</template>
+    <template name="after_addchild">#nl realize()</template>
   </templates>
 
 </codegen>
