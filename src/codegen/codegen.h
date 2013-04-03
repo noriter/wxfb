@@ -97,6 +97,7 @@ private:
 	wxString m_out;
 	wxString m_pred;
 	wxString m_npred;
+	bool m_camelize;
 	void ignore_whitespaces();
 	
 	// Current indentation level in the file
@@ -131,7 +132,8 @@ protected:
 		ID_INDENT,
 		ID_UNINDENT,
 		ID_IFTYPEEQUAL,
-		ID_IFTYPENOTEQUAL
+		ID_IFTYPENOTEQUAL,
+		ID_CAMELIZE,
 	} Ident;
 
 	bool IsEqual(const wxString& value, const wxString& set);
@@ -180,6 +182,7 @@ protected:
 	void ParseUnindent();
 	bool ParseIfTypeEqual();
 	bool ParseIfTypeNotEqual();
+	void ParseCamelize();
 
 	PProperty GetProperty( wxString* childName = NULL );
 	PObjectBase GetWxParent();

@@ -154,7 +154,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\output\plugins\containers\xml\containers.solcode"
+			RelativePath="..\..\output\plugins\containers\xml\containers.nitcode"
 			>
 		</File>
 		<File

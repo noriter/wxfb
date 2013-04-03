@@ -150,7 +150,7 @@
         #ifequal #parent $aui_managed "1"
         @{ #nl
           _auiMgr.addPane($name, wx.AuiPaneInfo()
-          #ifnotnull $aui_name @{.name($aui_name)@}.$docking()
+          #ifnotnull $aui_name @{.name($aui_name)@}.#camelize $docking()
           #ifnotnull $caption @{.caption($caption)@}
           #ifequal $caption_visible "0" @{.captionVisible($caption_visible)@}
           #ifequal $close_button "0" @{.closeButton($close_button)@}
@@ -161,8 +161,8 @@
           #ifequal $gripper "1" @{.gripper()@}
           #ifequal $show "0" @{.hide()@}
           #ifequal $moveable "0" @{.movable($moveable)@}
-          #ifnotnull $dock @{.$dock()#ifequal $dock "Float" @{.floatingPosition($pane_position)@}@}
-          #ifnotnull $resize @{.$resize()#ifequal $resize "Resizable"	@{.floatingSize($pane_size)@}@}
+          #ifnotnull $dock @{.#camelize $dock()#ifequal $dock "Float" @{.floatingPosition($pane_position)@}@}
+          #ifnotnull $resize @{.#camelize $resize()#ifequal $resize "Resizable"	@{.floatingSize($pane_size)@}@}
           #ifequal $dock_fixed "0" @{.dockFixed($dock_fixed)@}
           #ifequal $BottomDockable "0" @{.bottomDockable($BottomDockable)@}
           #ifequal $TopDockable "0" @{.topDockable($TopDockable)@}
@@ -209,40 +209,40 @@
       $name.realize()
       #ifparenttypeequal "form"
       @{
-        #ifequal #parent $aui_managed "1"
-        @{ #nl
-          _auiMgr.addPane($name, wx.AuiPaneInfo()#ifnotnull $aui_name
-          @{.name($aui_name)@}.$docking()#ifnotnull $caption
-          @{.caption($caption)@}#ifequal $caption_visible "0"
-          @{.captionVisible($caption_visible)@}#ifequal $close_button "0"
-          @{.closeButton($close_button)@}#ifequal $maximize_button "1"
-          @{.maximizeButton($maximize_button)@}#ifequal $minimize_button "1"
-          @{.minimizeButton($minimize_button)@}#ifequal $pin_button "1"
-          @{.pinButton($pin_button)@}#ifequal $pane_border "0"
-          @{.paneBorder($pane_border)@}#ifequal $gripper "1"
-          @{.gripper()@}#ifequal $show "0"
-          @{.hide()@}#ifequal $moveable "0"
-          @{.movable($moveable)@}#ifnotnull $dock
-          @{.$dock()#ifequal $dock "Float"
-          @{.floatingPosition($pane_position)@}
-          @}#ifnotnull $resize
-          @{.$resize()#ifequal $resize "Resizable"
-          @{.floatingSize($pane_size)@}
-          @}#ifequal $dock_fixed "0"
-          @{.dockFixed($dock_fixed)@}#ifequal $BottomDockable "0"
-          @{.bottomDockable($BottomDockable)@}#ifequal $TopDockable "0"
-          @{.topDockable($TopDockable)@}#ifequal $LeftDockable "0"
-          @{.leftDockable($LeftDockable)@}#ifequal $RightDockable "0"
-          @{.rightDockable($RightDockable)@}#ifequal $floatable "0"
-          @{.floatable($floatable)@}#ifnotnull $aui_row
-          @{.row($aui_row)@}#ifnotnull $aui_position
-          @{.position($aui_position)@}#ifnotnull $aui_layer
-          @{.layer($aui_layer)@}#ifequal $center_pane "1"
-          @{.centerPane()@}#ifequal $default_pane "1"
-          @{.defaultPane()@}#ifequal $toolbar_pane "1"
-          @{.toolbarPane()@}
-          )
-        @}
+      #ifequal #parent $aui_managed "1"
+      @{ #nl
+      _auiMgr.addPane($name, wx.AuiPaneInfo()#ifnotnull $aui_name
+      @{.name($aui_name)@}.#camelize $docking()#ifnotnull $caption
+      @{.caption($caption)@}#ifequal $caption_visible "0"
+      @{.captionVisible($caption_visible)@}#ifequal $close_button "0"
+      @{.closeButton($close_button)@}#ifequal $maximize_button "1"
+      @{.maximizeButton($maximize_button)@}#ifequal $minimize_button "1"
+      @{.minimizeButton($minimize_button)@}#ifequal $pin_button "1"
+      @{.pinButton($pin_button)@}#ifequal $pane_border "0"
+      @{.paneBorder($pane_border)@}#ifequal $gripper "1"
+      @{.gripper()@}#ifequal $show "0"
+      @{.hide()@}#ifequal $moveable "0"
+      @{.movable($moveable)@}#ifnotnull $dock
+      @{.#camelize $dock()#ifequal $dock "Float"
+      @{.floatingPosition($pane_position)@}
+      @}#ifnotnull $resize
+      @{.#camelize $resize()#ifequal $resize "Resizable"
+      @{.floatingSize($pane_size)@}
+      @}#ifequal $dock_fixed "0"
+      @{.dockFixed($dock_fixed)@}#ifequal $BottomDockable "0"
+      @{.bottomDockable($BottomDockable)@}#ifequal $TopDockable "0"
+      @{.topDockable($TopDockable)@}#ifequal $LeftDockable "0"
+      @{.leftDockable($LeftDockable)@}#ifequal $RightDockable "0"
+      @{.rightDockable($RightDockable)@}#ifequal $floatable "0"
+      @{.floatable($floatable)@}#ifnotnull $aui_row
+      @{.row($aui_row)@}#ifnotnull $aui_position
+      @{.position($aui_position)@}#ifnotnull $aui_layer
+      @{.layer($aui_layer)@}#ifequal $center_pane "1"
+      @{.centerPane()@}#ifequal $default_pane "1"
+      @{.defaultPane()@}#ifequal $toolbar_pane "1"
+      @{.toolbarPane()@}
+      )
+      @}
       @}
     </template>
   </templates>

@@ -154,7 +154,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\output\plugins\common\xml\common.solcode"
+			RelativePath="..\..\output\plugins\common\xml\common.nitcode"
 			>
 		</File>
 		<File
@@ -166,7 +166,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\output\plugins\common\xml\menutoolbar.solcode"
+			RelativePath="..\..\output\plugins\common\xml\menutoolbar.nitcode"
 			>
 		</File>
 		<File

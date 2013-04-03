@@ -36,7 +36,8 @@ TemplateParser::TemplateParser(PObjectBase obj, wxString _template)
 :
 m_obj( obj ),
 m_in( _template ),
-m_indent( 0 )
+m_indent( 0 ),
+m_camelize(false)
 {
 }
 
@@ -44,7 +45,8 @@ TemplateParser::TemplateParser( const TemplateParser & that, wxString _template 
 :
 m_obj( that.m_obj ),
 m_in( _template ),
-m_indent( 0 )
+m_indent( 0 ),
+m_camelize(false)
 {
 }
 
@@ -139,6 +141,9 @@ bool TemplateParser::ParseMacro()
 		break;
 	case ID_IFTYPENOTEQUAL:
 		ParseIfTypeNotEqual();
+		break;
+	case ID_CAMELIZE:
+		ParseCamelize();
 		break;
 	default:
 		THROW_WXFBEX( wxT("Invalid Macro Type") );
@@ -238,6 +243,19 @@ bool TemplateParser::ParseProperty()
 	else
 	{
 		code = property->GetChildFromParent( childName );
+	}
+
+	if (m_camelize)
+	{
+		for (size_t i=0; i<code.size(); ++i)
+		{
+			if (isalnum(code[i]))
+			{
+				code[i] = tolower(code[i]);
+				break;
+			}
+		}
+		m_camelize = false;
 	}
 
 	if (propname == wxT("name"))
@@ -879,6 +897,8 @@ TemplateParser::Ident TemplateParser::SearchIdent(wxString ident)
 		return ID_IFTYPEEQUAL;
 	else if (ident == wxT("iftypenotequal") )
 		return ID_IFTYPENOTEQUAL;
+	else if (ident == wxT("camelize") )
+		return ID_CAMELIZE;
 	else
 		THROW_WXFBEX( wxString::Format( wxT("Unknown macro: \"%s\""), ident.c_str() ) );
 }
@@ -1006,6 +1026,12 @@ bool TemplateParser::ParseNewLine()
 
 void TemplateParser::ParseAppend()
 {
+	ignore_whitespaces();
+}
+
+void TemplateParser::ParseCamelize()
+{
+	m_camelize = true;
 	ignore_whitespaces();
 }
 
